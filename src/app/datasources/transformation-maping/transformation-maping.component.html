@@ -1,0 +1,138 @@
+<div style="padding: 21px;">
+  <mat-card>
+    <mat-card-content>
+      <div class="">
+        <div class="row table-header-div stick-content">
+          <div class="column backbtn">
+            <button mat-stroked-button color="primary" (click)="goback()">
+              <mat-icon class="back-image">arrow_back_ios</mat-icon>
+              Back
+            </button>
+          </div>
+          <div class="column paginator">
+            <mat-paginator class="paginator-display" #paginator [pageSize]="10" (page)="onPageChange($event)"
+              [hidePageSize]="true" [pageSizeOptions]="[10, 20, 30]">
+            </mat-paginator>
+          </div>
+        </div>
+        <div class="table-wrapper tabledata-height">
+          <table mat-table [dataSource]="resdataSource" class="table mat-elevation-z8">
+            <ng-container matColumnDef="select">
+              <th class="stick-content-table" mat-header-cell *matHeaderCellDef>
+                <span>
+                  Select
+                </span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox [checked]="element.select" (change)="selChange($event, element); "
+                  [(ngModel)]="element.checked" [disabled]="element.checkselect">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="resource">
+              <th class="stick-content-table" mat-header-cell *matHeaderCellDef>
+                <span>
+                  Clinical Resource
+                </span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{element?.resource}}
+              </td>
+            </ng-container>
+
+            <!-- Id Column -->
+            <ng-container matColumnDef="sourcedocument">
+              <th class="stick-content-table" mat-header-cell *matHeaderCellDef>
+                <span>
+                  Source
+                </span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="src">
+                  <div class="form-field">
+                    <mat-form-field>
+                      <mat-select placeholder="Source" [(ngModel)]="element.selectedSourceVal"
+                        (selectionChange)="sourceChanged($event,element)" [disabled]="element.checked">
+                        <mat-option *ngFor="let option of element.sourceversion; let i = index" [value]="option">
+                          {{ element.sourceversion[i].source}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="srcschema" *ngIf="element?.selectedSourceVal">
+                    <a class="jsonSchema" (click)="getJSONSchema(element, 'selectedSourceVal', 'srcdocid')">JSON
+                      Schema</a>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Datasource Name Column -->
+            <ng-container matColumnDef="targetdocument">
+              <th class="stick-content-table" mat-header-cell *matHeaderCellDef>
+                <span>
+                  Target
+                </span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="tgt">
+                  <div class="form-field">
+                    <mat-form-field>
+                      <mat-select placeholder="Target" [(ngModel)]="element.selectedTargetVal"
+                        (selectionChange)="targetChanged($event, element)" [disabled]="element.checked">
+                        <mat-option *ngFor="let option of element.targetversion; let i = index" [value]="option">
+                          {{ element.targetversion[i].target }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="tgtschema" *ngIf="element?.selectedTargetVal">
+                    <a class="jsonSchema" (click)="getJSONSchema(element, 'selectedTargetVal', 'tgtdocid')">JSON
+                      Schema</a>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- endpoint url -->
+            <ng-container matColumnDef="transformationdocument">
+              <th class="stick-content-table" mat-header-cell *matHeaderCellDef>
+                <span>
+                  Transformation
+                </span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="def">
+                  <div class="form-field">
+                    <mat-form-field>
+                      <mat-select placeholder="Transformation" [(ngModel)]="element.selectedTransformationVal"
+                        (selectionChange)="definitionChanged($event, element)" [disabled]="element.checked">
+                        <mat-option *ngFor="let option of element.definitionversion; let i = index" [value]="option">
+                          {{element.definitionversion[i].transformation }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="defschema" *ngIf="element?.selectedTransformationVal">
+                    <a class="jsonSchema" (click)="getJSONSchema(element, 'selectedTransformationVal', 'defdocid')">JSON
+                      Schema</a>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end" class="padding-10 table-button-div fixfooter">
+      <button [disabled]="isDisableBtn" class="margin-right input-form__submit" color="warn" mat-flat-button
+        (click)="clear()">Clear</button>
+      <button [disabled]="isDisableBtn" color="primary" class="input-form__submit" *ngIf="!isEdit" mat-flat-button
+        (click)="onsave()">Save</button>
+      <button [disabled]="isDisableBtn" color="primary" class="input-form__submit" *ngIf="isEdit" mat-flat-button
+        (click)="update()">Update</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

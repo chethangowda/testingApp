@@ -1,0 +1,233 @@
+
+<div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+
+  <div style="overflow-x: auto;" *ngIf="!isNoRecords" class="viewBackground">
+    <div class="resourcetitle">
+      <!-- <strong>Location</strong> -->
+      <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Claim</strong>
+      <div  *ngIf="isArray(popoverData)" style="float: right;">
+        <mat-form-field>
+          <mat-label>Select Claim</mat-label>
+          <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+            <mat-option *ngFor="let item of popoverData" [value]="item">
+              <span *ngIf="item?.display">{{item?.display}}</span>
+              <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Status</td>
+          <td>Type</td>
+          <td>Use</td>
+          <td>Claim Date</td>
+          <td>Priority</td>
+          <td>Procedure Code</td>
+          <td>Diagnosis Code</td>
+          <td>ProductOrService Code</td>
+          <td>Claim Total</td>
+          <td>Practitioner Id</td>
+          <td>Insurance</td>
+          <td>Encounter Id</td>
+          <td>Location</td>
+        </tr>
+
+        <tr>
+          <!-- Status -->
+          <td>
+            <span *ngIf="!claimData?.status">--</span>
+            {{ claimData?.status }}
+          </td>
+
+          <!-- Type -->
+          <td>
+            <span *ngIf="!claimData?.type || claimData?.type?.length <= 0">--</span>
+            <div *ngIf="claimData?.type">
+              <span *ngIf="!claimData?.type?.coding && claimData?.type?.text">{{claimData?.type?.text}}</span>
+              <span *ngFor="let code of claimData?.type?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+           <!-- use -->
+           <td>
+            <span *ngIf="!claimData?.use">--</span>
+            {{ claimData?.use }}
+          </td>
+
+          <!-- claim date -->
+          <td >
+            <span *ngIf="!claimData?.created">--</span>
+            <span *ngIf="claimData?.created">
+            <span *ngIf="!claimData?.created.toLowerCase().includes('t')"> {{ claimData?.created | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="claimData?.created.toLowerCase().includes('t')"> {{ claimData?.created | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+          </td>
+
+           <!-- prority -->
+           <td>
+            <span *ngIf="!claimData?.priority || claimData?.priority?.length <= 0">--</span>
+            <div *ngIf="claimData?.priority">
+              <span *ngIf="!claimData?.priority?.coding && claimData?.priority?.text">{{claimData?.priority?.text}}</span>
+              <span *ngFor="let code of claimData?.priority?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+          <!-- Procedure Code -->
+          <td>
+            <span *ngIf="!claimData?.procedure || claimData?.procedure?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimData?.procedure; let mLast=last">
+              <span *ngIf="specialityItem?.procedureCodeableConcept">
+                <span *ngIf="!specialityItem?.procedureCodeableConcept?.coding && specialityItem?.procedureCodeableConcept?.text">{{specialityItem?.procedureCodeableConcept?.text}}</span>
+              <span *ngFor="let code of specialityItem?.procedureCodeableConcept?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+              </span>
+              <span *ngIf="!mLast"> <br><hr> </span>
+            </div>
+          </td>
+
+          <!-- diagnosis Code -->
+          <td>
+            <span *ngIf="!claimData?.diagnosis || claimData?.diagnosis?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimData?.diagnosis; let mLast=last">
+              <span *ngIf="specialityItem?.diagnosisCodeableConcept">
+                <span *ngIf="!specialityItem?.diagnosisCodeableConcept?.coding && specialityItem?.diagnosisCodeableConcept?.text">{{specialityItem?.diagnosisCodeableConcept?.text}}</span>
+              <span *ngFor="let code of specialityItem?.diagnosisCodeableConcept?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+              </span>
+              <span *ngIf="!mLast"> <br><hr> </span>
+            </div>
+          </td>
+
+          <!-- product Code -->
+          <td>
+            <span *ngIf="!claimData?.item || claimData?.item?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimData?.item; let mLast=last">
+              <span *ngIf="specialityItem?.productOrService">
+                <span *ngIf="!specialityItem?.productOrService?.coding && specialityItem?.productOrService?.text">{{specialityItem?.productOrService?.text}}</span>
+              <span *ngFor="let code of specialityItem?.productOrService?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+              </span>
+              <span *ngIf="!mLast"> <br><hr> </span>
+            </div>
+          </td>
+
+          <!-- total -->
+          <td>
+            <span *ngIf="!claimData?.total">--</span>
+            {{ claimData?.total.value }}{{ claimData?.total.currency }}
+          </td>
+
+          <!-- practitioner -->
+          <td>
+            <span *ngIf="!claimData?.provider || claimData?.provider?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!claimData?.provider?.display">{{claimData?.provider?.reference}}</span>
+              <span *ngIf="claimData?.provider?.display">{{claimData?.provider?.display}}</span>
+            </span>
+            <span *ngIf="!isNoReference && claimData?.provider?.reference.toLowerCase().includes('practitioner') && !claimData?.provider?.reference.toLowerCase().includes('practitionerrole')" class="texthiperLink" (click)="onclickResourceLink(claimData.provider)"
+                [mdePopoverTriggerFor]="pracPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="claimData?.provider?.display">{{claimData?.provider?.display}}</span>
+              <span *ngIf="!claimData?.provider?.display && claimData?.provider?.reference">{{claimData?.provider?.reference}}</span>
+            </span>
+            <mde-popover #pracPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+              [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == claimData?.provider" practitionerRes [popoverData]="selectedResData"></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+
+           <!-- insurance Id -->
+           <td>
+            <span *ngIf="!claimData?.insurance || claimData?.insurance?.length <= 0">--</span>
+            <span *ngFor="let ritem of claimData?.insurance">
+                <span *ngIf="(ritem?.coverage)" class="texthiperLink" (click)="onclickResourceLink(ritem.coverage)"
+                    [mdePopoverTriggerFor]="covPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                  <span *ngIf="ritem?.coverage?.display">{{ritem?.coverage?.display}}</span>
+                  <span *ngIf="!ritem?.coverage?.display && ritem?.coverage?.reference">{{ritem?.coverage?.reference}}</span>
+                </span>
+                <mde-popover #covPopover="mdePopover" [mdePopoverOverlapTrigger]="false" [mdePopoverCloseOnClick]="false">
+                  <mat-card class="tooltip" style="width: min-content;">
+                    <div style="width: 100%;" *ngIf="selectedResData == ritem?.coverage" CoverageRes [popoverData]="selectedResData"></div>
+                  </mat-card>
+                </mde-popover>
+              </span>
+          </td>
+
+          <!-- Encounter -->
+
+          <td>
+            <span *ngIf="!claimData?.item || claimData?.item?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimData?.item">
+                <span *ngIf="specialityItem?.encounter">
+                    <span *ngFor="let eitem of specialityItem?.encounter">
+                <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(eitem)"
+                    [mdePopoverTriggerFor]="encPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                  <span *ngIf="eitem.display">{{eitem.display}}</span>
+                  <span *ngIf="!eitem.display && eitem.reference">{{eitem.reference}}</span>
+                </span>
+                <mde-popover #encPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+                  [mdePopoverCloseOnClick]="false">
+                  <mat-card class="tooltip" style="width: min-content;">
+                    <div style="width: 100%;" *ngIf="selectedResData == eitem" encounterRes [popoverData]="selectedResData"></div>
+                  </mat-card>
+                </mde-popover>
+                </span>
+                </span>
+            </div>
+          </td>
+
+            <!-- location -->
+            <td>
+                <span *ngIf="!claimData?.facility || claimData?.facility?.length <= 0">--</span>
+                <span *ngIf="isNoReference">
+                <span *ngIf="!claimData?.facility?.display">{{claimData?.facility?.reference}}</span>
+                <span *ngIf="claimData?.facility?.display">{{claimData?.facility?.display}}</span>
+                </span>
+                <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(claimData.facility)"
+                    [mdePopoverTriggerFor]="locPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="claimData?.facility?.display">{{claimData?.facility?.display}}</span>
+                <span *ngIf="!claimData?.facility?.display && claimData?.facility?.reference">{{claimData?.facility?.reference}}</span>
+                </span>
+                <mde-popover #locPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+                [mdePopoverCloseOnClick]="false">
+                <mat-card class="tooltip" style="width: min-content;">
+                    <div style="width: 100%;" *ngIf="selectedResData == claimData?.facility" locationRes [popoverData]="selectedResData"></div>
+                </mat-card>
+                </mde-popover>
+            </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>

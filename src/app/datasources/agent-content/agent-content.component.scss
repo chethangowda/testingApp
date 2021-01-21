@@ -1,0 +1,124 @@
+@import "../../../styles/mixins";
+
+.table td {
+  cursor: default !important;
+
+  mat-icon-button {
+    cursor: pointer;
+  }
+}
+
+.search {
+  margin-left: 865px;
+  margin-top: 25px;
+}
+
+.refresh {
+  margin-left: 10%;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+p {
+  margin-left: 25px;
+}
+
+.search button {
+  margin-right: 22px;
+}
+
+.table-wrapper {
+  margin-top: 25px;
+}
+
+.input-form img {
+  position: relative;
+  top: 1px;
+  left: 8%;
+}
+
+.analytics {
+  display: block;
+  padding-left: 56px;
+}
+
+.filter {
+  padding-left: 24px;
+  padding-top: 45px;
+  display: flex;
+  align-items: center;
+}
+
+.table td p {
+  border-radius: 60px;
+  padding-left: 10px;
+  width: 70px;
+}
+
+td.mat-cell:first-of-type {
+  width: 0px;
+}
+
+@media (max-width: 1140px) {
+  .table {
+    td.birth-cell,
+    th.birth-cell {
+      width: 120px;
+    }
+
+    td.address-cell,
+    th.address-cell {
+      width: 300px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .table-wrapper {
+    overflow: scroll;
+  }
+
+  .table {
+    min-width: 1280px;
+  }
+
+  .search {
+    margin-left: 265px;
+  }
+  .input-form img {
+    left: 16%;
+  }
+
+  .search button {
+    margin-right: 0px;
+  }
+  mat-card-actions {
+    padding-left: 330px;
+  }
+  .row {
+    display: block;
+  }
+
+  .start {
+    width: 100%;
+  }
+
+  .stop {
+    width: 100%;
+    padding-left: 0px;
+  }
+  mat-card {
+    width: 70%;
+    margin-left: 96px;
+    margin-right: 96px;
+    border-style: groove;
+  }
+  .testbtn {
+    float: right;
+    margin-top: -75px;
+  }
+
+  .row .url {
+    width: 75%;
+  }
+}

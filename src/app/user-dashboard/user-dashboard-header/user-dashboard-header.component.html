@@ -1,0 +1,46 @@
+<div class="analytics-header backgroundImg">
+  <div class="tabs">
+    <p class="tabs__item active" [ngClass]="{active: isSelectedTab == 'dataset'}"
+      *ngIf="(groupper?.includes('ADMIN_PERMISSION')) || (groupper?.includes('Dashboard_DataSet'))"
+      (click)="onSelectLink('dataset')">
+      Data Set
+    </p>
+    <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'metrics'}"
+      *ngIf="(groupper?.includes('ADMIN_PERMISSION')) ||  (groupper?.includes('Dashboard_ResourceMetrics'))"
+      (click)="onSelectLink('metrics')">
+      Metrics
+    </p>
+    <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'pmal'}"
+      *ngIf="(groupper?.includes('ADMIN_PERMISSION')) ||  (groupper?.includes('Dashboard_PMAL'))"
+      (click)="onSelectLink('pmal')">
+      PMAL
+    </p>
+    <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'coverage-requirements'}"
+      *ngIf="(groupper?.includes('ADMIN_PERMISSION')) ||  (groupper?.includes('Dashboard_Coverage'))"
+      (click)="onSelectLink('coverage-requirements')">
+      Coverage Requirements & Discovery
+    </p>
+  </div>
+
+  <div *ngIf="isSelectedTab != 'metrics'" class="search">
+
+    <form action="" class="input-form">
+      <img src="assets/images/search-icon.svg" alt="">
+      <input type="text" (input)="onFilterText($event)" placeholder="General Search">
+    </form>
+
+    <div class="pagination">
+      <p class="pagination__counter">
+        <b>{{fromRecords}} - {{toRecords}}</b>
+        of
+        <b>{{totalRecords}}</b>
+        Records
+      </p>
+      <div class="pagination-controls">
+        <i [ngClass]="{disabled: presentPageNo <= 1}" (click)="gotosrcPreviousPage()"></i>
+        <i [ngClass]="{disabled: presentPageNo >= totalPages}" (click)="gotosrcNextPage()"></i>
+      </div>
+    </div>
+  </div>
+
+</div>

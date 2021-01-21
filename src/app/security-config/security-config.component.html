@@ -1,0 +1,4 @@
+<div class="maindiv">
+  <app-security-header (selectedTab)="onGetSelectedTab($event)"></app-security-header>
+  <app-security-config-content *ngIf="isSelectedTab == 'securityconfig'"></app-security-config-content>
+</div>

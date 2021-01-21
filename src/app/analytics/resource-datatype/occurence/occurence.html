@@ -1,0 +1,30 @@
+  <div [ngSwitch]="presentDataType">
+    <div *ngSwitchCase="'occurrenceDateTime'">
+      <span *ngIf="itemData?.occurrenceDateTime?.includes('T')">{{itemData?.occurrenceDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+      <span *ngIf="!itemData?.occurrenceDateTime?.includes('T')">{{itemData?.occurrenceDateTime}}</span>
+    </div>
+
+    <div *ngSwitchCase="'occurrencePeriod'">
+      <span *ngIf="itemData?.occurrencePeriod?.start">
+      <span *ngIf="itemData?.occurrencePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.occurrencePeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.occurrencePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.occurrencePeriod?.start}}</span> <br>
+      </span>
+      <span *ngIf="itemData?.occurrencePeriod?.end">
+      <span *ngIf="itemData?.occurrencePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.occurrencePeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.occurrencePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.occurrencePeriod?.end}}</span>
+    </span>
+    </div>
+
+    <div *ngSwitchCase="'occurrenceTiming'">
+      <span  *ngIf="itemData?.occurrenceTiming?.code">
+        <span *ngFor="let code of itemData?.occurrenceTiming?.code?.coding; let itemLa=last">
+          <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+          <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+          <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+          <span *ngIf="!itemLa"> <br><hr> </span>
+        </span><br>
+      </span>
+    </div>
+
+    <div *ngSwitchDefault>--</div>
+  </div>

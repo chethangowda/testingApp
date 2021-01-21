@@ -1,0 +1,178 @@
+<div *ngIf="itemData?.component">
+  <div *ngFor="let itemComp of itemData.component">
+  <div [ngSwitch]="itemComp?.valueType">
+  <div *ngSwitchCase="'valueDateTime'">
+  <span *ngIf="itemComp?.valueDateTime?.includes('T')">{{itemComp?.valueDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+  <span *ngIf="!itemComp?.valueDateTime?.includes('T')">{{itemComp?.valueDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valuePeriod'">
+    <span *ngIf="itemComp?.valuePeriod?.start">
+  <span *ngIf="itemComp?.valuePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemComp?.valuePeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+  <span *ngIf="!itemComp?.valuePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemComp?.valuePeriod?.start}}</span> <br>
+    </span>
+    
+    <span *ngIf="itemComp?.valuePeriod?.end">
+  <span *ngIf="itemComp?.valuePeriod?.end?.includes('T')"><strong>End :</strong>{{itemComp?.valuePeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span><br>
+  <span *ngIf="!itemComp?.valuePeriod?.end?.includes('T')"><strong>End :</strong>{{itemComp?.valuePeriod?.end}}</span>
+</span>  
+</div>
+  
+  <div *ngSwitchCase="'valueString'">
+  <span>{{itemComp?.valueString}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueBoolean'">
+  <span>{{itemComp?.valueBoolean}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueRange'">
+  <span><strong>Low : </strong>{{itemComp?.valueRange?.low?.value}} <span *ngIf="itemComp?.valueRange?.low?.code">- itemComp?.valueRange?.low?.code</span></span> <br>
+  <span><strong>High :</strong>{{itemComp?.valueRange?.high?.value}}<span *ngIf="itemComp?.valueRange?.high?.code">- itemComp?.valueRange?.high?.code</span></span>
+  </div>
+  
+  <div *ngSwitchCase="'valueInteger'">
+  <span>{{itemComp?.valueInteger}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueTime'">
+  <span>{{itemComp?.valueTime}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueCodeableConcept'">
+  <span *ngIf="itemComp?.valueCodeableConcept">
+  <span *ngFor="let code of itemComp?.valueCodeableConcept?.coding; let itemLa=last">
+  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+  <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+  <span *ngIf="!itemLa"> <br><hr> </span>
+  </span><br>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueQuantity'">
+  <span *ngIf="itemComp?.valueQuantity?.value">{{itemComp?.valueQuantity?.value}} |
+  <span *ngIf="itemComp?.valueQuantity?.code">{{itemComp?.valueQuantity?.code}}</span>
+  <span *ngIf="!itemComp?.valueQuantity?.code">
+  <span *ngIf="itemComp?.valueQuantity?.unit">{{itemComp?.valueQuantity?.unit}}</span>
+  </span>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueRatio'">
+  <span *ngIf="itemComp?.valueRatio?.numerator">
+  <span *ngIf="itemComp?.valueRatio?.numerator?.value">{{itemComp?.valueRatio?.numerator?.value}} |
+  <span *ngIf="itemComp?.valueRatio?.numerator?.code">{{itemComp?.valueRatio?.numerator?.code}}</span>
+  <span *ngIf="!itemComp?.valueRatio?.numerator?.code">
+  <span *ngIf="itemComp?.valueRatio?.numerator?.unit">{{itemComp?.valueRatio?.numerator?.unit}}</span>
+  </span>
+  </span>
+  </span>
+  <br>
+  <span *ngIf="itemComp?.valueRatio?.denominator">
+  <span *ngIf="itemComp?.valueRatio?.denominator?.value">{{itemComp?.valueRatio?.denominator?.value}} |
+  <span *ngIf="itemComp?.valueRatio?.denominator?.code">{{itemComp?.valueRatio?.denominator?.code}}</span>
+  <span *ngIf="!itemComp?.valueRatio?.denominator?.code">
+  <span *ngIf="itemComp?.valueRatio?.denominator?.unit">{{itemComp?.valueRatio?.denominator?.unit}}</span>
+  </span>
+  </span>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueSampledData'">
+  <span *ngIf="!presentDataType">--</span>
+  </div>
+  
+  <div *ngSwitchDefault>
+  <span *ngIf="!presentDataType">--</span>
+  </div>
+  </div>
+  </div>
+  </div>
+  
+  <div [ngSwitch]="presentDataType">
+  <div *ngSwitchCase="'valueDateTime'">
+  <span *ngIf="itemData?.valueDateTime?.includes('T')">{{itemData?.valueDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+  <span *ngIf="!itemData?.valueDateTime?.includes('T')">{{itemData?.valueDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valuePeriod'">
+    <span *ngIf="itemData?.valuePeriod?.start">
+  <span *ngIf="itemData?.valuePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.valuePeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+  <span *ngIf="!itemData?.valuePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.valuePeriod?.start}}</span> <br>
+    </span>
+    <span *ngIf="itemData?.valuePeriod?.end">
+  <span *ngIf="itemData?.valuePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.valuePeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span><br>
+  <span *ngIf="!itemData?.valuePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.valuePeriod?.end}}</span>
+    </span>  
+</div>
+  
+  <div *ngSwitchCase="'valueString'">
+  <span>{{itemData?.valueString}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueBoolean'">
+  <span>{{itemData?.valueBoolean}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueRange'">
+  <span><strong>Low : </strong>{{itemData?.valueRange?.low?.value}} <span *ngIf="itemData?.valueRange?.low?.code">- itemData?.valueRange?.low?.code</span></span> <br>
+  <span><strong>High :</strong>{{itemData?.valueRange?.high?.value}}<span *ngIf="itemData?.valueRange?.high?.code">- itemData?.valueRange?.high?.code</span></span>
+  </div>
+  
+  <div *ngSwitchCase="'valueInteger'">
+  <span>{{itemData?.valueInteger}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueTime'">
+  <span>{{itemData?.valueTime}}</span>
+  </div>
+  
+  <div *ngSwitchCase="'valueCodeableConcept'">
+  <span *ngIf="itemData?.valueCodeableConcept">
+  <span *ngFor="let code of itemData?.valueCodeableConcept?.coding; let itemLa=last">
+  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+  <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+  <span *ngIf="!itemLa"> <br><hr> </span>
+  </span><br>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueQuantity'">
+  <span *ngIf="itemData?.valueQuantity?.value">{{itemData?.valueQuantity?.value}} |
+  <span *ngIf="itemData?.valueQuantity?.code">{{itemData?.valueQuantity?.code}}</span>
+  <span *ngIf="!itemData?.valueQuantity?.code">
+  <span *ngIf="itemData?.valueQuantity?.unit">{{itemData?.valueQuantity?.unit}}</span>
+  </span>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueRatio'">
+  <span *ngIf="itemData?.valueRatio?.numerator">
+  <span *ngIf="itemData?.valueRatio?.numerator?.value">{{itemData?.valueRatio?.numerator?.value}} |
+  <span *ngIf="itemData?.valueRatio?.numerator?.code">{{itemData?.valueRatio?.numerator?.code}}</span>
+  <span *ngIf="!itemData?.valueRatio?.numerator?.code">
+  <span *ngIf="itemData?.valueRatio?.numerator?.unit">{{itemData?.valueRatio?.numerator?.unit}}</span>
+  </span>
+  </span>
+  </span>
+  <br>
+  <span *ngIf="itemData?.valueRatio?.denominator">
+  <span *ngIf="itemData?.valueRatio?.denominator?.value">{{itemData?.valueRatio?.denominator?.value}} |
+  <span *ngIf="itemData?.valueRatio?.denominator?.code">{{itemData?.valueRatio?.denominator?.code}}</span>
+  <span *ngIf="!itemData?.valueRatio?.denominator?.code">
+  <span *ngIf="itemData?.valueRatio?.denominator?.unit">{{itemData?.valueRatio?.denominator?.unit}}</span>
+  </span>
+  </span>
+  </span>
+  </div>
+  
+  <div *ngSwitchCase="'valueSampledData'">
+  <span *ngIf="!itemData?.component">--</span>
+  </div>
+  
+  <div *ngSwitchDefault>
+  <span *ngIf="!itemData?.component">--</span>
+  </div>
+  </div>

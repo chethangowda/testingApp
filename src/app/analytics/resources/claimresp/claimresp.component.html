@@ -1,0 +1,280 @@
+
+<div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+
+  <div *ngIf="!isNoRecords" class="viewBackground">
+    <div class="resourcetitle">
+      <!-- <strong>Location</strong> -->
+      <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">ClaimResponse</strong>
+      <div  *ngIf="isArray(popoverData)" style="float: right;">
+        <mat-form-field>
+          <mat-label>Select ClaimResponse</mat-label>
+          <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+            <mat-option *ngFor="let item of popoverData" [value]="item">
+              <span *ngIf="item?.display">{{item?.display}}</span>
+              <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Status</td>
+          <td>Type</td>
+          <td>Use</td>
+          <td>Created Date</td>
+          <td>OutCome</td>
+          <td>Disposition</td>
+          <td>payee Type</td>
+          <td>Submitted Amount</td>
+          <td>CoPay Amount</td>
+          <td>Benifit Amount</td>
+          <td>payment Type</td>
+          <td>payment Date</td>
+          <td>payment Amount</td>
+          <td>payment Identifier</td>
+          <td>Organization Id</td>
+          <td>Requestor Id</td>
+          <td>Claim Id</td>
+        </tr>
+
+        <tr>
+          <!-- Status -->
+          <td>
+            <span *ngIf="!claimresData?.status">--</span>
+            {{ claimresData?.status }}
+          </td>
+
+          <!-- Type -->
+          <td>
+            <span *ngIf="!claimresData?.type || claimresData?.type?.length <= 0">--</span>
+            <div *ngIf="claimresData?.type">
+              <span *ngIf="!claimresData?.type?.coding && claimresData?.type?.text">{{claimresData?.type?.text}}</span>
+              <span *ngFor="let code of claimresData?.type?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+           <!-- use -->
+           <td>
+            <span *ngIf="!claimresData?.use">--</span>
+            {{ claimresData?.use }}
+          </td>
+
+          <!-- created date -->
+          <td >
+            <span *ngIf="!claimresData?.created">--</span>
+            <span *ngIf="claimresData?.created">
+            <span *ngIf="!claimresData?.created.toLowerCase().includes('t')"> {{ claimresData?.created | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="claimresData?.created.toLowerCase().includes('t')"> {{ claimresData?.created | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+          </td>
+
+           <!-- outcome -->
+           <td>
+            <span *ngIf="!claimresData?.outcome">--</span>
+            {{ claimresData?.outcome }}
+          </td>
+
+          <!-- disposition -->
+          <td>
+            <span *ngIf="!claimresData?.disposition">--</span>
+            {{ claimresData?.disposition }}
+          </td>
+
+          <!-- payee Type -->
+          <td>
+            <span *ngIf="!claimresData?.payeeType || claimresData?.payeeType?.length <= 0">--</span>
+            <div *ngIf="claimresData?.payeeType">
+              <span *ngIf="!claimresData?.payeeType?.coding && claimresData?.payeeType?.text">{{claimresData?.payeeType?.text}}</span>
+              <span *ngFor="let code of claimresData?.payeeType?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+           <!-- submitamount -->
+           <td>
+            <span *ngIf="!claimresData?.item || claimresData?.item?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimresData?.item; let mLast=last">
+              <span *ngIf="specialityItem?.adjudication">
+               <span *ngFor="let code of specialityItem?.adjudication; let itemLast=last">
+                <span *ngIf="code?.category?.coding">
+                    <span *ngFor="let catcode of code?.category?.coding; let cLast=last">
+                <span *ngIf="(catcode?.code == 'submitted') || (catcode?.display == 'Submitted Amount')">
+                <span *ngIf="code?.amount">{{code?.amount?.value}}  {{code?.amount?.currency}}&nbsp; </span>
+            </span>
+            <span *ngIf="!cLast"><br><hr> </span>
+              </span>
+              </span>
+              <span *ngIf="!itemLast"></span>
+            </span>
+        </span>
+              <span *ngIf="!mLast"> </span>
+            </div>
+          </td>
+
+          <!-- copayamount -->
+          <td>
+            <span *ngIf="!claimresData?.item || claimresData?.item?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimresData?.item; let mLast=last">
+              <span *ngIf="specialityItem?.adjudication">
+               <span *ngFor="let code of specialityItem?.adjudication; let itemLast=last">
+                <span *ngIf="code?.category?.coding">
+                    <span *ngFor="let catcode of code?.category?.coding; let cLast=last">
+                <span *ngIf="(catcode?.code == 'copay') || (catcode?.display == 'CoPay')">
+                <span *ngIf="code?.amount">{{code?.amount?.value}}  {{code?.amount?.currency}}&nbsp; </span>
+            </span>
+            <span *ngIf="!cLast"> <br><hr></span>
+              </span>
+              </span>
+              <span *ngIf="!itemLast"></span>
+            </span>
+        </span>
+              <span *ngIf="!mLast"></span>
+            </div>
+          </td>
+
+          <!-- benifitamount -->
+          <td>
+            <span *ngIf="!claimresData?.item || claimresData?.item?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of claimresData?.item; let mLast=last">
+              <span *ngIf="specialityItem?.adjudication">
+               <span *ngFor="let code of specialityItem?.adjudication; let itemLast=last">
+                <span *ngIf="code?.category?.coding">
+                    <span *ngFor="let catcode of code?.category?.coding; let cLast=last">
+                <span *ngIf="(catcode?.code == 'benefit') || (catcode?.display == 'Benefit Amount')">
+                <span *ngIf="code?.amount">{{code?.amount?.value}}  {{code?.amount?.currency}}&nbsp; </span>
+            </span>
+            <span *ngIf="!cLast"><br><hr> </span>
+              </span>
+              </span>
+              <span *ngIf="!itemLast"> </span>
+            </span>
+        </span>
+              <span *ngIf="!mLast"> </span>
+            </div>
+          </td>
+
+          <!-- paymenttype -->
+          <td>
+            <span *ngIf="!claimresData?.payment || claimresData?.payment?.length <= 0">--</span>
+            <div *ngIf="claimresData?.payment?.type">
+                <span *ngIf="!claimresData?.payment?.type?.coding && claimresData?.payment?.type?.text">{{claimresData?.payment?.type?.text}}</span>
+                <span *ngFor="let code of claimresData?.payment?.type?.coding; let itemLast=last">
+                  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                  <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                  <span *ngIf="!itemLast"> <br><hr> </span>
+                </span>
+              </div>
+          </td>
+
+          <!-- paymentdate -->
+          <td>
+            <span *ngIf="!claimresData?.payment || claimresData?.payment?.length <= 0">--</span>
+                <span *ngIf="!claimresData?.payment?.date">--</span>
+                <span *ngIf="claimresData?.payment?.date">
+                <span *ngIf="!claimresData?.payment?.date.toLowerCase().includes('t')"> {{ claimresData?.payment?.date | date:'yyyy-MM-dd'}}</span>
+                <span *ngIf="claimresData?.payment?.date.toLowerCase().includes('t')"> {{ claimresData?.payment?.date | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+              </td>
+
+           <!-- paymentamount -->
+           <td>
+            <span *ngIf="!claimresData?.payment || claimresData?.payment?.length <= 0">--</span>
+                <span *ngIf="!claimresData?.payment?.amount">--</span>
+                {{ claimresData?.payment?.amount?.value }}{{ claimresData?.payment?.amount?.currency }}
+          </td>
+
+          <!-- paymentamount -->
+          <td>
+            <span *ngIf="!claimresData?.payment || claimresData?.payment?.length <= 0">--</span>
+                <span *ngIf="!claimresData?.payment?.identifier">--</span>
+                <span *ngIf="claimresData?.payment?.identifier?.system">{{ claimresData?.payment?.identifier?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="claimresData?.payment?.identifier?.value">{{claimresData?.payment?.identifier?.value}}  &nbsp; </span>
+          </td>
+
+         <!-- org Id -->
+         <td>
+            <span *ngIf="!claimresData?.insurer || claimresData?.insurer?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!claimresData?.insurer?.display">{{claimresData?.insurer?.reference}}</span>
+              <span *ngIf="claimresData?.insurer?.display">{{claimresData?.insurer?.display}}</span>
+            </span>
+            <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(claimresData.insurer)"
+                [mdePopoverTriggerFor]="orgPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="claimresData?.insurer?.display">{{claimresData?.insurer?.display}}</span>
+              <span *ngIf="!claimresData?.insurer?.display && claimresData?.insurer?.reference">{{claimresData?.insurer?.reference}}</span>
+            </span>
+            <mde-popover #orgPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+              [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == claimresData?.insurer" organizationRes [popoverData]="selectedResData"></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+
+          <!-- practitioner -->
+          <td>
+            <span *ngIf="!claimresData?.requestor || claimresData?.requestor?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!claimresData?.requestor?.display">{{claimresData?.requestor?.reference}}</span>
+              <span *ngIf="claimresData?.requestor?.display">{{claimresData?.requestor?.display}}</span>
+              </span>
+            <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(claimresData.requestor)"
+            [mdePopoverTriggerFor]="PolPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+            <span *ngIf="claimresData?.requestor?.display">{{claimresData?.requestor?.display}}</span>
+            <span *ngIf="!claimresData?.requestor?.display">{{claimresData?.requestor?.reference}}</span>
+            </span>
+            <mde-popover #PolPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == claimresData?.requestor">
+                  <div *ngIf="selectedResData.reference.toLowerCase().includes('organization')" >
+                    <div organizationRes [popoverData] = "selectedResData"></div>
+                   </div>
+                   <div *ngIf="(selectedResData.reference.toLowerCase().includes('practitioner')) && !(selectedResData.reference.toLowerCase().includes('practitionerrole'))" >
+                     <div practitionerRes [popoverData] = "selectedResData"></div>
+                    </div></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+
+           <!-- claim Id -->
+           <td>
+            <span *ngIf="!claimresData?.request || claimresData?.request?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!claimresData?.request?.display">{{claimresData?.request?.reference}}</span>
+              <span *ngIf="claimresData?.request?.display">{{claimresData?.request?.display}}</span>
+            </span>
+            <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(claimresData.request)"
+                [mdePopoverTriggerFor]="claimPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="claimresData?.request?.display">{{claimresData?.request?.display}}</span>
+              <span *ngIf="!claimresData?.request?.display && claimresData?.request?.reference">{{claimresData?.request?.reference}}</span>
+            </span>
+            <mde-popover #claimPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+              [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: 60%;">
+                <div style="width: 100%;" *ngIf="selectedResData == claimresData?.request" claimRes [popoverData]="selectedResData"></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>

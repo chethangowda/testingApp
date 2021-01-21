@@ -1,0 +1,80 @@
+@import "mixins";
+
+.filter {
+  padding-left: 24px;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.input-form {
+  margin-right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  padding-right: 24px;
+
+  &__item {
+    position: relative;
+    width: 100%;
+    max-width: 240px;
+    margin-right: 48px;
+  }
+
+  img {
+    position: absolute;
+    top: 9px;
+    left: 12px;
+  }
+
+  label {
+    display: block;
+    width: 100%;
+  }
+
+  input,
+  select {
+    @include basic-input();
+    width: 100%;
+    padding-left: 34px;
+  }
+
+  .input-form__submit {
+    background: #0083ef;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
+    color: #ffffff;
+    width: 100%;
+    max-width: 168px;
+    height: 28px;
+    cursor: pointer;
+    padding: 0;
+    transition: 0.3s;
+
+    &:hover {
+      transition: 0.3s;
+      -webkit-box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.65);
+      -moz-box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.65);
+      box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .input-form {
+    &__item {
+      margin-right: 25px;
+    }
+  }
+}
+
+@media (max-width: 840px) {
+  .input-form {
+    &__item {
+      margin-right: 10px;
+    }
+  }
+}

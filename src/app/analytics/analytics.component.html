@@ -1,0 +1,7 @@
+<div class="analytics">
+  <app-analytics-header (selectPatientTab)="onGetSelectedTab($event)"></app-analytics-header>
+  <app-analytics-content [isFromPage]="'patinetPage'" *ngIf="isSelectedTab == 'patientview'"></app-analytics-content>
+  <app-cohort-query *ngIf="isSelectedTab == 'cohoryQuery'"></app-cohort-query>
+</div>
+
+

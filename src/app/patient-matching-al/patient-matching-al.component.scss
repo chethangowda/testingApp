@@ -1,0 +1,7 @@
+@import "../../styles/mixins";
+
+.analytics {
+  display: block;
+  padding-left: $sideNavWidth;
+  position: -webkit-sticky;
+}

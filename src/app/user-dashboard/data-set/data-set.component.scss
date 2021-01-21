@@ -1,0 +1,6 @@
+@import "../../../styles/mixins";
+
+.maindiv {
+  display: block;
+  padding-left: $sideNavWidth;
+}

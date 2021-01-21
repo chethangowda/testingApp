@@ -1,0 +1,11 @@
+@import "../../../styles/mixins";
+
+@media (max-width: 790px) {
+  .pagination .pagination__counter {
+    min-width: 115px;
+  }
+}
+
+.backgroundImg {
+  background: url("../../../assets/images/login-bg.png") -1px;
+}

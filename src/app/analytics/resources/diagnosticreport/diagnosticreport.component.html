@@ -1,0 +1,157 @@
+<div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+
+  <div *ngIf="!isNoRecords" class="viewBackground">
+    <div class="resourcetitle">
+      <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Diagnostic Report</strong>
+      <div  *ngIf="isArray(popoverData)" style="float: right;">
+        <mat-form-field>
+          <mat-label>Select DiagnosticReport</mat-label>
+          <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+            <mat-option *ngFor="let item of popoverData" [value]="item">
+              <span *ngIf="item?.display">{{item?.display}}</span>
+              <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Status</td>
+          <td>Category</td>
+          <td>Code</td>
+          <td>Collection Date</td>
+          <td>Issued Date</td>
+          <td>Notes</td>
+          <td>Practitioner Id</td>
+          <td>Encounter Id</td>
+          <td>ServiceRequest Id</td>
+        </tr>
+
+        <tr>
+          <!-- Status -->
+          <td>
+            <span *ngIf="!diagnosticData?.status">--</span>
+            {{ diagnosticData?.status }}
+          </td>
+
+          <!-- Category -->
+          <td>
+            <span *ngIf="!diagnosticData?.category || diagnosticData?.category?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of diagnosticData?.category">
+              <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+              <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+          <!-- Code -->
+          <td>
+            <span *ngIf="!diagnosticData?.code || diagnosticData?.code?.length <= 0">--</span>
+            <div *ngIf="diagnosticData?.code">
+              <span *ngIf="!diagnosticData?.code?.coding && diagnosticData?.code?.text">{{diagnosticData?.code?.text}}</span>
+              <span *ngFor="let code of diagnosticData?.code?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+          </td>
+
+          <!-- Collection -->
+          <td >
+            <div effectivetime-datatype [itemData]="diagnosticData" [datatype]="'effectivetime'"></div>
+            <!-- <span *ngIf="!diagnosticData?.effectiveDateTime">--</span>
+            <span *ngIf="!diagnosticData?.effectiveDateTime.toLowerCase().includes('t')"> {{ diagnosticData?.effectiveDateTime | date:'mediumDate'}}</span>
+            <span *ngIf="diagnosticData?.effectiveDateTime.toLowerCase().includes('t')"> {{ diagnosticData?.effectiveDateTime | date:'medium'}}</span> -->
+          </td>
+
+          <!-- Issued -->
+          <td >
+            <span *ngIf="!diagnosticData?.issued">--</span>
+            <span *ngIf="diagnosticData?.issued">
+            <span *ngIf="!diagnosticData?.issued.toLowerCase().includes('t')"> {{ diagnosticData?.issued | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="diagnosticData?.issued.toLowerCase().includes('t')"> {{ diagnosticData?.issued | date:'yyyy-MM-dd  h:mm:ss a'}}</span>
+          </span>
+          </td>
+
+          <!-- Note -->
+          <td>
+            <span *ngIf="!diagnosticData?.conclusion">--</span>
+            {{ diagnosticData?.conclusion }}
+          </td>
+
+          <!-- Practitioner Id -->
+          <td >
+            <span *ngIf="!diagnosticData?.performer || diagnosticData?.performer?.length <= 0">--</span>
+            <div *ngFor="let code of diagnosticData?.performer">
+              <span *ngIf="code?.reference.toLowerCase().includes('practitioner') && !(code?.reference.toLowerCase().includes('practitionerrole'))">
+                <span class="texthiperLink" (click)="onclickResourceLink(code)"
+                  [mdePopoverTriggerFor]="pracPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                  <span *ngIf="!code?.display  && code?.reference">{{code?.reference}}</span>
+                  <span *ngIf="code?.display">{{code?.display}}</span>
+                </span>
+                <mde-popover #pracPopover="mdePopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" [mdePopoverOverlapTrigger]="false"
+                  [mdePopoverCloseOnClick]="false">
+                  <mat-card class="tooltip" style="width: min-content;">
+                    <div style="width: 100%;" *ngIf="selectedResData == code" practitionerRes [popoverData]="selectedResData"></div>
+                  </mat-card>
+                </mde-popover>
+              </span>
+            </div>
+          </td>
+
+          <!-- Encounter -->
+          <td>
+            <span *ngIf="!diagnosticData?.encounter || diagnosticData?.encounter?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!diagnosticData?.encounter?.display">{{diagnosticData?.encounter?.reference}}</span>
+              <span *ngIf="diagnosticData?.encounter?.display">{{diagnosticData?.encounter?.display}}</span>
+            </span>
+            <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(diagnosticData.encounter)"
+                [mdePopoverTriggerFor]="encPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="diagnosticData?.encounter?.display">{{diagnosticData?.encounter?.display}}</span>
+              <span *ngIf="!diagnosticData?.encounter?.display && diagnosticData?.encounter?.reference">{{diagnosticData?.encounter?.reference}}</span>
+            </span>
+            <mde-popover #encPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+              [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == diagnosticData?.encounter" encounterRes [popoverData]="selectedResData"></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+
+          <!-- ServiceRequest -->
+          <td >
+            <span *ngIf="!diagnosticData?.basedOn || diagnosticData?.basedOn?.length <= 0">--</span>
+            <div *ngFor="let code of diagnosticData?.basedOn | slice: 0:1">
+              <span *ngIf="code?.reference.toLowerCase().includes('servicerequest')">
+                <span class="texthiperLink" (click)="onclickResourceLink(diagnosticData?.basedOn)"
+                  [mdePopoverTriggerFor]="serPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                  <span *ngIf="!code?.display  && code?.reference">{{code?.reference}}</span>
+                  <span *ngIf="code?.display">{{code?.display}}</span>
+                </span>
+                <mde-popover #serPopover="mdePopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" [mdePopoverOverlapTrigger]="false"
+                  [mdePopoverCloseOnClick]="false">
+                  <mat-card class="tooltip" style="width: min-content;">
+                    <div style="width: 100%;" *ngIf="selectedResData == diagnosticData?.basedOn" servicereqRes [popoverData]="selectedResData"></div>
+                  </mat-card>
+                </mde-popover>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>

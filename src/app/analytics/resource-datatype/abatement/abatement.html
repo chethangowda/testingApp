@@ -1,0 +1,32 @@
+<div [ngSwitch]="presentDataType">
+  <div *ngSwitchCase="'abatementDateTime'">
+    <span *ngIf="itemData?.abatementDateTime?.includes('T')">{{itemData?.abatementDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+    <span *ngIf="!itemData?.abatementDateTime?.includes('T')">{{itemData?.abatementDateTime}}</span>
+  </div>
+
+  <div *ngSwitchCase="'abatementPeriod'">
+    <span *ngIf="itemData?.abatementPeriod?.start">
+    <span *ngIf="itemData?.abatementPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.abatementPeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+    <span *ngIf="!itemData?.abatementPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.abatementPeriod?.start}}</span> <br>
+    </span>
+    <span *ngIf="itemData?.abatementPeriod?.end">
+    <span *ngIf="itemData?.abatementPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.abatementPeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+    <span *ngIf="!itemData?.abatementPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.abatementPeriod?.end}}</span>
+  </span>
+  </div>
+
+  <div *ngSwitchCase="'abatementRange'">
+    <span><strong>Low : </strong>{{itemData?.abatementRange?.low?.value}} <span *ngIf="itemData?.abatementRange?.low?.code">- itemData?.abatementRange?.low?.code</span></span> <br>
+    <span><strong>High :</strong>{{itemData?.abatementRange?.high?.value}}<span *ngIf="itemData?.abatementRange?.high?.code">- itemData?.abatementRange?.high?.code</span></span>
+  </div>
+
+  <div *ngSwitchCase="'abatementAge'">
+    <span *ngIf="itemData?.abatementAge?.value">{{itemData?.abatementAge?.value}} <span *ngIf="itemData?.abatementAge?.unit"> - {{itemData?.abatementAge?.unit}}</span></span>
+  </div>
+
+  <div *ngSwitchCase="'abatementString'">
+    <span>{{itemData?.abatementString}}</span>
+  </div>
+
+  <div *ngSwitchDefault>--</div>
+</div>

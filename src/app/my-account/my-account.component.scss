@@ -1,0 +1,404 @@
+@import "../../styles/mixins";
+
+.changepwd mat-card {
+  width: 40%;
+  margin-left: 25%;
+}
+
+.pwd {
+  display: flex;
+}
+
+.text-pwd p {
+  text-align: justify;
+  width: 455px;
+  margin-left: 51px;
+}
+.text-pwd button {
+  width: 60%;
+  margin-left: 111px;
+}
+
+.form1 {
+  margin-left: 75px;
+}
+
+.backgroundImg {
+  background: url("../../assets/images/login-bg.png") -1px;
+}
+
+mat-form-field {
+  display: block;
+}
+
+.profiledetails {
+  padding-left: $sideNavWidth;
+}
+
+.mat-form-field-suffix .mat-icon {
+  font-size: 100%;
+}
+
+.profiledetails mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: 0 9px 47px 0px rgba(0, 0, 0, 0.2), 0 3px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.adddatsource mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: 0 9px 47px 0px rgba(0, 0, 0, 0.2), 0 3px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.changepwd mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: 0 9px 47px 0px rgba(0, 0, 0, 0.2), 0 3px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.profiledetails mat-card {
+  width: 40%;
+  margin-left: 377px;
+}
+
+.update-profile .content-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.user {
+  padding-left: 160px;
+}
+
+.image .mat-hint {
+  margin-left: 253px;
+  font-size: smaller;
+}
+
+.upload-file {
+  margin-left: 195px;
+}
+
+.delete-file {
+  margin-left: 30px;
+}
+
+.fa {
+  font-size: -webkit-xxx-large;
+  margin-left: 540px;
+  //margin-left: 235px;
+}
+.fas {
+  margin-right: 7px;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+img {
+  // height: 75px;
+  // width: 75px;
+  // border-radius: 50%;
+  // margin-left: 288px;
+  // border: 2px solid #000;
+  // object-fit: cover;
+  width: 20%;
+  height: 100%;
+  border: 1px solid #000;
+}
+#fileInput {
+  display: none;
+}
+.hoverable {
+  position: relative;
+  display: block;
+  // cursor: pointer;
+  height: 85px;
+  width: 85px;
+  border-radius: 50%;
+}
+.hoverable .hover-text {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  margin-left: 340px;
+  color: blue;
+}
+.hoverable .background {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 1;
+  margin-left: 340px;
+}
+.hoverable:hover .hover-text {
+  display: block;
+}
+.hoverable:hover .background {
+  display: block;
+}
+
+.update-profile {
+  padding-left: 175px;
+  padding-right: 175px;
+}
+
+.adddatsource mat-card {
+  width: 45%;
+  margin-left: 377px;
+}
+
+.adddatsource mat-card-actions {
+  padding-left: 440px;
+}
+
+.adddatsource mat-form-field {
+  display: block;
+}
+
+.adddatsource mat-card-header {
+  font-weight: 900;
+  padding-left: 90px;
+}
+
+.buttons {
+  float: right;
+  margin-top: -24px;
+}
+
+.start {
+  width: 70%;
+}
+
+.stop {
+  width: 70%;
+  padding-left: 25px;
+}
+
+.row {
+  display: flex;
+}
+
+.user-details > table {
+  height: 550px;
+  width: 100%;
+  text-align: left;
+  padding-left: 50px;
+  // color: darkcyan;
+}
+
+.user-details > table td {
+  padding-left: 50px;
+  font-size: 18px;
+}
+
+.user-details > table th {
+  font-weight: lighter;
+  font-size: 18px;
+  width: 200px;
+}
+
+.user-details > table mat-divider {
+  width: 86%;
+  margin-left: 38px;
+}
+
+.passwd-form p {
+  font-size: 16px;
+  margin-top: 25px;
+}
+h2 {
+  color: cornflowerblue;
+  font-size: larger;
+}
+.errormsg {
+  margin-top: 15px;
+}
+.text {
+  margin-top: 40px;
+  margin-left: 35px;
+}
+.cnfrm {
+  margin-top: 45px;
+}
+// .example-full-width{
+//   width:356px;
+// }
+
+@media (max-width: 1024px) {
+  .adddatsource mat-card-actions {
+    padding-left: 330px;
+  }
+  .row {
+    display: block;
+  }
+
+  .start {
+    width: 100%;
+  }
+
+  .stop {
+    width: 100%;
+    padding-left: 0px;
+  }
+
+  .text {
+    white-space: pre-wrap;
+  }
+
+  .adddatsource mat-card {
+    width: 70%;
+    margin-left: 96px;
+    margin-right: 96px;
+    //border-style: groove;
+  }
+
+  .profiledetails mat-card {
+    width: 70%;
+    margin-left: 96px;
+    margin-right: 96px;
+  }
+
+  .changepwd .content {
+    width: 70%;
+    margin-left: 96px;
+    margin-right: 96px;
+  }
+}
+
+.profile-img {
+  text-align: center;
+}
+.profile-img img {
+  width: 20%;
+  height: 100%;
+  border: 1px solid #000;
+}
+.profile-img .file {
+  position: relative;
+  overflow: hidden;
+  margin-top: -23px;
+  width: 20%;
+  border: none;
+  border-radius: 0;
+  font-size: 15px;
+  background: #21252942;
+  height: 20px;
+  margin-left: 261px;
+}
+
+.profile-img .file:hover {
+  background-color: #0083ef;
+}
+.profile-img .file input {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+
+.content {
+  width: 100%;
+  max-width: 394px;
+  height: calc(100vh - 330px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 20px;
+
+  &__box {
+    width: 100%;
+  }
+
+  &__heading {
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: #09090a;
+    margin-bottom: 24px;
+
+    @media (min-width: $l-screen) {
+      font-size: 24px;
+      line-height: 30px;
+      margin-bottom: 34px;
+    }
+  }
+
+  &__form {
+    width: 180%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+
+  &__form-box {
+    margin-bottom: 24px;
+  }
+
+  &__button {
+    @include basic-button();
+    background: #0083ef;
+    border-radius: 4px;
+    height: 38px;
+
+    &.transparent {
+      margin-top: 18px;
+      height: 18px;
+      color: #0083ef;
+      background: transparent;
+      margin-bottom: 30px;
+
+      @media (min-width: $l-screen) {
+        margin-top: 24px;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+    line-height: 28px;
+    text-align: center;
+    color: #818faf;
+    margin-bottom: 40px;
+
+    @media (min-width: $l-screen) {
+      margin-bottom: 72px;
+    }
+
+    a {
+      font-weight: 600;
+      color: #0083ef;
+      text-decoration: none;
+    }
+  }
+}
+
+.form1 {
+  display: flex;
+}
+
+.text {
+  margin-left: 172px;
+  margin-top: 20px;
+  font-size: x-small;
+  white-space: pre;
+}
+
+.content__form mat-form-field-infix {
+  padding: 0.5em 0;
+  border-top: 0.14375em solid transparent;
+}

@@ -1,0 +1,255 @@
+<br>
+<div class="selectds" *ngIf="selectds">
+  <mat-card>
+    <mat-card-header class="font_color">
+      <p> Select DataSource </p>
+      <div class="search">
+        <form action="" class="input-form">
+          <img src="assets/images/search-icon.svg" alt="">
+          <input type="text" (keyup)="applydatasourceFilter($event.target.value)" placeholder="General Search">
+        </form>
+        <div class="pagination">
+          <mat-paginator class="paginator-display" #paginator [pageSize]="10" [hidePageSize]="true"
+            [pageSizeOptions]="[10, 20, 30]">
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider><br>
+
+    <mat-card-content class="datasrc">
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+          (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-checkbox #ref (change)="$event ? masterToggle(ref) : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(row) : null;isSomeSelected()" [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dsid">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>DataSource ID</span>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.dsid}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dsname">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>DataSource Name</span>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.dsname}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="endpoint">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>EndPoint URL</span>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.endpoint}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="connector">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>Connector Type</span>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.connector}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="security">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>Security Method </span>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row.security}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedsrcColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedsrcColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="warn" (click)="closeform()">Close</button>
+      <button mat-raised-button color="primary" (click)="next()">Next</button>
+    </mat-card-actions>
+  </mat-card><br>
+  <mat-divider></mat-divider>
+</div>
+
+<div class="createdset" *ngIf="createdset" id="scroll">
+  <br>
+  <mat-card>
+    <mat-card-header class="font_color"> {{title}} DataSet </mat-card-header><br />
+    <mat-divider></mat-divider>
+    <br>
+    <mat-card-content>
+      <form [formGroup]="dsetForm" class="datasourcetypeform">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dataset Name</mat-label>
+          <input matInput placeholder="Dataset Name" formControlName="dsetname" required>
+          <mat-error *ngIf="dsetForm.controls['dsetname'].errors?.required && dsetForm.controls['dsetname'].touched">
+            Data Set Name is required</mat-error>
+          <mat-error *ngIf="dsetForm.controls['dsetname'].errors?.pattern"> Enter a valid Data Set Name
+          </mat-error>
+        </mat-form-field>
+
+        <div class="row">
+          <div class="start">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Scheduling Frequency</mat-label>
+              <mat-select placeholder="Select Scheduling Frequency" formControlName="frequency"
+                (selectionChange)="onTypeSelect();" required>
+                <mat-option *ngFor="let freq of freqoptions" [value]="freq.value">
+                  {{ freq.viewValue }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="dsetForm.controls['frequency'].errors?.required && dsetForm.controls['frequency'].touched">
+                Scheduling Frequency is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Time</mat-label>
+              <input matInput type="time" matInput placeholder="Select Time" formControlName="time" required>
+              <mat-error *ngIf="dsetForm.controls['time'].errors?.required">
+                Time is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div formGroupName="weeklyForm" *ngIf=enablelinks?.weekly>
+          <mat-form-field appearance="outline">
+            <mat-label>Select Day</mat-label>
+            <mat-select formControlName="weekday" required>
+              <mat-option value="Sunday"> Sunday</mat-option>
+              <mat-option value="Monday"> Monday</mat-option>
+              <mat-option value="Tuesday"> Tuesday</mat-option>
+              <mat-option value="Wednesday"> Wednesday</mat-option>
+              <mat-option value="Thursday"> Thursday</mat-option>
+              <mat-option value="Friday"> Friday</mat-option>
+              <mat-option value="Saturday"> Saturday</mat-option>
+            </mat-select>
+            <mat-error *ngIf="dsetForm.get('weeklyForm.weekday').errors?.required">Week Day is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div formGroupName="monthlyForm" *ngIf=enablelinks?.monthly>
+          <mat-form-field appearance="outline">
+            <mat-label>Select Date</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="MM/dd/yyyy" formControlName="monthdate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="dsetForm.get('monthlyForm.monthdate').errors?.required">Month Date is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <div class="start">
+            <mat-form-field appearance="outline">
+              <mat-label>Select From Date</mat-label>
+              <input matInput [readonly]="true" [max]="fromDateTarget" [ngxMatDatetimePicker]="picker1"
+                placeholder="MM/dd/yyyy HH:mm:ss" (click)="picker1.open()" formControlName="fromdate"
+                (dateInput)="selectFromDate()">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker1 [disabled]="false"></ngx-mat-datetime-picker>
+              <mat-icon *ngIf="dsetForm?.value?.fromdate" style="cursor: pointer;" class="arrangeicon"
+                (click)="clearfromDate()">close</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="stop">
+            <mat-form-field appearance="outline">
+              <mat-label>Select To Date</mat-label>
+              <input matInput [readonly]="true" [min]="endrangeStartFrom" [max]="rangeEndAt"
+                [ngxMatDatetimePicker]="picker2" placeholder="MM/dd/yyyy HH:mm:ss" (click)="picker2.open()"
+                formControlName="todate" (dateInput)="selectToDate()">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2 [disabled]="false"></ngx-mat-datetime-picker>
+              <mat-icon *ngIf="dsetForm?.value?.todate" style="cursor: pointer;" class="arrangeicon"
+                (click)="cleartoDate()">close</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="warn" (click)="closeform()">Close</button>
+      <button mat-raised-button color="primary" [disabled]="dsetForm.invalid" (click)="savedataset()">Save</button>
+    </mat-card-actions>
+  </mat-card><br>
+  <mat-divider></mat-divider>
+</div>
+
+<div class="table-wrapper" style="margin-top: 0px; height: calc(100vh - 115px);">
+  <table mat-table [dataSource]="dataSet" matSort #table [matSortDisableClear]="true"
+    (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>DataSet ID</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dsetname">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>DataSet Name</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.dsetname}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="frequency">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Frequency</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.frequency}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="monthdate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Date</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.monthdate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weekday">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Day</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.weekday}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="scheduletime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Time</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.scheduletime}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Actions</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <i class="material-icons editbutton" matTooltip="Edit Dataset"
+          *ngIf="(groupper?.includes('Update_DataSet')) || (groupper?.includes('ADMIN_PERMISSION'))"
+          (click)="editdataset(element);">edit</i>
+        <i class="material-icons editbutton" matTooltip="Extract"
+          *ngIf="(groupper?.includes('Execute_Extract')) || (groupper?.includes('ADMIN_PERMISSION'))"
+          (click)="extractdataset(element);">cloud_download</i>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

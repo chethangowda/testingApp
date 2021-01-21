@@ -1,0 +1,111 @@
+<div style="background-color: #edf1f3; padding: 10px; height: calc(100vh - 83px) !important;" class="table-wrapper">
+  <mat-grid-list cols="10" rowHeight="2:1" [gutterSize]="'10px'">
+    <mat-grid-tile [colspan]="5" [rowspan]="10" style="padding: 5px;" class="divShadow">
+      <div style="width: 100%; height: 100%; padding: 5px; background-color: white;">
+        <mat-grid-list cols="10" [gutterSize]="'1px'">
+          <mat-grid-tile [colspan]="10" [rowspan]="1" class="headerBorder">
+            <p style="font-size: 20px; font-weight: bold;
+            font-family: sans-serif;">Resources</p>
+            <input class="searchInputbox" type="text" placeholder="Search" (input)="onSearch($event)">
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="10" [rowspan]="9">
+            <div class="table-wrapper" style="width: 100%; height: 92%; overflow-x: hidden; overflow-y:auto">
+              <div class="pointer" (click)="setRow(i)" style="margin: 4px;"
+                *ngFor="let item of resourceCount | searchFilter : searchText; let i = index"
+                (click)="onSelectResource(item)">
+
+                <mat-card style="padding: 0px" [ngClass]="{'highlight': selectedIndex === i}">
+                  <mat-grid-list cols="10" rowHeight="50px">
+                    <mat-grid-tile [colspan]="2" [rowspan]="1">
+                      <h2 style="word-break: break-all; padding: 2px; font-style: italic;
+                    text-align: center;" class="nameAlign">{{item?.resourceName}}</h2>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                      <h2 style="
+                    text-align: center;">{{item?.resourceCount}}</h2>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="7" [rowspan]="1">
+                      <div class="firstdiv">
+                        <div [ngStyle]="{'width.%': item.value}" class="topdiv">
+
+                        </div>
+                      </div>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                </mat-card>
+
+              </div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+      </div>
+      <div class="loading" *ngIf="resourcecLoader">
+        <img class="loadingimage" src="assets/images/loaderimg.gif">
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="5" [rowspan]="5" class="divShadow" style="padding: 5px; background-color: white;">
+      <div style="width: 100%; height: 100%; padding: 5px;" *ngIf="resourceName">
+        <mat-grid-list cols="10" rowHeight="2:1" [gutterSize]="'5px'">
+          <mat-grid-tile [colspan]="10" [rowspan]="2" class="headerBorder">
+            <div id="container">
+              <div>
+                <p style="font-size: 20px; font-weight: bold;
+                font-family: sans-serif;">Data Source</p>
+              </div>
+              <div>
+                <p>
+                  <mat-icon [ngStyle]="{'color': indexVal > 0 ? 'burlywood' : 'gray'}" style="cursor: pointer;"
+                    (click)="onPrevious()">arrow_left</mat-icon>
+                  <mat-icon [ngStyle]="{'color': indexVal < (listOfDataSource.length -1) ? 'burlywood' : 'gray'}"
+                    style="cursor: pointer;" (click)="onNext()">arrow_right</mat-icon>
+                </p>
+              </div>
+              <div>
+                <p class="div-height" style="text-align: right; margin-left: auto;">
+                  <button mat-flat-button class="btnBackground">{{resourceName}}</button>
+                </p>
+              </div>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="10" [rowspan]="8">
+            <canvas baseChart class="maxwid" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+              [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend"
+              [colors]="pieChartColors" (chartClick)="chartClicked($event)">
+            </canvas>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+      <div class="loading" *ngIf="datasourceLoader">
+        <img class="loadingimage" src="assets/images/loaderimg.gif">
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="5" [rowspan]="5" class="divShadow" style="padding: 5px; background-color: white;">
+      <div style="width: 100%; height: 100%; padding: 5px;" *ngIf="datasourceName">
+        <mat-grid-list cols="10" rowHeight="2:1" [gutterSize]="'5px'">
+          <mat-grid-tile [colspan]="10" [rowspan]="2" class="headerBorder">
+            <p style="font-size: 20px; font-weight: bold;
+            font-family: sans-serif;">Extraction</p>
+            <p class="div-height" style="text-align: right; margin-left: auto;">
+              <button mat-flat-button class="btnBackground">{{datasourceName}}</button>
+            </p>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="10" [rowspan]="8">
+            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+              [plugins]="barChartPlugins" [legend]="barChartLegend" [colors]="barChartColors"
+              [chartType]="barChartType">
+            </canvas>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+      </div>
+      <div class="loading" *ngIf="extractionLoader">
+        <img class="loadingimage" src="assets/images/loaderimg.gif">
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <div style="display: block;">
+    <input readonly="true" #graphdiv>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div [ngSwitch]="presentDataType">
+  <div *ngSwitchCase="'bornDate'">
+    <span *ngIf="itemData?.bornDate?.includes('T')">{{itemData?.bornDate | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+    <span *ngIf="!itemData?.bornDate?.includes('T')">{{itemData?.bornDate}}</span>
+  </div>
+
+  <div *ngSwitchCase="'bornPeriod'">
+    <span *ngIf="itemData?.bornPeriod?.start">
+    <span *ngIf="itemData?.bornPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.bornPeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+    <span *ngIf="!itemData?.bornPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.bornPeriod?.start}}</span> <br>
+    </span>
+    
+    <span *ngIf="itemData?.bornPeriod?.end">
+    <span *ngIf="itemData?.bornPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.bornPeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+    <span *ngIf="!itemData?.bornPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.bornPeriod?.end}}</span>
+  </span>
+  </div>
+
+  <div *ngSwitchCase="'bornString'">
+    <span>{{itemData?.bornString}}</span>
+  </div>
+
+  <div *ngSwitchDefault>--</div>
+</div>

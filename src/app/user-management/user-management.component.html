@@ -1,0 +1,267 @@
+<div class="all">
+  <app-user-management-header [pageNumberData]="userdataToPage" (onPagination)="onPaginationCall($event)"
+    (createBtnEvent)="onCreateBtn($event)" (searchTextEvent)="onSearchFilter($event)"></app-user-management-header>
+  <div class="adddatsource" *ngIf="isCollapsed" id="scroll"><br>
+    <mat-card>
+      <div class="user">
+        <mat-card-header class="font_color"> User Management </mat-card-header><br>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-card-content style="margin-bottom: 0px;"><br>
+        <form [formGroup]="eventForm">
+
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>User ID</mat-label>
+                <input matInput placeholder="User ID" formControlName="userID" required>
+                <mat-error
+                  *ngIf="eventForm.controls['userID'].errors?.required && eventForm.controls['userID'].touched">
+                  User ID is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="email" formControlName="Email" required>
+                <mat-error *ngIf="eventForm.controls['Email'].errors?.required && eventForm.controls['Email'].touched">
+                  Email is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Select groups</mat-label>
+            <mat-select placeholder="Select group" formControlName="group" (selectionChange)="onSelectDropdown($event);"
+              multiple required>
+              <mat-option *ngFor="let connectortype of connectorTypes" [value]="connectortype.groupId">
+                {{connectortype.groupName}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="eventForm.controls['group'].errors?.required && eventForm.controls['group'].touched">
+              group is required</mat-error>
+
+          </mat-form-field>
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>First name</mat-label>
+                <input matInput placeholder="First name*" formControlName="first_name" required>
+                <mat-error
+                  *ngIf="eventForm.controls['first_name'].errors?.required && eventForm.controls['first_name'].touched">
+                  First Name is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Last name</mat-label>
+                <input matInput placeholder="Last name*" formControlName="last_name" required>
+                <mat-error
+                  *ngIf="eventForm.controls['last_name'].errors?.required && eventForm.controls['last_name'].touched">
+                  Last Name is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>organization</mat-label>
+                <input matInput placeholder="organization" formControlName="organization" required>
+                <mat-error
+                  *ngIf="eventForm.controls['organization'].errors?.required && eventForm.controls['organization'].touched">
+                  organization is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Department</mat-label>
+                <input matInput placeholder="Department" formControlName="Department">
+                <mat-error
+                  *ngIf="eventForm.controls['Department'].errors?.required && eventForm.controls['Department'].touched">
+                  Department is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="start">
+              <mat-form-field appearance="outline">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="Address" formControlName="Address">
+                <mat-error
+                  *ngIf="eventForm.controls['Address'].errors?.required && eventForm.controls['Address'].touched">
+                  Address is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop">
+
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput placeholder="City" formControlName="City">
+                <mat-error *ngIf="eventForm.controls['City'].errors?.required && eventForm.controls['City'].touched">
+                  City is required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Select Country</mat-label>
+                <mat-select placeholder="Select country" formControlName="Country"
+                  (selectionChange)="onSelectCountryDropdown($event);" required>
+                  <mat-option *ngFor="let country of countrtList" [value]="country.value">
+                    {{country.value}}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="eventForm.controls['Country'].errors?.required && eventForm.controls['Country'].touched">
+                  Country is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Code</mat-label>
+                <input matInput placeholder="Code" formControlName="Code" required>
+                <mat-error *ngIf="eventForm.controls['Code'].errors?.required && eventForm.controls['Code'].touched">
+                  Code is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput placeholder="Mobile Number" formControlName="Number" required>
+                <mat-error
+                  *ngIf="eventForm.controls['Number'].errors?.required && eventForm.controls['Number'].touched">
+                  Number is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Select Status</mat-label>
+                <mat-select placeholder="Select Status" formControlName="Status">
+                  <mat-option *ngFor="let item of statusList" [value]="item.id" [disabled]="item?.id == 'active'">
+                    {{item.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="eventForm.controls['Status'].errors?.required && eventForm.controls['Status'].touched">
+                  Status is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <mat-divider></mat-divider>
+      </mat-card-content>
+      <mat-card-actions align="end" style="margin-top: 10px;">
+        <button mat-raised-button (click)="closeform()" class="close"
+          style="background-color: #f44336; color: white;">close</button>&nbsp;
+        <button mat-raised-button type="submit" [disabled]="!eventForm.valid" (click)="onSubmit('create')"
+          color="primary" *ngIf="!isEdit" class="save">save</button>
+        <button mat-raised-button type="submit" [disabled]="!eventForm.valid" (click)="onSubmit('update')"
+          color="primary" *ngIf="isEdit" class="save">save</button>
+      </mat-card-actions>
+    </mat-card>
+  </div><br>
+
+
+  <div class="analytics-header">
+    <div class="filter">
+      <div class="table-wrapper" style="margin-top: 0px !important; height: calc(100vh - 91px);">
+        <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+          (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+          <!-- Id Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                IXID
+              </span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+
+          <!-- First Name Column -->
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                First Name
+              </span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+          </ng-container>
+
+          <!-- Last Name Column -->
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Last Name
+              </span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+          </ng-container>
+
+          <!-- Gender Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Email ID
+              </span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+          </ng-container>
+
+          <!-- DOB Column -->
+          <ng-container matColumnDef="phone">
+            <th class="" mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Mobile Number
+              </span>
+            </th>
+            <td class="" mat-cell *matCellDef="let element"> {{element.phone}} </td>
+          </ng-container>
+
+          <!-- Address Column -->
+          <ng-container matColumnDef="lastLoggedIn">
+            <th class="textalign-center" mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Last Login
+              </span>
+            </th>
+            <td class="textalign-center" mat-cell *matCellDef="let element">
+              <span *ngIf="element?.lastLoggedIn">{{element.lastLoggedIn | date:'medium'}}</span>
+              <span *ngIf="!element?.lastLoggedIn"> -- </span>
+
+            </td>
+          </ng-container>
+
+          <!-- Age Column -->
+          <ng-container matColumnDef="status">
+            <th class="" mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Status
+              </span>
+            </th>
+            <td class="" mat-cell *matCellDef="let element"> {{element.status}} </td>
+          </ng-container>
+
+          <!-- Action -->
+          <ng-container matColumnDef="action">
+            <th class="" mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span>
+                Action
+              </span>
+            </th>
+            <td class="" mat-cell *matCellDef="let element">
+              <i class="material-icons editbutton" matTooltip="Edit User"
+                *ngIf="(groupper?.includes('Update_User')) || (groupper?.includes('ADMIN_PERMISSION'))"
+                (click)="editUser(element);">edit</i>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </div>

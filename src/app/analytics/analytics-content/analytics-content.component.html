@@ -1,0 +1,218 @@
+<div *ngIf="isFromPage == 'patinetPage'" class="analytics-header">
+  <div class="filter">
+    <form class="input-form" [formGroup]="searchForm" (ngSubmit)="searchPatients()">
+      <div class="input-form__item">
+        <label>
+          <img src="assets/images/search-icon.svg" alt="">
+          <input type="text" formControlName="familyName" placeholder="Family Name">
+        </label>
+      </div>
+
+      <div class="input-form__item">
+        <label>
+          <img src="assets/images/search-icon.svg" alt="">
+          <input type="text" formControlName="givenName" placeholder="Given Name">
+        </label>
+      </div>
+
+      <div class="input-form__item input-form__item_select select-input">
+        <mat-form-field>
+          <mat-label>Gender</mat-label>
+          <mat-select class="selector-height" formControlName="gender" panelClass="input-form__panel">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let gender of genders" [value]="gender">
+              {{gender}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="input-form__item">
+        <label>
+          <img src="assets/images/search-icon.svg" alt="">
+          <input matInput [readonly]="inputReadonly" [matDatepicker]="picker2" (click)="picker2.open()"
+            placeholder="MM-DD-YYYY" formControlName="birthDate">
+          <mat-datepicker-toggle class="arrangedata" matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2 [disabled]="false"></mat-datepicker>
+        </label>
+        <mat-icon *ngIf="searchForm?.value?.birthDate" style="cursor: pointer;" class="arrangeicon"
+          (click)="clearDate()">close</mat-icon>
+      </div>
+
+      <input type="submit" value="Search" class="input-form__submit">
+    </form>
+  </div>
+</div>
+
+<div class="table-wrapper" style="overflow-x: auto;">
+  <table mat-table [ngClass]="{'nested' : isShowingDetails}" [dataSource]="dataSource" matSort #table
+    [matSortDisableClear]="true" (matSortChange)="handleSortChange($event)" multiTemplateDataRows
+    class="table mat-elevation-z8">
+
+    <ng-container *ngFor="let colItem of columns; let colIndex = index" matColumnDef="{{colItem?.field}}">
+      <th mat-header-cell fxFlex="100px" *matHeaderCellDef mat-sort-header
+        (mousedown)="onResizeColumn($event, colIndex)" class="tableheadet-z-index childTableBGcolor">
+        <span>
+          {{colItem?.field}}
+        </span>
+      </th>
+      <td mat-cell fxFlex="100px" *matCellDef="let element" [ngSwitch]="colItem?.dcName"
+        class="table-data-border id-cell" (click)="toggleDetails(element, colItem?.dcName)">
+        <i *ngSwitchCase="'Interopxid'" class="id-cell__wrapper">
+          <i class="sort-arrow">
+            <i class="sort-arrow"></i>
+          </i>
+          <span style="text-align: right;">
+            {{element[colItem?.dcName]}}
+          </span>
+
+        </i>
+
+        <span class="textalign-center" #target *ngSwitchCase="'Organization'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName] | slice:0:1;" style="float: left;"
+            (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+            <span
+              [ngStyle]="{'color': (selectedItem == element[colItem?.dcName] && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+              class="texthiperLink" *ngIf="item?.reference">
+              <span *ngIf="item?.display">{{item.display}}</span>
+              <span *ngIf="item?.reference && !item?.display">{{item.reference}}</span>
+            </span>
+            <span *ngIf="!item?.reference">--</span>
+          </span>
+        </span>
+
+        <span class="textalign-center" #target *ngSwitchCase="'Practitioner'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName] | slice:0:1;" style="float: left;"
+            (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+            <span
+              [ngStyle]="{'color': (selectedItem == element[colItem?.dcName] && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+              class="texthiperLink" *ngIf="item?.reference">
+              <span *ngIf="item?.display">{{item.display}}</span>
+              <span *ngIf="item?.reference && !item?.display">{{item.reference}}</span>
+            </span>
+            <span *ngIf="!item?.reference">--</span>
+          </span>
+        </span>
+
+        <span class="textalign-center" #target *ngSwitchCase="'PractitionerRole'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName] | slice:0:1;" style="float: left;"
+            (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+            <span
+              [ngStyle]="{'color': (selectedItem == element[colItem?.dcName] && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+              class="texthiperLink" *ngIf="item?.reference">
+              <span *ngIf="item?.display">{{item.display}}</span>
+              <span *ngIf="item?.reference && !item?.display">{{item.reference}}</span>
+            </span>
+            <span *ngIf="!item?.reference">--</span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'Identifier'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName]; let itemLast=last">
+            <span *ngIf="item?.type?.coding">
+              <span *ngFor="let code of item?.type?.coding | slice:0:1; let isLast=last" [matTooltip]="code?.display"
+                matTooltipClass="example-tooltip-red">
+                <span *ngIf="code?.code == 'ID'"> Source Id </span>
+                <span *ngIf="code?.code == 'SS'"> SSN </span>
+                <span *ngIf="(code?.code !== 'ID') && (code?.code !== 'SS')">{{code?.code}}{{isLast? '' : ' | '}}</span>
+              </span> :
+            </span>
+            {{item?.value}}
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'GivenName'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName]; let itemLast=last">
+            <span>{{ item }}</span>
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'FamilyName'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName]; let itemLast=last">
+            <span>{{ item }}</span>
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'Deceased'">
+          <span *ngIf="element[colItem?.dcName]?.deceasedDateTime">{{element[colItem?.dcName]?.deceasedDateTime | date:
+            'yyyy-M-dd hh:mm:ss a'}}</span>
+          <span *ngIf="!element[colItem?.dcName]?.deceasedDateTime">{{element[colItem?.dcName]?.deceasedBoolean}}</span>
+        </span>
+
+        <span *ngSwitchCase="'Language'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName]; let itemLast=last">
+            <span *ngIf="item?.display">
+              <span *ngIf="item?.display">{{item?.display}}
+                <span *ngIf="item?.code">&nbsp; - &nbsp; ({{item?.code}})</span>
+              </span>
+            </span>
+            <span *ngIf="!item?.display && item?.code">
+              <span *ngIf="item?.code">{{item?.code}}</span>
+            </span>
+          </span>
+        </span>
+
+        <span *ngSwitchCase="'Telecom'">
+          <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+          <span *ngFor="let item of element[colItem?.dcName]; let itemLast=last">
+            <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+            <span *ngIf="item?.value">{{item?.value}} &nbsp; </span>
+            <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+        </span>
+
+        <span *ngSwitchDefault>
+          {{element[colItem?.dcName]}}
+        </span>
+      </td>
+    </ng-container>
+
+
+    <!-- Patient details -->
+    <ng-container matColumnDef="patientDetails">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <app-patient-details [childMessage]="showingDetailsFor" *ngIf="isShowingDetailsFor(element)">
+        </app-patient-details>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="resourceDetails">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <div *ngIf="baseResourcecElement == element" class="example-element-detail" [ngSwitch]="selectedOrg"
+          style="justify-content: center;" [@detailExpand]="element == baseResourcecElement ? 'expanded' : 'collapsed'">
+
+          <div organizationRes style="width: 100%;" *ngSwitchCase="'Organization'" [popoverData]="selectedItem"></div>
+          <div practitionerRes style="width: 100%;" *ngSwitchCase="'Practitioner'" [popoverData]="selectedItem"></div>
+          <div practitionerRoleRes style="width: 100%;" *ngSwitchCase="'PractitionerRole'" [popoverData]="selectedItem">
+          </div>
+
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="row?.isHide"
+      [class.expanded]="isShowingDetailsFor(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['patientDetails'];" class="patient-details"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['resourceDetails'];" class="patient-details"></tr>
+  </table>
+</div>

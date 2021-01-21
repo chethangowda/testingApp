@@ -1,0 +1,4 @@
+<div class="maindiv">
+  <app-pmal-config-header (selectedTab)="onGetSelectedTab($event)"></app-pmal-config-header>
+  <app-pmal-rules-config *ngIf="isSelectedTab == 'rulesconfig'"></app-pmal-rules-config>
+</div>

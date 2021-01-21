@@ -1,0 +1,77 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+  <div class="resourcetitle">
+    <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Practitioner</strong>
+    <div *ngIf="isArray(popoverData)" style="float: right;">
+      <mat-form-field>
+        <mat-label>Select Practitioner</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- Table header -->
+      <tr class="fontBold tableHeaderBackground">
+        <td>Name</td>
+        <td>Identifiers</td>
+        <td>Telecom</td>
+      </tr>
+      <tr>
+          <!-- Name -->
+          <td>
+            <span *ngIf="!practitionerData?.name || practitionerData?.name?.length <= 0">--</span>
+            <span *ngFor="let pName of practitionerData?.name; let itemLast=last">
+              <span *ngIf="pName?.prefix">  {{ pName?.prefix.join(',') }} </span><span *ngIf="pName?.family">  {{ pName?.family }} </span><span *ngIf="pName?.given"> {{ (pName?.given.join(',')) }}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </td>
+          <!-- Identifier -->
+          <td>
+            <span *ngIf="!practitionerData?.identifier || practitionerData?.identifier?.length <= 0"></span>
+            <span *ngFor="let item of practitionerData?.identifier; let itemLast=last">
+            <span *ngIf="item?.type?.coding">
+              <span *ngFor="let code of item?.type?.coding | slice:0:1; let isLast=last"
+               [matTooltip]="code?.display"  matTooltipClass="example-tooltip-red">
+                <span *ngIf="code?.code == 'ID'"> Source Id </span>
+                <span *ngIf="code?.code !== 'ID'">{{code?.code}}{{isLast? '' : ' | '}}</span>
+              </span> :
+            </span>
+             {{item?.value}}
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+
+          </td>
+          <!-- Telecom -->
+          <td>
+            <span *ngIf="!practitionerData?.telecom || practitionerData?.telecom?.length <= 0">--</span>
+            <span *ngFor="let item of practitionerData?.telecom; let itemLast=last">
+              <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="item?.value">{{item?.value}}  &nbsp; </span>
+              <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+
+          </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isNoRecords" class="viewBackground">
+  <p class="textalign-center colorRed" style="width: 100%;">
+  <strong>No Records</strong></p>
+</div>
+
+<!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+
+

@@ -1,0 +1,94 @@
+<h1 mat-dialog-title>Patient Detailed View</h1>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <div class="analytics-header">
+    <div class="tabs">
+      <p class="tabs__item active" [ngClass]="{active: isSelectedTab == 'tableview'}"
+        (click)="onSelectLink('tableview')">
+        Table View
+      </p>
+      <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'jsonview'}" (click)="onSelectLink('jsonview')">
+        JSON View
+      </p>
+    </div>
+  </div>
+
+  <div class="table-wrapper" *ngIf="isSelectedTab == 'tableview'">
+    <table mat-table [dataSource]="dataSource" class="table mat-elevation-z8">
+
+      <!-- Interopx ID Column -->
+      <ng-container matColumnDef="inpxid">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Interopx Id</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.inpxid}} </td>
+      </ng-container>
+
+      <!-- First Name -->
+      <ng-container matColumnDef="fname">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>First Name</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.fname}} </td>
+      </ng-container>
+
+      <!-- Middle Name -->
+      <ng-container matColumnDef="mname">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Middle Name</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.mname}} </td>
+      </ng-container>
+
+      <!-- Last Name -->
+      <ng-container matColumnDef="lname">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Last Name</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.lname}} </td>
+      </ng-container>
+
+      <!-- SSN -->
+      <ng-container matColumnDef="ssn">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>SSN</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.ssn}} </td>
+      </ng-container>
+
+      <!-- Gender -->
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Gender</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+      </ng-container>
+
+      <!-- DOB -->
+      <ng-container matColumnDef="dob">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Date of Birth</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.dob}} </td>
+      </ng-container>
+
+      <!-- Phone -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>
+          <span>Phone</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <div class="json" *ngIf="isSelectedTab === 'jsonview'">
+    <pre>{{jsonview| json}}</pre>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" mat-dialog-close>close</button>
+</mat-dialog-actions>

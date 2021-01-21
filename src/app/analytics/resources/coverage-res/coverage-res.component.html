@@ -1,0 +1,179 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+    <!-- <div class="resourcetitle">
+      <strong style="float: left;">Coverage</strong>
+      <div style="float: right;">
+        <mat-form-field>
+          <mat-label>Select Coverage</mat-label>
+          <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+            <mat-option *ngFor="let item of popoverData" [value]="item">
+              <span *ngIf="item?.display">{{item?.display}}</span>
+              <span *ngIf="!item?.display">{{item?.reference}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div> -->
+    <div class="resourcetitle">
+      <!-- <strong>Location</strong> -->
+      <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Coverage</strong>
+      <div  *ngIf="isArray(popoverData)" style="float: right;">
+        <mat-form-field>
+          <mat-label>Select Coverage</mat-label>
+          <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+            <mat-option *ngFor="let item of popoverData" [value]="item">
+              <span *ngIf="item?.display">{{item?.display}}</span>
+              <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Status</td>
+          <td>Policy Holder</td>
+          <td>Subscriber</td>
+          <td>Relationship</td>
+          <!-- <td>Insurance Type</td> -->
+          <td>Payor</td>
+        </tr>
+        <tr>
+          <!-- Status -->
+          <td >
+            <span *ngIf="!coverageData?.status">--</span>
+            {{ coverageData?.status }}
+          </td>
+          <td>
+            <span *ngIf="!coverageData?.policyHolder || coverageData?.policyHolder?.length <= 0">--</span>
+            <span *ngIf="coverageData?.policyHolder?.reference">
+            <span *ngIf="!(coverageData?.policyHolder?.reference.toLowerCase().includes('patient'))" >
+              <span class="texthiperLink" (click)="onclickResourceLink(coverageData.policyHolder)"
+              [mdePopoverTriggerFor]="PolPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="!coverageData?.policyHolder?.display  && coverageData?.policyHolder?.reference">{{coverageData?.policyHolder?.reference}}</span>
+                <span *ngIf="coverageData?.policyHolder?.display">{{coverageData?.policyHolder?.display}}</span>
+              </span>
+              </span>
+                <span *ngIf="coverageData?.policyHolder?.reference.toLowerCase().includes('patient')" >
+                  <span *ngIf="coverageData?.policyHolder?.display">{{ coverageData?.policyHolder?.display }}</span>
+                <span *ngIf="coverageData?.policyHolder?.reference && !coverageData?.policyHolder?.display">{{
+                  coverageData?.policyHolder?.reference
+                }}</span>
+                </span>
+           
+            <mde-popover #PolPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == coverageData?.policyHolder">
+                  <div *ngIf="selectedResData.reference.toLowerCase().includes('organization')" >
+                    <div organizationRes [popoverData] = "selectedResData"></div>
+                   </div>
+                   <div *ngIf="selectedResData.reference.toLowerCase().includes('relatedperson')" >
+                     <div relatedpersonres [popoverData] = "selectedResData"></div>
+                    </div></div>
+              </mat-card>
+            </mde-popover>
+          </span>
+          </td>
+
+          <td>
+            <span *ngIf="!coverageData?.subscriber || coverageData?.subscriber?.length <= 0">--</span>
+            <span *ngIf="coverageData?.subscriber?.reference">
+            <span *ngIf="!(coverageData?.subscriber?.reference.toLowerCase().includes('patient'))" >
+              <span class="texthiperLink" (click)="onclickResourceLink(coverageData.subscriber)"
+              [mdePopoverTriggerFor]="PractPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="!coverageData?.subscriber?.display  && coverageData?.subscriber?.reference">{{coverageData?.subscriber?.reference}}</span>
+                <span *ngIf="coverageData?.subscriber?.display">{{coverageData?.subscriber?.display}}</span>
+              </span>
+              </span>
+                <span *ngIf="coverageData?.subscriber?.reference.toLowerCase().includes('patient')" >
+                  <span *ngIf="coverageData?.subscriber?.display">{{ coverageData?.subscriber?.display }}</span>
+                <span *ngIf="coverageData?.subscriber?.reference && !coverageData?.subscriber?.display">{{
+                  coverageData?.subscriber?.reference
+                }}</span>
+                </span>
+            <mde-popover #PractPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == coverageData?.subscriber">
+                  <div *ngIf="selectedResData.reference.toLowerCase().includes('organization')" >
+                    <div organizationRes [popoverData] = "selectedResData"></div>
+                   </div>
+                   <div *ngIf="selectedResData.reference.toLowerCase().includes('relatedperson')" >
+                     <div relatedpersonres [popoverData] = "selectedResData"></div>
+                    </div>
+                </div>
+              </mat-card>
+            </mde-popover>
+          </span>
+          </td>
+        
+          <td>
+            <span *ngIf="!coverageData?.relationship || coverageData?.relationship?.length <= 0">--</span>
+            <!-- <span *ngFor="let code of coverageData?.type"> -->
+            <span *ngIf="coverageData?.relationship?.coding">
+              <span *ngFor="let item of coverageData?.relationship?.coding; let itemLast=last">
+                <span *ngIf="item?.code">{{ item?.code }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="item?.system">{{item?.system}}  &nbsp; </span>
+                <span *ngIf="item?.display"> <strong>|</strong> &nbsp; {{item?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span> 
+            <!-- </span> -->
+             <!-- {{item?.value}}
+            <span *ngIf="!itemLast"> <br><hr> </span> -->
+          </span>
+  
+          </td>
+<td>
+          <span *ngIf="!coverageData?.payor || coverageData?.payor?.length <= 0">--</span>
+          <div *ngFor="let code of coverageData?.payor | slice: 0:1">
+          <span *ngIf="code?.reference">
+            <span *ngIf="!(code?.reference.toLowerCase().includes('patient'))" >
+            <span class="texthiperLink" (click)="onclickResourceLink(code)"
+            [mdePopoverTriggerFor]="appPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="!code?.display  && code?.reference">{{code?.reference}}</span>
+              <span *ngIf="code?.display">{{code?.display}}</span>
+            </span>
+            </span>
+              <span *ngIf="code?.reference.toLowerCase().includes('patient')" >
+                <span *ngIf="code?.display">{{ code.display }}</span>
+              <span *ngIf="code?.reference && !code?.display">{{
+                code.reference
+              }}</span>
+              </span>
+            <mde-popover #appPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == code">
+                  <div *ngIf="selectedResData.reference.toLowerCase().includes('organization')" >
+                    <div organizationRes [popoverData] = "selectedResData"></div>
+                   </div>
+                   <div *ngIf="selectedResData.reference.toLowerCase().includes('relatedperson')" >
+                     <div relatedpersonres [popoverData] = "selectedResData"></div>
+                    </div>
+                </div>
+              </mat-card>
+            </mde-popover>
+        </span>
+    </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+  
+  <!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+  
+  
+  
+  
+  
+  
+  

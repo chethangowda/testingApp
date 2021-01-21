@@ -1,0 +1,7 @@
+<div class="analytics" style="overflow: hidden;">
+  <app-admin-header (selectPatientTab)="onGetSelectedTab($event)"></app-admin-header>
+  <div class="analytics-header">
+    <app-extraction *ngIf="isSelectedTab === 'extraction'"></app-extraction>
+    <app-audit-log *ngIf="isSelectedTab === 'auditLog'"></app-audit-log>
+  </div>
+</div>

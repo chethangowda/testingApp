@@ -1,0 +1,92 @@
+@import "styles/mixins";
+@import "~@angular/material/theming";
+
+$custom-typography: mat-typography-config(
+  $font-family: "Source Sans Pro",
+);
+@include mat-core($custom-typography);
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  color: $main-text-color;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@import "styles/reset";
+@import "styles/customization";
+@import "styles/table";
+@import "styles/filter";
+@import "styles/tabs-header";
+
+.width-50 {
+  width: 50%;
+}
+
+.width-70 {
+  width: 70%;
+}
+
+.width-60 {
+  width: 60%;
+}
+
+.width-30 {
+  width: 30%;
+}
+
+.width-40 {
+  width: 40%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.color-yellow {
+  color: #ffbb04;
+}
+
+.fontsize-14 {
+  font-size: 14px;
+}
+
+.fontsize-20 {
+  font-size: 20px;
+}
+
+.fontsize-16 {
+  font-size: 16px;
+}
+
+.fontsize-18 {
+  font-size: 18px;
+}
+
+.fontBold {
+  font-weight: bold;
+}
+
+.colorRed {
+  color: red;
+}
+
+.fontstyle-italic {
+  font-style: italic;
+}
+
+.textalign-center {
+  text-align: center;
+}
+
+.textalign-left {
+  text-align: left;
+}

@@ -1,0 +1,41 @@
+<div class="tabs-header backgroundImg" style="padding-left:60px ;">
+  <div class="tabs">
+    <div class="tabs__wrapper">
+      <p class="tabs__item active">
+        User Management
+      </p>
+
+    </div>
+
+    <div class="pagination-controls">
+      <i class="disabled"></i>
+      <i></i>
+    </div>
+  </div>
+  <div class="search">
+    <button class="bt-right" mat-mini-fab color="primary"
+      *ngIf="(groupper?.includes('Create_User')) || (groupper?.includes('ADMIN_PERMISSION'))" matTooltip="Create User"
+      (click)="dialogbox();">
+      <p>+</p>
+    </button>
+    <form action="" class="input-form searchText-right">
+      <img src="assets/images/search-icon.svg" alt="">
+      <input type="text" placeholder="General Search" (input)="onSearchText($event)">
+    </form>
+
+    <div class="pagination">
+      <p class="pagination__counter">
+        <!-- <b *ngIf="totalsourcecount == null"> 0 - 0</b> -->
+        <b>{{fromRecords}} - {{toRecords}}</b>
+        of
+        <!-- <b *ngIf="totalsourcecount == null">00</b> -->
+        <b>{{totalRecords}}</b>
+        Records
+      </p>
+      <div class="pagination-controls">
+        <i [ngClass]="{disabled: presentPageNo <= 1}" (click)="gotosrcPreviousPage()"></i>
+        <i [ngClass]="{disabled: presentPageNo >= totalPages}" (click)="gotosrcNextPage()"></i>
+      </div>
+    </div>
+  </div>
+</div>

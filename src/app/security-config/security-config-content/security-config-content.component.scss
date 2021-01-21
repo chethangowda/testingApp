@@ -1,0 +1,191 @@
+@import "../../../styles/mixins";
+
+.button {
+  width: 40px;
+  height: 40px;
+  margin-top: 30 px;
+  background-color: rgb(0, 131, 239);
+  color: white;
+  border-radius: 50%;
+}
+
+.bt-right {
+  right: 30px;
+  p {
+    font-size: x-large;
+  }
+}
+
+.createconfig {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-column-value {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 28% !important;
+  width: 32% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: 0 9px 47px 0px rgba(0, 0, 0, 0.2), 0 3px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+mat-card {
+  width: 50%;
+}
+
+.row {
+  display: flex;
+}
+
+.start {
+  width: 40%;
+}
+
+.stop {
+  width: 40%;
+  margin-left: 30px;
+}
+
+.filter {
+  padding-left: 110px;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.addbtn {
+  float: right;
+  margin-top: -69px;
+  margin-right: 20px;
+}
+
+.buttons {
+  padding-left: 10px;
+  margin-top: 9px;
+}
+
+mat-form-field {
+  display: block;
+}
+
+.json {
+  background: none;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+
+.input-form__item {
+  max-width: 100%;
+  margin-right: 0px;
+}
+
+input[type="text"]:disabled {
+  background: #dddddd;
+}
+
+.json input {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  border-radius: 5px;
+  width: 380px;
+}
+
+.table-wrapper {
+  padding-left: 56px;
+}
+
+.table td {
+  cursor: default !important;
+}
+
+.editbutton {
+  cursor: pointer;
+}
+
+.value input {
+  border: 1px solid darkblue;
+  border-radius: 5px;
+}
+
+.value input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.configtable {
+  width: 90%;
+  margin-left: 100px;
+  margin-top: 32px;
+  mat-card {
+    width: 100%;
+  }
+}
+
+.input-form {
+  margin-right: 0;
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  padding-right: 24px;
+
+  &__item {
+    position: relative;
+    width: 100%;
+    max-width: 240px;
+    margin-right: 48px;
+
+    &.input-form__item_select {
+      svg {
+        left: calc(100% - 18px);
+        top: 14px;
+      }
+    }
+  }
+
+  svg {
+    position: absolute;
+    top: 9px;
+    left: 12px;
+  }
+
+  label {
+    display: block;
+    width: 100%;
+  }
+
+  input,
+  select {
+    @include basic-input();
+    width: 100%;
+    padding-left: 34px;
+  }
+
+  select {
+    padding-left: 8px;
+    outline: none;
+    font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    color: #818faf;
+
+    option {
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 18px;
+      color: #818faf;
+    }
+  }
+}

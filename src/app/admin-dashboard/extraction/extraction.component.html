@@ -1,0 +1,70 @@
+<div style="width: 100%; text-align: right;">
+  <button class="refresh" mat-stroked-button color="primary" matTooltip="Refresh" (click)="refresh()">
+    <mat-icon color="primary">refresh</mat-icon>
+  </button>
+</div>
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="dataSource" #table matSort [matSortDisableClear]="true"
+    (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+    <ng-container matColumnDef="dataSourceName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Datasource Name</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.dataSourceName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="extractionId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Extraction ID</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.extractionId}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="extractionStartTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Ext. Start Time</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.extractionStartTime | date:'medium'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="extractionEndTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Ext. End Time</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.extractionEndTime | date:'medium'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Ext. Status</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="transformationStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Transformation Status</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.transformationStatus}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="idMatchingStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>PMAL Status </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.idMatchingStatus}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="deDuplicationStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>De-Duplication Status</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.deDuplicationStatus}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

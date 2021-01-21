@@ -1,0 +1,87 @@
+<!-- NESTED TABLE WITH SPECIFIC PATIENT DATA -->
+<div class="patient-table childTableBGcolor">
+  <div class="tabs-header nested">
+    <div class="tabs fontBold fontsize-18 color-yellow">
+      Data Source
+    </div>
+    <div class="search">
+      <form action="" class="input-form">
+        <img src="assets/images/search-icon.svg" alt="">
+        <input type="text" placeholder="General Search" (input)="onFilter($event)">
+      </form>
+
+      <div class="pagination">
+        <mat-paginator class="paginator-display" #paginator [pageSize]="10" (page)="onPageChange($event)"
+          [hidePageSize]="true" [pageSizeOptions]="[10, 20, 30]">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+      (matSortChange)="handleSortChange($event)" multiTemplateDataRows class="table mat-elevation-z8">
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="dataSourceId">
+        <th class="childTableBGcolor" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Datasource ID
+          </span>
+        </th>
+        <td class="id-cell right-align-cell" mat-cell *matCellDef="let element">
+          <i class="id-cell__wrapper">
+            {{element?.dataSourceId}}
+          </i>
+        </td>
+      </ng-container>
+
+      <!-- First Name Column -->
+      <ng-container matColumnDef="dataSourceName">
+        <th class="childTableBGcolor" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            DataSource Name
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element?.dataSourceName}} </td>
+      </ng-container>
+
+      <!-- First Name Column -->
+      <ng-container matColumnDef="endPointUrl">
+        <th class="childTableBGcolor" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            URL
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="element?.endPointUrl">{{element?.endPointUrl}}</span>
+          <span *ngIf="!element?.endPointUrl">--</span>
+        </td>
+      </ng-container>
+
+      <!-- Last Name Column -->
+      <ng-container matColumnDef="isSecure">
+        <th class="childTableBGcolor" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Content Type
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element?.isSecure ? 'Bulk' : 'Open'}} </td>
+      </ng-container>
+
+      <!-- Last Name Column -->
+      <ng-container matColumnDef="connectorId">
+        <th class="childTableBGcolor" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Connector Type
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{getConnectorType(element?.connectorId)}} </td>
+      </ng-container>
+
+      <tr class="childTableBGcolor" mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="opacity: 1">
+      </tr>
+      <tr class="childTableBGcolor" mat-row *matRowDef="let row; columns: displayedColumns;" style="opacity: 1"></tr>
+    </table>
+  </div>
+</div>

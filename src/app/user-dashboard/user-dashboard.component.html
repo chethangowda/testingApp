@@ -1,0 +1,7 @@
+<div class="maindiv">
+  <app-user-dashboard-header (selectedTab)="onGetSelectedTab($event)"></app-user-dashboard-header>
+  <app-data-set *ngIf="isSelectedTab == 'dataset'"></app-data-set>
+  <app-metrics-dashdoard *ngIf="isSelectedTab == 'metrics'"></app-metrics-dashdoard>
+  <app-pmal *ngIf="isSelectedTab == 'pmal'"></app-pmal>
+  <app-coverage-requirements *ngIf="isSelectedTab == 'coverage-requirements'"></app-coverage-requirements>
+</div>

@@ -1,0 +1,40 @@
+@import "../../styles/variables";
+
+.analytics {
+  display: block;
+  padding-left: $sideNavWidth;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.textsize-35vh {
+  font-size: 35vh;
+}
+
+.textsize-21 {
+  font-size: 21px;
+}
+
+.colorBlue {
+  color: #0083ef;
+}
+
+.colorRed {
+  color: red;
+}
+
+.divCenter {
+  width: 400px;
+  height: 400px;
+  // background-color: red;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}

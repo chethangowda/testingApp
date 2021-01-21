@@ -1,0 +1,49 @@
+<mat-card class="mat-card pageContent" style="margin: 16px 10px;">
+  <mat-card-title class="mat-card-title">
+    <div class="contentHeader">
+      <h1 style="font-size: larger;line-height: 1.2;">CRD & PAS Managment System</h1>
+    </div>
+  </mat-card-title>
+  <hr />
+
+  <mat-card-content class="mat-card-content">
+    <mat-card class="mat-card" style="background-color: aliceblue;">
+      <h5 class="class-header" style="font-size: large;">Prior Authorization Support (PAS)</h5>
+
+    </mat-card>
+
+    <div class="table-responsive table-striped mat-elevation-z4 mr-2  ml-2 card">
+      <table class="table">
+        <tr>
+          <th>Order ID</th>
+          <th>Patient Name</th>
+          <th>Gender</th>
+          <th>Date of Birth</th>
+          <th>CRD Status</th>
+          <th>DTR Status</th>
+          <th>PAS Status</th>
+          <th>Actions</th>
+        </tr>
+        <tr *ngFor="let data of pasdata">
+          <td>{{data.bundleId | slice:0:8}}</td>
+          <td>{{data.patientName}}</td>
+          <td>{{data.gender}}</td>
+          <td>{{data.dob}}</td>
+          <td>{{data.crdStatus}}</td>
+          <td>{{data.dtrStatus}}</td>
+          <td>{{data.pasStatus}}</td>
+          <td class="actionbutton" *ngIf="data.pasStatus === 'Not Initiated'">
+            <button mat-raised-button color="primary" (click)="onSubmit(data)">
+              Submit PAS
+            </button>
+          </td>
+          <td class="actionbutton" *ngIf="data.pasStatus === 'Pended'">
+            <button mat-raised-button color="warn" (click)="onSubmit(data)">
+              Check Status
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

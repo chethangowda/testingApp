@@ -1,0 +1,47 @@
+<div style="padding: 10px;">
+  <div style="padding: 10px; text-align: center;">
+    {{resourceName}}
+  </div>
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr class="fontBold">
+        <td>Name</td>
+        <td>Identifiers</td>
+        <td>Telecom</td>
+      </tr>
+      <tr>
+        <td>{{ organizationData?.name }}
+        </td>
+        <td>
+          <span *ngFor="let item of organizationData?.identifier; let itemLast=last">
+            <span *ngIf="item?.type?.coding">
+              <span *ngFor="let code of item?.type?.coding | slice:0:1; let isLast=last" [matTooltip]="code?.display"
+                matTooltipClass="example-tooltip-red">
+                <span *ngIf="code?.code == 'ID'"> Source Id </span>
+                <span *ngIf="code?.code !== 'ID'">{{code?.code}}{{isLast? '' : ' | '}}</span>
+              </span> :
+            </span>
+            {{item?.value}}
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+
+        </td>
+        <td>
+          <span *ngFor="let item of organizationData?.telecom; let itemLast=last">
+            <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+            <span *ngIf="item?.value">{{item?.value}} &nbsp; </span>
+            <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br>
+              <hr>
+            </span>
+          </span>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif">

@@ -1,0 +1,105 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+  <!-- <div class="resourcetitle">
+    <strong style="float: left;">Practitioner Role</strong>
+    <div style="float: right;">
+      <mat-form-field>
+        <mat-label>Select Practitioner Role</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div> -->
+
+  <div class="resourcetitle">
+    <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Practitioner Role</strong>
+    <div  *ngIf="isArray(popoverData)" style="float: right;">
+      <mat-form-field>
+        <mat-label>Select PractitionerRole</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- Table header -->
+      <tr class="fontBold tableHeaderBackground">
+        <td>Speciality</td>
+        <td>Organization</td>
+        <td>Practitioner</td>
+      </tr>
+      <tr>
+        <!-- Specialty -->
+        <td>
+          <span *ngIf="!practitionerRoleData?.specialty">--</span>
+          <div *ngFor="let specialityItem of practitionerRoleData?.specialty">
+            <span *ngIf="specialityItem?.text">{{specialityItem?.text}}
+              <span> <br><hr> </span>
+            </span>
+            <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+              <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+              <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </div>
+        </td>
+        <!-- Organization -->
+        <td *ngIf="!practitionerRoleData?.organization || (practitionerRoleData?.organization && !practitionerRoleData?.organization?.reference)">
+          --
+        </td>
+        <td *ngIf="practitionerRoleData?.organization && practitionerRoleData?.organization?.reference">
+          <span class="texthiperLink" #target2="mdePopoverTrigger" (click)="onclickResourceLink(practitionerRoleData.organization)"
+          [mdePopoverTriggerFor]="OrgPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+            <span *ngIf="practitionerRoleData?.organization?.display">{{practitionerRoleData?.organization?.display}}</span>
+            <span *ngIf="!practitionerRoleData?.organization?.display">{{practitionerRoleData?.organization?.reference}}</span>
+          </span>
+          <mde-popover #OrgPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+          [mdePopoverCloseOnClick]="false">
+            <mat-card class="tooltip" style="width: min-content;">
+              <div style="width: 100%;" *ngIf="selectedResData == practitionerRoleData?.organization" organizationRes [popoverData]="selectedResData"></div>
+            </mat-card>
+          </mde-popover>
+        </td>
+        <!-- Practitioner -->
+        <td *ngIf="!practitionerRoleData?.practitioner || (practitionerRoleData?.practitioner && !practitionerRoleData?.practitioner?.reference)">
+          --
+        </td>
+        <td *ngIf="practitionerRoleData?.practitioner && practitionerRoleData?.practitioner?.reference">
+          <span class="texthiperLink" (click)="onclickResourceLink(practitionerRoleData.practitioner)"
+          [mdePopoverTriggerFor]="PractPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+          <span *ngIf="practitionerRoleData?.practitioner?.display">{{practitionerRoleData?.practitioner?.display}}</span>
+          <span *ngIf="!practitionerRoleData?.practitioner?.display">{{practitionerRoleData?.practitioner?.reference}}</span>
+          </span>
+          <mde-popover #PractPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+          [mdePopoverCloseOnClick]="false">
+            <mat-card class="tooltip" style="width: min-content;">
+              <div style="width: 100%;" *ngIf="selectedResData == practitionerRoleData?.practitioner" practitionerRes [popoverData]="selectedResData"></div>
+            </mat-card>
+          </mde-popover>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isNoRecords" class="viewBackground">
+  <p class="textalign-center colorRed" style="width: 100%;">
+  <strong>No Records</strong></p>
+</div>
+
+<!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+.column {
+  float: left;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.headerCol {
+  width: 50%;
+}
+
+.piechart {
+  width: 50%;
+}
+
+.nameAlign {
+  padding-right: 21px;
+  text-align: right;
+}
+
+.mat-card-header-text {
+  width: 100%;
+}
+
+.card-width {
+  width: -webkit-fill-available;
+  margin: 21px;
+}
+
+.card-height {
+  height: 100%;
+}
+
+.maxwid {
+  max-height: 300px;
+  max-width: 600px;
+}
+
+.btnBackground {
+  background: #b4dbfb82;
+  color: #0b79d4;
+  font-weight: bold;
+  cursor: default;
+}
+
+.headerBorder {
+  border-bottom: 0.5px solid #808080a6;
+  margin-bottom: 5px;
+}

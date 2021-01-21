@@ -1,0 +1,139 @@
+@import "../../../styles/mixins";
+
+.analytics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 75px;
+  padding-left: 24px;
+  border-bottom: 1px solid rgba(129, 143, 175, 0.25);
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  height: 75px;
+
+  &__item {
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 23px;
+    margin-right: 32px;
+    display: flex;
+    align-items: center;
+    color: $main-text-color;
+    border-bottom: 0 solid #0083ef;
+
+    &:hover,
+    &.active {
+      padding-top: 6px;
+      border-bottom: 6px solid #0083ef;
+      transition: 0.3s;
+      color: #0083ef;
+    }
+  }
+}
+
+.flex-container1 {
+  width: 100%;
+  display: flex;
+  margin-top: 10px;
+}
+
+.prebutton {
+  margin-right: 10px;
+  margin-top: 10px;
+  float: right;
+}
+.nextbutton {
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
+}
+.excludebutton {
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
+}
+.activelearnbutton {
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
+}
+.linkbutton {
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
+}
+.button {
+  float: right;
+  width: 100%;
+  margin-right: 60px;
+}
+.buttons {
+  display: flex;
+  padding-left: 60px;
+}
+
+.close {
+  float: right;
+  margin-top: 10px;
+  margin-right: 100px;
+}
+
+.group {
+  margin-top: 15px;
+  .table-wrapper {
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+}
+
+.conflict {
+  margin-top: 50px;
+  .table-wrapper {
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  }
+}
+
+.patientgrps {
+  padding-left: 15px;
+}
+
+.stats .table td {
+  cursor: default !important;
+}
+
+.highlight {
+  background: #ffbb0485;
+  text-decoration: underline;
+}
+
+.stats .table-wrapper {
+  height: auto;
+  overflow-y: scroll;
+}
+
+h1 {
+  font-size: larger;
+  text-decoration: underline;
+}
+
+.head h1 {
+  margin-left: 20px;
+  margin-top: -25px;
+}
+
+td.mat-cell a {
+  color: blue;
+  text-decoration: underline;
+}
+
+.back-image {
+  cursor: pointer;
+}

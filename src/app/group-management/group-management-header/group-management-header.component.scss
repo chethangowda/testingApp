@@ -1,0 +1,14 @@
+@import "../../../styles/mixins";
+
+.search {
+  button {
+    margin-right: 22px;
+    p {
+      font-size: x-large;
+    }
+  }
+}
+
+.backgroundImg {
+  background: url("../../../assets/images/login-bg.png") -1px;
+}

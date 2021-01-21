@@ -1,0 +1,205 @@
+
+<div *ngIf="isNoRecords" class="viewBackground">
+  <p class="textalign-center colorRed" style="width: 100%;">
+  <strong>No Records</strong></p>
+</div>
+
+<div *ngIf="!isNoRecords" class="viewBackground">
+  <div class="resourcetitle">
+    <!-- <strong>Location</strong> -->
+    <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">CareTeam</strong>
+    <div  *ngIf="isArray(popoverData)" style="float: right;">
+      <mat-form-field>
+        <mat-label>Select CareTeam</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- Table header -->
+      <tr class="fontBold tableHeaderBackground">
+        <td>CareTeam Name</td>
+        <td>Status</td>
+        <td>Category</td>
+        <td>Telecom</td>
+        <td>Reason Code</td>
+        <td>Start Date</td>
+        <td>End Date</td>
+        <td>Notes</td>
+        <td>Practitioner Id</td>
+        <td>Practitioner Role</td>
+        <td>Encounter Id</td>
+        <td>Organization</td>
+      </tr>
+
+      <tr>
+        <!-- Name -->
+        <td>
+          <span *ngIf="!careteamData?.name">--</span>
+          {{ careteamData?.name }}
+        </td>
+
+        <!-- Status -->
+        <td>
+          <span *ngIf="!careteamData?.status">--</span>
+          {{ careteamData?.status }}
+        </td>
+
+        <!-- Category -->
+        <td>
+          <span *ngIf="!careteamData?.category || careteamData?.category?.length <= 0">--</span>
+          <div *ngFor="let specialityItem of careteamData?.category">
+            <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+            <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+              <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+              <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </div>
+        </td>
+
+        <!-- Telecom -->
+        <td>
+          <span *ngIf="!careteamData?.telecom || careteamData?.telecom?.length <= 0">--</span>
+          <span *ngFor="let item of careteamData?.telecom; let itemLast=last">
+            <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+            <span *ngIf="item?.value">{{item?.value}}  &nbsp; </span>
+            <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+        </td>
+
+        <!-- Reason Code -->
+        <td>
+          <span *ngIf="!careteamData?.reasonCode || careteamData?.reasonCode?.length <= 0">--</span>
+          <div *ngFor="let specialityItem of careteamData?.reasonCode">
+            <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+            <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+              <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+              <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </div>
+        </td>
+
+        <!-- Start Time -->
+        <td >
+          <span *ngIf="!careteamData?.period">--</span>
+          <span *ngIf="careteamData?.period?.start">
+          <span *ngIf="!careteamData?.period?.start.toLowerCase().includes('t')"> {{ careteamData?.period?.start | date:'yyyy-MM-dd'}}</span>
+          <span *ngIf="careteamData?.period.start.toLowerCase().includes('t')"> {{ careteamData?.period?.start | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+        </span>
+        </td>
+
+        <!-- End Time -->
+        <td >
+          <span *ngIf="!careteamData?.period">--</span>
+          <span *ngIf="careteamData?.period?.end">
+          <span *ngIf="!careteamData?.period?.end.toLowerCase().includes('t')"> {{ careteamData?.period?.end | date:'yyyy-MM-dd'}}</span>
+          <span *ngIf="careteamData?.period?.end.toLowerCase().includes('t')"> {{ careteamData?.period?.end | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+        </span>
+        </td>
+
+        <!-- Note -->
+        <td >
+          <span *ngIf="!careteamData?.note || careteamData?.note?.length <= 0">--</span>
+          <div *ngFor="let specialityItem of careteamData?.note">
+            <span *ngIf="specialityItem?.text">{{specialityItem?.text}}</span>
+          </div>
+        </td>
+
+        <!-- Practitioner Id -->
+        <td>
+          <span *ngIf="!careteamData?.participant || careteamData?.participant?.length <= 0">--</span>
+          <span *ngFor="let ritem of careteamData?.participant; let itemLast=last" style="float: left;">
+            <span *ngIf="(ritem?.member.reference.toLowerCase().includes('practitioner')) && !(ritem?.member.reference.toLowerCase().includes('practitionerrole'))">
+              <span *ngIf="(ritem?.member)" class="texthiperLink" (click)="onclickResourceLink(ritem.member)"
+                  [mdePopoverTriggerFor]="pracPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="ritem?.member?.display">{{ritem?.member?.display}}</span>
+                <span *ngIf="!ritem?.member?.display && ritem?.member?.reference">{{ritem?.member?.reference}}</span>
+              </span>
+              <mde-popover #pracPopover="mdePopover" [mdePopoverOverlapTrigger]="false" [mdePopoverCloseOnClick]="false">
+                <mat-card class="tooltip" style="width: min-content;">
+                  <div style="width: 100%;" *ngIf="selectedResData == ritem?.member" practitionerRes [popoverData]="selectedResData"></div>
+                </mat-card>
+              </mde-popover>
+            </span>
+            <span *ngIf="!itemLast"> <br> </span>
+          </span>
+        </td>
+
+        <!-- Practitionerrole -->
+        <td>
+          <span *ngIf="!careteamData?.participant || careteamData?.participant?.length <= 0">--</span>
+          <span *ngFor="let ritem of careteamData?.participant; let itemLast=last" style="float: left;">
+            <span *ngIf="(ritem?.role)">
+              <span *ngFor="let role of ritem?.role; let mlast=last" style="float: left;">
+                <span  *ngIf="role?.coding">
+                  <span *ngFor="let code of role?.coding; let itemLa=last">
+                    <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                    <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                    <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                    <span *ngIf="!itemLa"> <br><hr> </span>
+                  </span><br>
+                </span>
+                <span  *ngIf="!role?.coding && role?.text">{{role?.text}}</span>
+                <span *ngIf="!mlast"> <hr> </span>
+              </span>
+            </span>
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+        </td>
+
+
+        <!-- Encounter -->
+        <td>
+          <span *ngIf="!careteamData?.encounter || careteamData?.encounter?.length <= 0">--</span>
+          <span *ngIf="isNoReference">
+            <span *ngIf="!careteamData?.encounter?.display">{{careteamData?.encounter?.reference}}</span>
+            <span *ngIf="careteamData?.encounter?.display">{{careteamData?.encounter?.display}}</span>
+          </span>
+          <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(careteamData.encounter)"
+              [mdePopoverTriggerFor]="encPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+            <span *ngIf="careteamData?.encounter?.display">{{careteamData?.encounter?.display}}</span>
+            <span *ngIf="!careteamData?.encounter?.display && careteamData?.encounter?.reference">{{careteamData?.encounter?.reference}}</span>
+          </span>
+          <mde-popover #encPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+            <mat-card class="tooltip" style="width: min-content;">
+              <div style="width: 100%;" *ngIf="selectedResData == careteamData?.encounter" encounterRes [popoverData]="selectedResData"></div>
+            </mat-card>
+          </mde-popover>
+        </td>
+
+        <!-- Organization -->
+        <td >
+          <span *ngIf="!careteamData?.managingOrganization || careteamData?.managingOrganization?.length <= 0">--</span>
+          <div *ngFor="let code of careteamData?.managingOrganization | slice: 0:1">
+            <span *ngIf="code?.reference">
+              <span class="texthiperLink" (click)="onclickResourceLink(careteamData?.managingOrganization)"
+                [mdePopoverTriggerFor]="orgPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="!code?.display  && code?.reference">{{code?.reference}}</span>
+                <span *ngIf="code?.display">{{code?.display}}</span>
+              </span>
+              <mde-popover #orgPopover="mdePopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" [mdePopoverOverlapTrigger]="false"
+                [mdePopoverCloseOnClick]="false">
+                <mat-card class="tooltip" style="width: min-content;">
+                  <div style="width: 100%;" *ngIf="selectedResData == careteamData?.managingOrganization" organizationRes [popoverData]="selectedResData"></div>
+                </mat-card>
+              </mde-popover>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

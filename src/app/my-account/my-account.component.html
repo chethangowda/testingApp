@@ -1,0 +1,319 @@
+<div class="tabs-header backgroundImg" style="padding-left:60px ;">
+  <div class="tabs">
+    <div class="tabs__wrapper">
+      <p class="tabs__item active">
+        My Profile
+      </p>
+      <i class="fas fa-user-edit"></i>
+    </div>
+
+  </div>
+  <div class="search">
+    <button mat-raised-button color="primary" (click)="changepassword()">
+      <mat-icon style="margin-right: 10px;">vpn_key</mat-icon>Change Password
+    </button>
+  </div>
+</div><br>
+
+
+<div class="profiledetails" *ngIf="userprofile">
+
+  <mat-card>
+    <mat-card-title></mat-card-title>
+    <mat-card-content>
+      <button mat-mini-fab style="float: right; background-color: #0083ef;" matTooltip="Edit Profile"
+        (click)="updateprofile()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <img style="margin-left: 213px;" [src]="url ? url : 'assets/images/user.png'">
+
+      <br>
+      <div class="user-details">
+        <table>
+          <tr>
+            <th scope="row">User Id<span style="float: right;">:</span></th>
+            <td>{{ profileres?.username }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">First Name<span style="float: right;">:</span></th>
+            <td>{{ profileres?.firstName }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Last Name<span style="float: right;">:</span></th>
+            <td>{{ profileres?.lastName }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Phone Number<span style="float: right;">:</span></th>
+            <td>{{ profileres?.phone }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Organization<span style="float: right;">:</span></th>
+            <td>{{ profileres?.organization }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Department<span style="float: right;">:</span></th>
+            <td>{{ profileres?.department }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Address<span style="float: right;">:</span></th>
+            <td>{{ profileres?.address }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">City<span style="float: right;">:</span></th>
+            <td>{{ profileres?.city }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Country<span style="float: right;">:</span></th>
+            <td>{{ profileres?.country }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Account Status<span style="float: right;">:</span></th>
+            <td>{{ profileres?.status }}</td>
+          </tr>
+          <mat-divider></mat-divider>
+          <tr>
+            <th scope="row">Assigned Groups<span style="float: right;">:</span></th>
+            <td>{{ grpslist }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+
+
+</div>
+
+<div class="adddatsource" *ngIf="editprofile"><br>
+
+  <mat-card>
+    <div class="user">
+      <mat-card-header class="font_color"> Edit Profile </mat-card-header><br>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-card-content style="margin-bottom: 0px;"><br>
+      <div class="profile-img">
+        <img [src]="url ? url : 'assets/images/user.png'">
+        <div class="file btn btn-lg btn-primary">
+          Change Photo
+          <input type="file" (change)="onSelectFile($event)" name="file" />
+        </div>
+      </div><br>
+
+
+      <form [formGroup]="eventForm">
+
+
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>User ID</mat-label>
+              <input matInput placeholder="User ID" formControlName="userID" required>
+              <mat-error *ngIf="eventForm.controls['userID'].errors?.required && eventForm.controls['userID'].touched">
+                User ID is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="email" formControlName="Email" required>
+              <mat-error *ngIf="eventForm.controls['Email'].errors?.required && eventForm.controls['Email'].touched">
+                Email is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Select groups</mat-label>
+          <mat-select placeholder="Select group" formControlName="group" (selectionChange)="onSelectDropdown($event);"
+            multiple required>
+            <mat-option *ngFor="let connectortype of connectorTypes" [value]="connectortype.groupId">
+              {{connectortype.groupName}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="eventForm.controls['group'].errors?.required && eventForm.controls['group'].touched">
+            group is required</mat-error>
+
+        </mat-form-field>
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>First name</mat-label>
+              <input matInput placeholder="First name*" formControlName="first_name" required>
+              <mat-error
+                *ngIf="eventForm.controls['first_name'].errors?.required && eventForm.controls['first_name'].touched">
+                First Name is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Last name</mat-label>
+              <input matInput placeholder="Last name*" formControlName="last_name" required>
+              <mat-error
+                *ngIf="eventForm.controls['last_name'].errors?.required && eventForm.controls['last_name'].touched">
+                Last Name is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>organization</mat-label>
+              <input matInput placeholder="organization" formControlName="organization" required>
+              <mat-error
+                *ngIf="eventForm.controls['organization'].errors?.required && eventForm.controls['organization'].touched">
+                organization is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Department</mat-label>
+              <input matInput placeholder="Department" formControlName="Department">
+              <mat-error
+                *ngIf="eventForm.controls['Department'].errors?.required && eventForm.controls['Department'].touched">
+                Department is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="start">
+            <mat-form-field appearance="outline">
+              <mat-label>Address</mat-label>
+              <input matInput placeholder="Address" formControlName="Address">
+              <mat-error
+                *ngIf="eventForm.controls['Address'].errors?.required && eventForm.controls['Address'].touched">
+                Address is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop">
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput placeholder="City" formControlName="City">
+              <mat-error *ngIf="eventForm.controls['City'].errors?.required && eventForm.controls['City'].touched">
+                City is required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Country</mat-label>
+        <input matInput placeholder="Country" formControlName="Country" required> -->
+              <mat-label>Select Country</mat-label>
+              <mat-select placeholder="Select country" formControlName="Country"
+                (selectionChange)="onSelectCountryDropdown($event);" required>
+                <mat-option *ngFor="let country of countrtList" [value]="country.value">
+                  {{country.value}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="eventForm.controls['Country'].errors?.required && eventForm.controls['Country'].touched">
+                Country is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Code</mat-label>
+              <input matInput placeholder="Code" formControlName="Code" required>
+              <mat-error *ngIf="eventForm.controls['Code'].errors?.required && eventForm.controls['Code'].touched">
+                Code is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Mobile Number</mat-label>
+              <input matInput placeholder="Mobile Number" formControlName="Number" required>
+              <mat-error *ngIf="eventForm.controls['Number'].errors?.required && eventForm.controls['Number'].touched">
+                Number is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Status</mat-label>
+                <input matInput placeholder="Status" formControlName="Status" required> -->
+              <mat-label>Select Status</mat-label>
+              <mat-select placeholder="Select Status" formControlName="Status">
+                <mat-option *ngFor="let item of statusList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="eventForm.controls['Status'].errors?.required && eventForm.controls['Status'].touched">
+                Status is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions align="end" style="margin-top: 10px;">
+      <button mat-raised-button (click)="closeform()" class="close"
+        style="background-color: #f44336; color: white;">close</button>&nbsp;
+      <button mat-raised-button type="submit" [disabled]="!eventForm.valid" (click)="onSubmit()" color="primary"
+        class="save">save</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div><br>
+
+<div class="changepwd" *ngIf="password">
+  <section class="content">
+    <div class="content__box">
+      <h2 class="content__heading">
+        Change Password
+      </h2>
+
+      <div class="form1">
+        <div>
+          <form [formGroup]="resetForm" class="content__form">
+            <mat-form-field appearance="outline">
+              <mat-label>New Password</mat-label>
+              <input id="newPssword" type="password" matInput placeholder="New Password" formControlName="newpassword"
+                required>
+              <mat-error
+                *ngIf="resetForm.controls['newpassword'].errors?.required && resetForm.controls['newpassword'].touched">
+                Please enter New Password</mat-error>
+              <mat-error *ngIf="resetForm.controls['newpassword'].errors?.pattern">
+                Please enter Valid New Password</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="content__form-box">
+              <mat-label>Confirm Password</mat-label>
+              <input id="conformPassword" type="password" matInput placeholder="Confirm Password"
+                formControlName="confirmpassword" required>
+              <mat-error
+                *ngIf="resetForm.controls['confirmpassword'].errors?.required && resetForm.controls['confirmpassword'].touched">
+                Please Confirm your password</mat-error>
+              <mat-error class="error-msg" *ngIf="resetForm.hasError('notSame')">
+                Passwords do not match
+              </mat-error>
+            </mat-form-field>
+            <button class="content__button" (click)="onsetpassword(resetForm)">
+              Change Password
+            </button>
+            <button class="content__button transparent" (click)="closeform()">
+              Goto My Account
+            </button>
+          </form>
+        </div>
+        <div class="text">
+          <p>(The password must be 8 characters long and include atleast one Uppercase and one Lowercase alphabet,
+            and one number and one special character).</p>
+        </div>
+      </div>
+    </div>
+  </section>y
+</div>

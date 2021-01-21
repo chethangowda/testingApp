@@ -1,0 +1,34 @@
+<div class="tabs-header backgroundImg">
+  <div class="tabs-header">
+    <div class="tabs">
+      <div class="tabs__wrapper">
+        <p class="tabs__item active" [ngClass]="{ active: isSelectedTab == 'extraction' }"
+          (click)="onSelectTab('extraction')">
+          Extractions
+        </p>
+        <p class="tabs__item" [ngClass]="{ active: isSelectedTab == 'auditLog' }" (click)="onSelectTab('auditLog')">
+          Audit/ Activity Log
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="search">
+    <form action="" class="input-form">
+      <img src="assets/images/search-icon.svg" alt="" />
+      <input #searchInput type="text" (input)="onFilterdatasrcText($event)" placeholder="General Search" />
+    </form>
+
+    <div class="pagination">
+      <p class="pagination__counter">
+        <b>{{ fromRecords }} - {{ toRecords }}</b>
+        of
+        <b>{{ totalRecords }}</b>
+        Records
+      </p>
+      <div class="pagination-controls">
+        <i [ngClass]="{ disabled: presentPageNo <= 1 }" (click)="gotosrcPreviousPage()"></i>
+        <i [ngClass]="{ disabled: presentPageNo >= totalPages }" (click)="gotosrcNextPage()"></i>
+      </div>
+    </div>
+  </div>
+</div>

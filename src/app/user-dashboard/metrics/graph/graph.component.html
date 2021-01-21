@@ -1,0 +1,22 @@
+<mat-card *ngIf="barChartLabels?.length > 0">
+  <mat-card-header>
+    <mat-card-title>
+      Extractions
+    </mat-card-title>
+
+    <div class="div-height" style="width: 100%; text-align: right;">
+      <button mat-flat-button class="btnBackground">{{datasourceName}}</button>
+    </div>
+  </mat-card-header>
+  <mat-divider class="headerBorder" cols="4" rowHeight="50px"></mat-divider>
+  <mat-card-content style="height: 400px; margin-top: 15px;">
+    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+      [plugins]="barChartPlugins" [legend]="barChartLegend" [colors]="chartColors" [chartType]="barChartType">
+    </canvas>
+  </mat-card-content>
+
+</mat-card>
+
+<div style="display: block;">
+  <input readonly="true" #graphdiv>
+</div>

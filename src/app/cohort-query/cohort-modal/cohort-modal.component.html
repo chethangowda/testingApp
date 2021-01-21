@@ -1,0 +1,34 @@
+<div *ngIf="dialogData == 'save'">
+  <mat-card-content>
+    <form [formGroup]="queryForm" (ngSubmit)="onSubmit(queryForm)">
+      <mat-form-field appearance="outline" class="width100">
+        <mat-label>Query Name</mat-label>
+        <input matInput placeholder="Query Name" formControlName="queryName" required>
+        <mat-error *ngIf="queryForm.controls['queryName'].errors?.required && queryForm.controls['queryName'].touched">
+          Query name is required</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-dialog-actions align="end">
+    <button mat-button color="warn" class="action-btn" mat-dialog-close>Cancel</button>
+    <button mat-button color="primary" class="action-btn" [disabled]="!queryForm.valid"
+      (click)="onSubmit(queryForm)">Save</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="dialogData == 'execute'">
+  <mat-card-content>
+    <form [formGroup]="queryForm" (ngSubmit)="onSubmit(queryForm)">
+      <mat-form-field appearance="outline" class="width100">
+        <mat-label>Query Name</mat-label>
+        <input matInput placeholder="Query Name" formControlName="queryName">
+        <mat-error *ngIf="queryForm.controls['queryName'].errors?.required && queryForm.controls['queryName'].touched">
+          Query name is required</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-dialog-actions align="end">
+    <button mat-button color="warn" class="action-btn" mat-dialog-close>Cancel</button>
+    <button mat-button color="primary" class="action-btn" (click)="onSubmit(queryForm)">Execute Without Name</button>
+  </mat-dialog-actions>
+</div>

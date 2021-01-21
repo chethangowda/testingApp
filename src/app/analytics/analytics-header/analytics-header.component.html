@@ -1,0 +1,42 @@
+<div class="tabs-header backgroundImg">
+  <div class="tabs">
+    <div class="tabs__wrapper">
+      <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'patientview'}"
+        *ngIf="(groupper.includes('Analytics_Patientview')) || (groupper.includes('ADMIN_PERMISSION'))"
+        (click)="onSelectTab('patientview')">
+        Patient View
+      </p>
+      <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'cohoryQuery'}"
+        *ngIf="(groupper.includes('Analytics_Cohort')) || (groupper.includes('ADMIN_PERMISSION'))"
+        (click)="onSelectTab('cohoryQuery')">
+        <span>
+          Cohort Query
+          <p *ngIf="isWorkinProgress" style="color: red; font-size: 12px;">{{isWorkinProgress}}</p>
+        </span>
+      </p>
+    </div>
+    <div class="pagination-controls">
+      <i class="disabled"></i>
+      <i></i>
+    </div>
+  </div>
+  <div *ngIf="isSelectedTab == 'patientview'" class="search">
+    <form action="" class="input-form">
+      <img src="assets/images/search-icon.svg" alt="">
+      <input type="text" (input)="onFilterText($event)" placeholder="General Search">
+    </form>
+
+    <div class="pagination">
+      <p class="pagination__counter">
+        <b>{{fromRecordCount}} - {{toRecordCount}}</b>
+        of
+        <b>{{totalRecords}}</b>
+        Records
+      </p>
+      <div class="pagination-controls">
+        <i [ngClass]="{disabled: !previous}" (click)="gotoPreviousPage()"></i>
+        <i [ngClass]="{disabled: !next}" (click)="gotoNextPage()"></i>
+      </div>
+    </div>
+  </div>
+</div>

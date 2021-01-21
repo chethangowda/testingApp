@@ -1,0 +1,179 @@
+<div class="all">
+  <div class="adddatsource" *ngIf="false" id="scroll"><br>
+    <mat-card>
+      <div class="user">
+        <mat-card-header class="font_color"> Create Config </mat-card-header><br>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-card-content style="margin-bottom: 0px;"><br>
+        <form [formGroup]="eventForm">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Select Service</mat-label>
+            <mat-select placeholder="Select Service" formControlName="service" required>
+              <mat-option *ngFor="let item of serviceTypes" [value]="item.serviceId">
+                {{item.serviceName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Key</mat-label>
+                <input matInput placeholder="Key" formControlName="key" required>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Value</mat-label>
+                <input matInput placeholder="Value" formControlName="value" required>
+              </mat-form-field>
+            </div>
+            <div class="buttons">
+              <button mat-raised-button color="primary" (click)="Addkeypairs();">Add</button>
+            </div>
+          </div>
+          <div class="input-form">
+            <div class="input-form__item col-sm-4">
+              <textarea class="json" (keyup)="keyup($event.target.value)">
+          </textarea>
+            </div>
+          </div>
+          <div class="input-form" *ngIf="validjson">
+            <div class="input-form__item col-sm-4">
+              <textarea class="json" formControlName="json" matInput>
+            <div  *ngFor="let item of jsonarray; let i = index">
+
+             <input class="form-control" type="text" [(ngModel)]="jsonarray[i]" [value]="jsonarray[i]"
+                  disabled="disabled"/>
+
+
+          </div>
+          </textarea>
+            </div>
+          </div>
+
+        </form>
+        <mat-divider></mat-divider>
+      </mat-card-content>
+      <mat-card-actions align="end" style="margin-top: 10px;">
+        <button mat-raised-button class="close" style="background-color: #f44336; color: white;">close</button>
+        <button mat-raised-button color="primary" class="save">save</button>
+        <button mat-raised-button color="primary" class="save">save</button>
+      </mat-card-actions>
+    </mat-card>
+  </div><br>
+
+  <div class="table-wrapper" style="height: calc(100vh - 115px);">
+    <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+      (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="systemValueId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            ID
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element" (click)="editRowId=-1"> {{element.systemValueId}} </td>
+      </ng-container>
+
+      <!-- Datasource Name Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Service
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element" (click)="editRowId=-1"> {{element.category}} </td>
+      </ng-container>
+
+      <!-- endpoint url -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Key
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element" (click)="editRowId=-1"> {{element.key}} </td>
+      </ng-container>
+
+      <!-- connector -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Value
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="element.systemValueId!==editRowId">
+            <span>{{element.value}} </span>
+          </ng-container>
+          <ng-container *ngIf="element.systemValueId===editRowId">
+            <div [formGroup]="keyvalueForm" class="value">
+              <input matInput type="tel" formControlName="number" minlength="1" maxlength="6"
+                (keyup)="keytab(dataSource.data, element)" numbersOnly required>
+              <div *ngIf="keyvalueForm.get('number').errors?.pattern">
+                <p style="color: red"> Only Numbers are allowed</p>
+              </div>
+              <div class="error-msg" *ngIf="notSame">
+                <p style="color: red"> Password expiry days has tobe greater than notice days</p>
+              </div>
+              <div *ngIf="keyvalueForm.get('number').errors?.required">
+                <p style="color: red"> Value is required</p>
+              </div>
+            </div>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Status
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element" (click)="editRowId=-1">
+          {{element?.active ? 'Active' : 'Inactive'}}
+          <div>
+            <mat-icon matTooltip="In-Active Group" style="color:green" *ngIf="element.active == true"
+              (click)="deactivategroup(element)">toggle_on</mat-icon>
+            <mat-icon matTooltip="Active Group" style="color: red" *ngIf="element.active == false"
+              (click)="deactivategroup(element)">toggle_off</mat-icon>
+          </div>
+        </td>
+      </ng-container>
+
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Actions
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="editbutton" *ngIf="isedit || element.systemValueId!==editRowId" style=" color: blue;"
+            matTooltip="Edit Config" (click)="editconfig(element.systemValueId,element)">edit</mat-icon>
+          <button mat-icon-button
+            [ngStyle]="{'color':( keyvalueForm.get('number').errors?.pattern) ? 'grey' : 'green' }"
+            *ngIf="element.systemValueId==editRowId"
+            [disabled]="(keyvalueForm.get('number').errors?.pattern) || (keyvalueForm.get('number').errors?.required)"
+            (click)="updateconfig(element)">
+            <mat-icon matTooltip="Save Config">check_circle</mat-icon>
+          </button>
+          <button mat-icon-button style="color:red" *ngIf="element.systemValueId==editRowId"
+            (click)="cancelconfig(element)">
+            <mat-icon matTooltip="Cancel Config">cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

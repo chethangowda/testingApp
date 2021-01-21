@@ -1,0 +1,82 @@
+<div class="analytics-header">
+  <div class="filter">
+    <form class="input-form" [formGroup]="searchForm">
+      <div class="input-form__item input-form__item_select select-input">
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category" panelClass="input-form__panel">
+            <mat-option *ngFor="let option of auditres | unique : 'category' " [value]="option.category">
+              {{option.category}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="input-form__item input-form__item_select select-input">
+        <mat-form-field>
+          <mat-label>List By</mat-label>
+          <mat-select formControlName="freq" panelClass="input-form__panel">
+            <mat-option value="Week">Week</mat-option>
+            <mat-option value="Month">Month</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="search()">Search</button>
+      <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+    </form>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="dataSource" #table matSort [matSortDisableClear]="true"
+    (matSortChange)="handleSortChange($event)" multiTemplateDataRows class="table mat-elevation-z8">
+
+    <ng-container matColumnDef="userName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span> UserID </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Category</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdDateTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Date-Time</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.createdDateTime | date:'medium'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="eventName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Activity</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="eventDetails">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+        <pre [hidden]="!showingDetailsFor" *ngIf="isShowingDetailsFor(element)">{{element.eventdata | json}}</pre>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="viewevent">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Action</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon class="viewicon" matTooltip="view Event" (click)="toggleDetails(element)">visibility</mat-icon>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.expanded]="isShowingDetailsFor(row)"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['eventDetails'];" class="patient-details"></tr>
+  </table>
+</div>

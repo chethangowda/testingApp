@@ -1,0 +1,11 @@
+<div class="dialog-body" mat-dialog-content>
+  <p>Are you sure you want to <strong class="fontstyle-italic">{{title}}</strong> Group:
+  </p>
+  <br>
+  <p class="textalign-center"><strong class="fontstyle-italic">{{grpName}}</strong> . ?</p>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" class="action-btn" mat-dialog-close>No</button>
+  <button mat-raised-button color="primary" class="action-btn" [mat-dialog-close]="true"
+    (click)="deactivate()">Yes</button>
+</mat-dialog-actions>

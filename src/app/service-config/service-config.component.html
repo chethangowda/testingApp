@@ -1,0 +1,4 @@
+<div class="maindiv">
+  <app-service-header (selectedTab)="onGetSelectedTab($event)"></app-service-header>
+  <app-service-config-content *ngIf="isSelectedTab == 'serviceconfig'"></app-service-config-content>
+</div>

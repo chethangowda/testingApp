@@ -1,0 +1,20 @@
+  <div [ngSwitch]="presentDataType">
+    <div *ngSwitchCase="'effectiveDateTime'">
+      <span *ngIf="itemData?.effectiveDateTime?.includes('T')">{{itemData?.effectiveDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+      <span *ngIf="!itemData?.effectiveDateTime?.includes('T')">{{itemData?.effectiveDateTime}}</span>
+    </div>
+
+    <div *ngSwitchCase="'effectivePeriod'">
+      <span *ngIf="itemData?.effectivePeriod?.start">
+      <span *ngIf="itemData?.effectivePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.effectivePeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.effectivePeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.effectivePeriod?.start}}</span> <br>
+      </span>
+      
+      <span *ngIf="itemData?.effectivePeriod?.end">
+      <span *ngIf="itemData?.effectivePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.effectivePeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+    <span *ngIf="!itemData?.effectivePeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.effectivePeriod?.end}}</span>
+      </span> 
+  </div>
+
+    <div *ngSwitchDefault>--</div>
+  </div>

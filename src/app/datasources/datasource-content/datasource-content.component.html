@@ -1,0 +1,325 @@
+<app-transformation-maping *ngIf="isShowTransformationTable" [onGetInput]="transformationDatasource" [isEdit]="isEdit"
+  (messageEvent)="onBackFromTransform($event)"></app-transformation-maping>
+
+<div *ngIf="!isShowTransformationTable">
+
+  <br>
+  <div class="adddatsource" *ngIf="createds" id="scroll">
+    <mat-card>
+      <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="dsTypeForm">
+          <ng-template matStepLabel>{{title}} DataSource</ng-template>
+          <div class="createform" style="text-align: -webkit-center;">
+
+            <mat-card-content style="width: 55%;">
+              <br>
+              <form [formGroup]="dsTypeForm" class="datasourcetypeform">
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Datasource Name</mat-label>
+                  <input matInput placeholder="Datasource Name" formControlName="dsname" required>
+                  <mat-error *ngIf="dsTypeForm.get('dsname').errors?.required && dsTypeForm.get('dsname').touched">
+                    Data Source Name is required</mat-error>
+                  <mat-error *ngIf="dsTypeForm.get('dsname').errors?.pattern"> Enter a valid Data Source Name
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Select Connector Type</mat-label>
+                  <mat-select placeholder="Connector Type" formControlName="connectortype"
+                    (selectionChange)="ontypeSelect();" required>
+                    <mat-option *ngFor="let connectortype of connectorTypes" [value]="connectortype.id">
+                      {{ connectortype.connectorName }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="dsTypeForm.get('connectortype').errors?.required && dsTypeForm.get('connectortype').touched">
+                    Connector Type is required</mat-error>
+                </mat-form-field>
+                <div formGroupName="flatfileForm" *ngIf=enablelinks?.flatfiletype>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Database URL</mat-label>
+                    <input matInput placeholder="Database Url" formControlName="dburl" required>
+                    <mat-error *ngIf="dsTypeForm.get('flatfileForm.dburl').errors?.required">
+                      Database Url is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Database UserName</mat-label>
+                    <input matInput placeholder="Database Username" formControlName="dbname" required>
+                    <mat-error *ngIf="dsTypeForm.get('flatfileForm.dbname').errors?.required">
+                      Database UserName is required
+                    </mat-error>
+                  </mat-form-field>
+                  <div class="row">
+                    <div class="url">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Database Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" placeholder="Database Password"
+                          formControlName="dbpwd" required>
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                          [attr.aria-pressed]="hide">
+                          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="dsTypeForm.get('flatfileForm.dbpwd').errors?.required">
+                          Database Password is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="testbtn">
+                      <button mat-raised-button color="primary" [disabled]="dsTypeForm.get('flatfileForm').invalid"
+                        (click)="testdbconfn();">Test</button>
+                    </div>
+                  </div>
+                </div>
+                <div formGroupName="fhirForm" *ngIf=enablelinks?.fhirtype>
+                  <div class="row">
+                    <div class="url">
+                      <mat-form-field appearance="outline">
+                        <mat-label>FHIR Server URL</mat-label>
+                        <input matInput placeholder="fhirserver URl" formControlName="fhirurl" required>
+                        <mat-error *ngIf="dsTypeForm.get('fhirForm.fhirurl').errors?.required">
+                          FHIR server Url is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="testbtn">
+                      <button mat-raised-button color="primary" [disabled]="dsTypeForm.get('fhirForm.fhirurl').invalid"
+                        (click)="testfn();">Test</button>
+                    </div>
+                  </div>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>FHIR Version</mat-label>
+                    <mat-select placeholder="Select FHIR Version" formControlName="fhirversion" required>
+                      <mat-option *ngFor="let option of FHIRversions" [value]="option.viewValue">
+                        {{ option.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="dsTypeForm.get('fhirForm.fhirversion').errors?.required">
+                      FHIR Version is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Scope</mat-label>
+                    <mat-select placeholder="Select Scope" formControlName="scope" required>
+                      <mat-option *ngFor="let scope of scopes" [value]="scope.value">
+                        {{ scope.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="dsTypeForm.get('fhirForm.scope').errors?.required">
+                      Scope is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Select Authentication Type</mat-label>
+                    <mat-select placeholder="Authentication Type" formControlName="authtype"
+                      (selectionChange)="onauthtypeSelect();" required>
+                      <mat-option *ngFor="let security of securities" [value]="security.value">
+                        {{ security.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="dsTypeForm.get('fhirForm.authtype').errors?.required">
+                      Authentication Type is required</mat-error>
+                  </mat-form-field>
+
+
+                </div>
+                <div formGroupName="bulkfhirForm" *ngIf=enablelinks?.bulkfhir>
+                  <div class="row">
+                    <div class="start">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Client ID</mat-label>
+                        <input matInput placeholder="Client Id" formControlName="clientid" required>
+                        <mat-error *ngIf="dsTypeForm.get('bulkfhirForm.clientid').errors?.required">
+                          ClientID is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="stop">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Issued URL</mat-label>
+                        <input matInput placeholder="Issued url" formControlName="issuedurl" required>
+                        <mat-error *ngIf="dsTypeForm.get('bulkfhirForm.issuedurl').errors?.required">
+                          Issued URL is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div formGroupName="ccdaForm" *ngIf=enablelinks?.ccdatype>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>File Path/Directory</mat-label>
+                    <input matInput placeholder="File Path/Directory" formControlName="filelocation" required>
+                    <mat-error *ngIf="dsTypeForm.get('ccdaForm.filelocation').errors?.required">
+                      FilePath is required
+                    </mat-error>
+                    <mat-error *ngIf="dsTypeForm.get('ccdaForm.filelocation').errors?.filePath">
+                      Invalid FilePath</mat-error>
+                  </mat-form-field>
+
+                </div>
+                <mat-form-field class="patientpanel" appearance="outline" *ngIf="ccda">
+                  <mat-label>Patient-Panel</mat-label>
+                  <input readonly matInput placeholder="Patient-Panel" formControlName="patientpanel" [value]="panel">
+                  <div class="buttons">
+                    <button mat-icon-button class="upload" *ngIf="!dsTypeForm?.value?.patientpanel"
+                      matTooltip="Upload Panel" (click)="fileInput.click()">
+                      <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button mat-icon-button class="close" *ngIf="dsTypeForm?.value?.patientpanel"
+                      matTooltip="Remove Panel" (click)="delete()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                  <input type="file" id="fileInput" #fileInput accept=".csv" (change)="onChange($event)">
+                </mat-form-field>
+
+                <div class="row">
+                  <div class="start col-sm-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Start Command</mat-label>
+                      <input matInput placeholder="Start Command" formControlName="startcmd">
+                    </mat-form-field>
+                  </div>
+                  <div class="stop col-sm-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>End Command</mat-label>
+                      <input matInput placeholder="Stop Command" formControlName="stopcmd">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </form>
+              <mat-divider></mat-divider>
+            </mat-card-content>
+          </div>
+
+          <div style="margin-right: 40px; float: right;">
+            <button mat-raised-button color="warn" style="margin-right: 30px;" (click)="closeform()">Close</button>
+
+            <button mat-raised-button matStepperNext color="primary">Next</button>
+          </div>
+
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>List of KeyValue Pair<p style="color: lightgrey;">(Optional)</p>
+          </ng-template>
+          <h3>DataSource: {{dsTypeForm.get('dsname').value}}</h3>
+          <div class="keytable">
+            <table style="width:50%">
+              <div *ngFor="let item of Object; let i = index">
+
+                <tr>
+                  <td><input class="form-control" type="text" [(ngModel)]="Object[i].key" disabled="disabled" /></td>
+                  <td><input class="form-control" type="text" [(ngModel)]="Object[i].value" /></td>
+                </tr>
+
+              </div>
+            </table>
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <div style="padding-top: 15px;">
+            <div class="divalignLeft">
+              <button class="step-close" mat-raised-button color="warn" matStepperPrevious>Back</button>
+            </div>
+            <div class="divalignRight">
+              <button mat-raised-button color="warn" style="margin-right: 30px;" (click)="closeform()">Close</button>
+              <button mat-raised-button color="primary" [disabled]="dsTypeForm.invalid"
+                (click)="savedatasource()">Save</button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </mat-card>
+    <br>
+    <mat-divider></mat-divider>
+  </div>
+
+  <div class="table-wrapper" style="height: calc(100vh - 115px);">
+    <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+      (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            DS-ID
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Datasource Name Column -->
+      <ng-container matColumnDef="dsourcename">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            DataSource Name
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.dsourcename}} </td>
+      </ng-container>
+
+      <!-- endpoint url -->
+      <ng-container matColumnDef="endpoint">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            EndPoint URL
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.endpoint}} </td>
+      </ng-container>
+
+      <!-- connector -->
+      <ng-container matColumnDef="connector">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Connector Type
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.connector}} </td>
+      </ng-container>
+
+      <!-- security method -->
+      <ng-container matColumnDef="security">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Security Method
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.security}} </td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Actions
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <i class="material-icons editbutton" matTooltip="Edit Datasource"
+            *ngIf="(groupper?.includes('Update_ DataSource')) || (groupper?.includes('ADMIN_PERMISSION'))"
+            (click)="editdatasource(element);">edit</i>
+          <span *ngIf="element?.connector == 'FLAT FILE'">
+            <i class="material-icons editbutton" matTooltip="Create Mappings"
+              *ngIf="(element.linked === false) && ((groupper?.includes('Datasource_Transformation')) || (groupper?.includes('ADMIN_PERMISSION')))"
+              (click)="onTransformationMaping(element);">playlist_add</i>
+            <i class="material-icons editbutton" matTooltip="Edit Mappings"
+              *ngIf="(element.linked === true) && ((groupper?.includes('Datasource_Transformation')) || (groupper?.includes('ADMIN_PERMISSION')))"
+              (click)="onEditTransformationMaping(element);">playlist_add_check</i>
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

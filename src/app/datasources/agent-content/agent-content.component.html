@@ -1,0 +1,59 @@
+<div style="width: 100%; text-align: right;">
+  <button class="refresh" mat-stroked-button color="primary" matTooltip="Refresh" (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+<div class="table-wrapper" style="margin-top: 0px; height: calc(100vh - 115px);">
+  <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+    (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+    <!-- Agent Name Column -->
+    <ng-container matColumnDef="agentname">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Agent Name</span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element.agentname}} </td>
+    </ng-container>
+
+    <!-- Frequency -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Status</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <p [ngStyle]="{'background-color': element.color}">{{element.status}} </p>
+      </td>
+    </ng-container>
+
+    <!-- connector -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>Actions</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button matTooltip="Start" [disabled]="element.startbtn" (click)="start(element)">
+          <mat-icon>play_circle_filled</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Stop" [disabled]="element.stopbtn" (click)="stop(element)">
+          <mat-icon>stop</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Restart" [disabled]="element.restartbtn" (click)="restart(element)">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- weekday method -->
+    <ng-container matColumnDef="extract">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span> Extract</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button color="primary" mat-raised-button>Extract</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

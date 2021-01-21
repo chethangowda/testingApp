@@ -1,0 +1,52 @@
+<div class="tabs-header backgroundImg">
+  <div class="tabs">
+    <div class="tabs__wrapper">
+      <p class="tabs__item active" [ngClass]="{active: isSelectedTab == 'datasourceview'}"
+        *ngIf="(groupper?.includes('View_DataSource')) || (groupper?.includes('ADMIN_PERMISSION'))"
+        (click)="onSelectTab('datasourceview')">
+        Datasources
+      </p>
+      <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'datasetview'}"
+        *ngIf="(groupper?.includes('View_ DataSet')) || (groupper?.includes('ADMIN_PERMISSION'))"
+        (click)="onSelectTab('datasetview')">
+        Datasets
+      </p>
+      <p class="tabs__item" [ngClass]="{active: isSelectedTab == 'agentview'}"
+        *ngIf="(groupper?.includes('View_Agent')) || (groupper?.includes('ADMIN_PERMISSION'))"
+        (click)="onSelectTab('agentview')">
+        Agents
+      </p>
+    </div>
+  </div>
+  <div class="search">
+    <button
+      *ngIf="(isSelectedTab == 'datasourceview') && ((groupper?.includes('Create_ DataSource')) || (groupper?.includes('ADMIN_PERMISSION')))"
+      mat-mini-fab class="bt-right" matTooltip="Create {{isSelectedTab}}" color="primary"
+      (click)="createFormFunction();">
+      <p>+</p>
+    </button>
+    <button
+      *ngIf="(isSelectedTab == 'datasetview') && ((groupper?.includes('Create_DataSet')) || (groupper?.includes('ADMIN_PERMISSION')))"
+      mat-mini-fab class="bt-right" matTooltip="Create {{isSelectedTab}}" color="primary"
+      (click)="createFormFunction();">
+      <p>+</p>
+    </button>
+    <form action="" class="input-form">
+      <img src="assets/images/search-icon.svg" alt="">
+      <input #searchFilterText type="text" (input)="onFilterdatasrcText($event)" placeholder="General Search">
+    </form>
+
+    <div class="pagination">
+      <p class="pagination__counter">
+        <b>{{fromRecords}} - {{toRecords}}</b>
+        of
+        <b>{{totalRecords}}</b>
+        Records
+      </p>
+      <div class="pagination-controls">
+        <i [ngClass]="{disabled: presentPageNo <= 1}" (click)="gotosrcPreviousPage()"></i>
+        <i [ngClass]="{disabled: presentPageNo >= totalPages}" (click)="gotosrcNextPage()"></i>
+      </div>
+    </div>
+  </div>
+</div>

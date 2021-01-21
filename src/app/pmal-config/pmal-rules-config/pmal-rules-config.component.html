@@ -1,0 +1,168 @@
+<div class="adddatsource" *ngIf="createRuleForm" id="scroll"><br>
+  <mat-card>
+    <div class="user">
+      <mat-card-header class="font_color"> Create Rule </mat-card-header><br>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-card-content style="margin-bottom: 0px;"><br>
+      <form [formGroup]="pmalForm">
+
+
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Rule Type</mat-label>
+              <mat-select placeholder="Select Rult Type" formControlName="ruleType">
+                <mat-option *ngFor="let type of pmalRuleTypes" [value]="type.id">
+                  {{type.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="pmalForm.controls['ruleType'].errors?.required && pmalForm.controls['ruleType'].touched">
+                Rule type is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Rule Name</mat-label>
+              <input type="text" matInput placeholder="Rule Name" formControlName="ruleName" required>
+              <mat-error
+                *ngIf="pmalForm.controls['ruleName'].errors?.required && pmalForm.controls['ruleName'].touched">
+                Rule Name is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput placeholder="Description" formControlName="description" required>
+          <mat-error
+            *ngIf="pmalForm.controls['description'].errors?.required && pmalForm.controls['description'].touched">
+            Description is required</mat-error>
+        </mat-form-field>
+
+
+        <div class="row">
+          <div class="start col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Demographics</mat-label>
+              <mat-select placeholder="Select Demographics" formControlName="ruleDemographic" multiple required>
+                <mat-option *ngFor="let demographic of pmalDemographicsList" [value]="demographic">
+                  {{demographic?.demographicName}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="pmalForm.controls['ruleDemographic'].errors?.required && pmalForm.controls['ruleDemographic'].touched">
+                Demographics is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="stop col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Status</mat-label>
+              <mat-select placeholder="Select Status" formControlName="status">
+                <mat-option *ngFor="let item of pmalStatus" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="pmalForm.controls['status'].errors?.required && pmalForm.controls['status'].touched">
+                Status is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </form>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions align="end" style="margin-top: 10px;">
+      <button mat-raised-button (click)="closeform()" class="close"
+        style="background-color: #f44336; color: white;">close</button>&nbsp;
+      <button mat-raised-button type="submit" (click)="onSubmit('create')" [disabled]="!pmalForm.valid" color="primary"
+        *ngIf="!isEdit" class="save">save</button>
+      <button mat-raised-button type="submit" (click)="onSubmit('update')" [disabled]="!pmalForm.valid" color="primary"
+        *ngIf="isEdit" class="save">save</button>
+    </mat-card-actions>
+  </mat-card>
+</div><br>
+
+
+<div class="table-wrapper" style="margin-top: 0px; height: calc(100vh - 115px);">
+  <table mat-table [dataSource]="dataSource" matSort #table class="table mat-elevation-z8"
+    (matSortChange)="sortColumn($event)">
+
+    <!-- Id Column -->
+    <ng-container matColumnDef="ruleId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          ID
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.ruleId}} </td>
+    </ng-container>
+
+    <!-- Datasource Name Column -->
+    <ng-container matColumnDef="ruleName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Name
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.ruleName}} </td>
+    </ng-container>
+
+    <!-- endpoint url -->
+    <ng-container matColumnDef="ruleType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Type
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.ruleType}} </td>
+    </ng-container>
+
+    <!-- connector -->
+    <ng-container matColumnDef="ruleDesc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Description
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.ruleDesc}} </td>
+    </ng-container>
+
+    <!-- security method -->
+    <ng-container matColumnDef="displayDemographic">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Demographics
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.displayDemographic}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Status
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element"> {{element?.status}} </td>
+    </ng-container>
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span>
+          Actions
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <i class="material-icons editbutton" matTooltip="Edit Rule" (click)="editdatasource(element);">edit</i>
+        <i class="material-icons editbutton" matTooltip="Delete Rule" (click)="ondelete(element);">delete</i>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

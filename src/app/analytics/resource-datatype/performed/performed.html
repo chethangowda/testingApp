@@ -1,0 +1,33 @@
+  <div [ngSwitch]="presentDataType">
+    <div *ngSwitchCase="'performedDateTime'">
+      <span *ngIf="itemData?.performedDateTime?.includes('T')">{{itemData?.performedDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+      <span *ngIf="!itemData?.performedDateTime?.includes('T')">{{itemData?.performedDateTime}}</span>
+    </div>
+
+    <div *ngSwitchCase="'performedPeriod'">
+      <span *ngIf="itemData?.performedPeriod?.start">
+      <span *ngIf="itemData?.performedPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.performedPeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.performedPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.performedPeriod?.start}}</span> <br>
+    </span>
+
+    <span *ngIf="itemData?.performedPeriod?.end">
+      <span *ngIf="itemData?.performedPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.performedPeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.performedPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.performedPeriod?.end}}</span>
+    </span>
+    </div>
+
+    <div *ngSwitchCase="'performedString'">
+      <span>{{itemData?.performedString}}</span>
+    </div>
+
+    <div *ngSwitchCase="'performedAge'">
+      <span *ngIf="itemData?.performedAge?.value">{{itemData?.performedAge?.value}} <span *ngIf="itemData?.performedAge?.unit"> - {{itemData?.performedAge?.unit}}</span></span>
+    </div>
+
+    <div *ngSwitchCase="'performedRange'">
+      <span><strong>Low : </strong>{{itemData?.performedRange?.low?.value}} <span *ngIf="itemData?.performedRange?.low?.code">- itemData?.performedRange?.low?.code</span></span> <br>
+      <span><strong>High :</strong>{{itemData?.performedRange?.high?.value}}<span *ngIf="itemData?.performedRange?.high?.code">- itemData?.performedRange?.high?.code</span></span>
+    </div>
+
+    <div *ngSwitchDefault>--</div>
+  </div>

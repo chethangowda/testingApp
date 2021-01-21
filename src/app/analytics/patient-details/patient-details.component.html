@@ -1,0 +1,596 @@
+<!-- NESTED TABLE WITH SPECIFIC PATIENT DATA -->
+<div class="patient-table childTableBGcolor">
+  <div class="tabs-header nested">
+    <div class="tabs">
+      <div class="pagination-controls">
+        <mat-icon class="arrow-size noselect" (click)="scrollLeft()">arrow_left</mat-icon>
+      </div>
+
+      <div class="tabs__wrapper" style="margin-left: 10px;" #widgetsContent>
+        <p class="tabs__item" *ngFor="let section of sections" (click)="selectSection(section)"
+          [class.active]="(section.id === activeSection) && (section.name === sectionname)">
+          {{ section.name }}
+        </p>
+      </div>
+
+      <div class="pagination-controls">
+        <mat-icon class="arrow-size noselect" (click)="scrollRight()">arrow_right</mat-icon>
+      </div>
+    </div>
+    <div class="search">
+      <form action="" class="input-form">
+        <img src="assets/images/search-icon.svg" alt="" />
+        <input #filterTextBox type="text" placeholder="General Search" (input)="onFilterText($event)" />
+      </form>
+
+      <div class="pagination">
+        <p class="pagination__counter">
+          <b>{{ fromRecordCount }} - {{ toRecordCount }}</b>
+          of
+          <b>{{ totalRecords }}</b>
+          Records
+        </p>
+        <div class="pagination-controls">
+          <i [ngClass]="{ disabled: !previous }" (click)="gotoPreviousPage()"></i>
+          <i [ngClass]="{ disabled: !next }" (click)="gotoNextPage()"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper tabs__wrapper" style="overflow-x: auto; height: auto; max-height: 250px; overflow-y: auto;"
+    *ngIf="dDisplayedColumns?.length > 0">
+    <table class="table details-table" mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+      (matSortChange)="handleSortChange($event)" multiTemplateDataRows>
+
+      <ng-container *ngFor="let colItem of dDisplayedColumns; let colIndex = index" matColumnDef="{{ colItem?.cName }}">
+        <th mat-header-cell style="background-color: #b9defb !important;" *matHeaderCellDef mat-sort-header
+          class="tableheadet-z-index childTableBGcolor">
+          <span>
+            {{ colItem?.cName }}
+          </span>
+        </th>
+
+        <td mat-cell *matCellDef="let element" [ngSwitch]="colItem?.dcName" class="table-data-border">
+
+          <div *ngSwitchCase="'disLocation'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disIndividual'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disPractitioner'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'discareteam'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disOrganization'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disdiagnostic'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+          <div *ngSwitchCase="'disrelated'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+          <div *ngSwitchCase="'discoverage'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disservicereq'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disclaim'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disclaimres'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disEncounter'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'content'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+
+            <span *ngFor="let code of element[colItem?.dcName]">
+              <span (click)="download(element, colItem?.dcName, element[colItem?.dcName])" class="texthiperLink"
+                *ngIf="code?.data">Data </span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disDoseQuantity'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let dosage of element[colItem?.dcName]" style="float: left;">
+              <span *ngIf="!dosage?.doseAndRate">--</span>
+              <span *ngIf="dosage?.doseAndRate">
+                <span *ngFor="let item of dosage?.doseAndRate">
+                  <span *ngIf="item?.doseQuantity?.value">{{ item?.doseQuantity?.value }} </span>
+                  <span *ngIf="item?.doseQuantity?.value && item?.doseQuantity?.unit">-</span>
+                  <span *ngIf="item?.doseQuantity?.unit">{{ item?.doseQuantity?.unit }} </span>
+                </span>
+              </span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disprac'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let ritem of element[colItem?.dcName]; let itemLast=last" style="float: left;">
+              <span *ngIf="ritem?.role">
+                <span *ngFor="let role of ritem?.role; let mlast=last">
+                  <span *ngIf="role?.coding">
+                    <span *ngFor="let code of role?.coding; let itemLa=last">
+                      <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+                      <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+                      <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                      <span *ngIf="!itemLa"> <br>
+                        <hr>
+                      </span>
+                    </span><br></span>
+                  <span *ngIf="!role?.coding && role?.text">{{role?.text}}</span>
+                  <span *ngIf="!mlast">
+                    <hr>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="ritem?.member" (click)="toggleBaseResources(element, 'disIndividual', ritem?.member)">
+                <span
+                  [ngStyle]="{'color': (selectedRefItem == ritem?.member && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                  class="texthiperLink" *ngIf="ritem?.member?.reference">
+                  <span *ngIf="ritem?.member?.display">{{ ritem?.member.display }}</span>
+                  <span *ngIf="ritem?.member?.reference && !ritem?.member?.display">{{
+                    ritem?.member.reference
+                    }}</span>
+                </span>
+              </span>
+              <span *ngIf="!itemLast"> <br>
+                <hr>
+              </span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disDoseTime'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let dosage of element[colItem?.dcName]" style="float: left;">
+              <span *ngIf="!dosage?.timing?.code?.coding">--</span>
+              <span *ngIf="dosage?.timing?.code?.coding">
+                <span *ngFor="let code of dosage?.timing?.code?.coding">
+                  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+                  <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+                  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                </span>
+              </span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disDiagnosis'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of element[colItem?.dcName]; let mLast=last">
+              <span *ngIf="specialityItem?.diagnosisCodeableConcept">
+                <span
+                  *ngIf="!specialityItem?.diagnosisCodeableConcept?.coding && specialityItem?.diagnosisCodeableConcept?.text">{{specialityItem?.diagnosisCodeableConcept?.text}}</span>
+                <span *ngFor="let code of specialityItem?.diagnosisCodeableConcept?.coding; let itemLast=last">
+                  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+                  <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+                  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                  <span *ngIf="!itemLast"> <br>
+                    <hr>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="!mLast"> <br>
+                <hr>
+              </span>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'disProcedure'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of element[colItem?.dcName]; let mLast=last">
+              <span *ngIf="specialityItem?.procedureCodeableConcept">
+                <span
+                  *ngIf="!specialityItem?.procedureCodeableConcept?.coding && specialityItem?.procedureCodeableConcept?.text">{{specialityItem?.procedureCodeableConcept?.text}}</span>
+                <span *ngFor="let code of specialityItem?.procedureCodeableConcept?.coding; let itemLast=last">
+                  <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong> &nbsp; </span>
+                  <span *ngIf="code?.code">{{code?.code}} &nbsp; </span>
+                  <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                  <span *ngIf="!itemLast"> <br>
+                    <hr>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="!mLast"> <br>
+                <hr>
+              </span>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'disDoseDuration'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let dosage of element[colItem?.dcName]; let itemLast=last">
+              <span
+                *ngIf="(dosage?.timing?.repeat?.duration == undefined) || (dosage?.timing?.repeat?.duration == null)">--</span>
+              <span *ngIf="dosage?.timing?.repeat?.duration == 0">0</span>
+              <span *ngIf="dosage?.timing?.repeat?.duration != 0">{{dosage?.timing?.repeat?.duration}}</span>
+              <span *ngIf="!itemLast"> <br>
+                <hr>
+              </span>
+            </span><br>
+          </div>
+
+          <div *ngSwitchCase="'dispayor'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span *ngIf="item?.reference">
+                <span *ngIf="item?.reference.toLowerCase().includes('patient')">
+                  <span *ngIf="item?.display">{{ item.display }}</span>
+                  <span *ngIf="item?.reference && !item?.display">{{
+                    item.reference
+                    }}</span>
+                </span>
+                <span *ngIf="!(item?.reference.toLowerCase().includes('patient'))">
+                  <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement) ? '#0400ef' : '#0083ef'}"
+                    class="texthiperLink">
+                    <span *ngIf="item?.display">{{ item.display }}</span>
+                    <span *ngIf="item?.reference && !item?.display">{{
+                      item.reference
+                      }}</span>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'dispolicy'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span *ngIf="item?.reference">
+                <span *ngIf="item?.reference.toLowerCase().includes('patient')">
+                  <span *ngIf="item?.display">{{ item.display }}</span>
+                  <span *ngIf="item?.reference && !item?.display">{{
+                    item.reference
+                    }}</span>
+                </span>
+                <span *ngIf="!(item?.reference.toLowerCase().includes('patient'))">
+                  <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement) ? '#0400ef' : '#0083ef'}"
+                    class="texthiperLink">
+                    <span *ngIf="item?.display">{{ item.display }}</span>
+                    <span *ngIf="item?.reference && !item?.display">{{
+                      item.reference
+                      }}</span>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disenclaim'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let ritem of element[colItem?.dcName]; let itemLast=last" style="float: left;">
+              <span *ngIf="((ritem?.start) || (ritem?.end)) && (!ritem?.reference)">
+                <span *ngIf="(ritem?.start) && (ritem?.start?.includes('T'))"><strong>Start : </strong>{{ritem?.start |
+                  date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+                <span *ngIf="(ritem?.end) && (ritem?.end?.includes('T'))"><strong>End :</strong>{{ritem?.end | date:
+                  'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+
+                <span *ngIf="(ritem?.start) && (!ritem?.start?.includes('T'))"><strong>Start :
+                  </strong>{{ritem?.start}}</span> <br>
+                <span *ngIf="(ritem?.end) && (!ritem?.end?.includes('T'))"><strong>End :</strong>{{ritem?.end}}</span>
+              </span>
+              <span *ngIf="ritem?.reference" (click)="toggleBaseResources(element, 'disEncounter', ritem)">
+                <span
+                  [ngStyle]="{'color': (selectedRefItem == ritem?.reference && baseResourcecElement ) ? '#0400ef' : '#0083ef'}"
+                  class="texthiperLink" *ngIf="ritem?.reference">
+                  <span *ngIf="ritem?.display">{{ ritem?.display }}</span>
+                  <span *ngIf="ritem?.reference && !ritem?.display">{{
+                    ritem?.reference
+                    }}</span>
+                </span>
+              </span>
+              <span *ngIf="!itemLast"> <br>
+                <hr>
+              </span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'disrequestor'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement) ? '#0400ef' : '#0083ef'}"
+                class="texthiperLink" *ngIf="item?.reference">
+                <span *ngIf="item?.display">{{ item.display }}</span>
+                <span *ngIf="item?.reference && !item?.display">{{
+                  item.reference
+                  }}</span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+
+          <div *ngSwitchCase="'dissubscriber'">
+            <span *ngIf="!element[colItem?.dcName] || element[colItem?.dcName]?.length <= 0">--</span>
+            <span *ngFor="let item of element[colItem?.dcName] | slice: 0:1" style="float: left;"
+              (click)="toggleBaseResources(element, colItem?.dcName, element[colItem?.dcName])">
+              <span *ngIf="item?.reference">
+                <span *ngIf="item?.reference.toLowerCase().includes('patient')">
+                  <span *ngIf="item?.display">{{ item.display }}</span>
+                  <span *ngIf="item?.reference && !item?.display">{{
+                    item.reference
+                    }}</span>
+                </span>
+                <span *ngIf="!(item?.reference.toLowerCase().includes('patient'))">
+                  <span [ngStyle]="{'color': (selectedRefItem == item && baseResourcecElement) ? '#0400ef' : '#0083ef'}"
+                    class="texthiperLink">
+                    <span *ngIf="item?.display">{{ item.display }}</span>
+                    <span *ngIf="item?.reference && !item?.display">{{
+                      item.reference
+                      }}</span>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="!item?.reference">--</span>
+            </span>
+          </div>
+          <div *ngSwitchDefault>
+            <div [ngSwitch]="colItem?.multiDataType">
+              <div *ngSwitchCase="'effectivetime'">
+                <div *ngIf="colItem?.multiDataType == 'effectivetime'" effectivetime-datatype
+                  [itemData]="element[colItem?.dcName]" [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'occurence'">
+                <div *ngIf="colItem?.multiDataType == 'occurence'" occurence-datatype
+                  [itemData]="element[colItem?.dcName]" [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'performed'">
+                <div *ngIf="colItem?.multiDataType == 'performed'" performed-datatype
+                  [itemData]="element[colItem?.dcName]" [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'onsetDate'">
+                <div *ngIf="colItem?.multiDataType == 'onsetDate'" onset-datatype [itemData]="element[colItem?.dcName]"
+                  [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'valuedata'">
+                <div *ngIf="colItem?.multiDataType == 'valuedata'" value-datatype [itemData]="element[colItem?.dcName]"
+                  [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'abatement'">
+                <div *ngIf="colItem?.multiDataType == 'abatement'" abatement-datatype
+                  [itemData]="element[colItem?.dcName]" [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchCase="'borndate'">
+                <div *ngIf="colItem?.multiDataType == 'borndate'" borndate-datatype
+                  [itemData]="element[colItem?.dcName]" [datatype]="colItem?.multiDataType"></div>
+              </div>
+              <div *ngSwitchDefault [innerHTML]="element[colItem?.dcName]"></div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="resourceDetails">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="example-element-detail" style="justify-content: center;" [ngSwitch]="selectedOrg" [@detailExpand]="
+              element == baseResourcecElement ? 'expanded' : 'collapsed'">
+            <div locationRes style="width: 100%;" *ngSwitchCase="'disLocation'" [popoverData]="selectedRefItem"></div>
+            <div practitionerRes style="width: 100%;" *ngSwitchCase="'disIndividual'" [popoverData]="selectedRefItem">
+            </div>
+            <div practitionerRes style="width: 100%;" *ngSwitchCase="'disPractitioner'" [popoverData]="selectedRefItem">
+            </div>
+            <div encounterRes style="width: 100%;" *ngSwitchCase="'disEncounter'" [popoverData]="selectedRefItem"></div>
+            <div CoverageRes style="width: 100%;" *ngSwitchCase="'discoverage'" [popoverData]="selectedRefItem"></div>
+            <div relatedpersonres style="width: 100%;" *ngSwitchCase="'disrelated'" [popoverData]="selectedRefItem">
+            </div>
+            <div practitionerRoleRes style="width:100%;" *ngSwitchCase="'disIndividualrole'"
+              [popoverData]="selectedRefItem"></div>
+            <div careteamRes style="width: 100%;" *ngSwitchCase="'discareteam'" [popoverData]="selectedRefItem"></div>
+            <div claimRes style="width: 100%;" *ngSwitchCase="'disclaim'" [popoverData]="selectedRefItem"></div>
+            <div claimrespRes style="width: 100%;" *ngSwitchCase="'disclaimres'" [popoverData]="selectedRefItem"></div>
+            <div diagnosticRes style="width: 100%;" *ngSwitchCase="'disdiagnostic'" [popoverData]="selectedRefItem">
+            </div>
+            <div servicereqRes style="width: 100%;" *ngSwitchCase="'disservicereq'" [popoverData]="selectedRefItem">
+            </div>
+            <div organizationRes style="width: 100%;" *ngSwitchCase="'disOrganization'" [popoverData]="selectedRefItem">
+            </div>
+            <div *ngSwitchCase="'dispayor'" style="width: 100%;">
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('organization')">
+                <div organizationRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('relatedperson')">
+                <div relatedpersonres [popoverData]="selectedRefItem"></div>
+              </div>
+            </div>
+            <div *ngSwitchCase="'dispolicy'" style="width: 100%;">
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('organization')">
+                <div organizationRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('relatedperson')">
+                <div relatedpersonres [popoverData]="selectedRefItem"></div>
+              </div>
+            </div>
+            <div *ngSwitchCase="'dissubscriber'" style="width: 100%;">
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('organization')">
+                <div organizationRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('relatedperson')">
+                <div relatedpersonres [popoverData]="selectedRefItem"></div>
+              </div>
+            </div>
+            <div *ngSwitchCase="'disrequestor'" style="width: 100%;">
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('organization')">
+                <div organizationRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('practitionerrole')">
+                <div practitionerRoleRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div
+                *ngIf="(selectedRefItem[0].reference.toLowerCase().includes('practitioner')) && (!selectedRefItem[0].reference.toLowerCase().includes('practitionerrole'))">
+                <div practitionerRes [popoverData]="selectedRefItem"></div>
+              </div>
+              <div *ngIf="selectedRefItem[0].reference.toLowerCase().includes('relatedperson')">
+                <div relatedpersonres [popoverData]="selectedRefItem"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr class="childTableBGcolor" mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr class="childTableBGcolor" mat-row *matRowDef="let row; columns: displayedColumns"
+        [class.example-expanded-row]="baseResourcecElement === row"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['resourceDetails']" class="patient-details"></tr>
+    </table>
+  </div>
+
+  <div *ngIf="isNoData" class="filter-error">
+    <p class="fontsize-16 fontstyle-italic colorRed fontBold" style="padding-bottom: 10px;">
+      No records found for the selected resoure
+    </p>
+    <img src="assets/images/nodata.png" style="width: 200px; height: 200px; filter: grayscale(50%);" />
+  </div>
+</div>

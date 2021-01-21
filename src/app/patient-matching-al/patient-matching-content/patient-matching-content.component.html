@@ -1,0 +1,357 @@
+<div *ngIf="patientgroups" class="patientgrps">
+  <div class="group">
+    <h1>InteropX Data Repository-Patient Record</h1>
+    <br>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort class="table mat-elevation-z8">
+        <!-- group Column -->
+        <ng-container matColumnDef="group">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Group</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.group}} </td>
+        </ng-container>
+
+        <!-- Interopx ID Column -->
+        <ng-container matColumnDef="inpxid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Interopx Id</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> <a (click)=openDialog(element);> {{element.inpxid}}</a> </td>
+        </ng-container>
+
+        <!-- First Name -->
+        <ng-container matColumnDef="fname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>First Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.fname}} </td>
+        </ng-container>
+
+        <!-- Middle Name -->
+        <ng-container matColumnDef="mname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Middle Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.mname}} </td>
+        </ng-container>
+
+        <!-- Last Name -->
+        <ng-container matColumnDef="lname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Last Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.lname}} </td>
+        </ng-container>
+
+        <!-- SSN -->
+        <ng-container matColumnDef="ssn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>SSN</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.ssn}} </td>
+        </ng-container>
+
+        <!-- Gender -->
+        <ng-container matColumnDef="gender">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Gender</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+        </ng-container>
+
+        <!-- DOB -->
+        <ng-container matColumnDef="dob">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>DOB</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.dob}} </td>
+        </ng-container>
+
+        <!-- Phone -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Phone</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+        </ng-container>
+
+        <!-- City -->
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>City</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+        </ng-container>
+
+        <!-- State -->
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>State</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.state}} </td>
+        </ng-container>
+
+        <!-- PostalCode -->
+        <ng-container matColumnDef="pcode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Postal Code</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.pcode}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="conflict">
+    <h1>Partially Matching-Patient Records</h1>
+    <br>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="conflictdataSource" matSort class="table mat-elevation-z8">
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- actions Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Action</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+        </ng-container>
+
+        <!-- source ID Column -->
+        <ng-container matColumnDef="sourceid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Source Id</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.sourceid}} </td>
+        </ng-container>
+
+        <!-- First Name -->
+        <ng-container matColumnDef="fname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>First Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('FirstName') === true}">
+            {{element.fname}} </td>
+        </ng-container>
+
+        <!-- Middle Name -->
+        <ng-container matColumnDef="mname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Middle Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('MiddleName') === true}">
+            {{element.mname}} </td>
+        </ng-container>
+
+        <!-- Last Name -->
+        <ng-container matColumnDef="lname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Last Name</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('LastName') === true}">
+            {{element.lname}} </td>
+        </ng-container>
+
+        <!-- SSN -->
+        <ng-container matColumnDef="ssn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>SSN</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.mismatch.includes('Ssn') === true}">
+            {{element.ssn}} </td>
+        </ng-container>
+
+        <!-- Gender -->
+        <ng-container matColumnDef="gender">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Gender</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('Gender') === true}">
+            {{element.gender}} </td>
+        </ng-container>
+
+        <!-- DOB -->
+        <ng-container matColumnDef="dob">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>DOB</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('Birthdate') === true}">
+            {{element.dob}} </td>
+        </ng-container>
+
+        <!-- Phone -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Phone</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('TelephoneNumberOne') === true}">
+            {{element.phone}} </td>
+        </ng-container>
+
+        <!-- City -->
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>City</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.mismatch.includes('City') === true}">
+            {{element.city}} </td>
+        </ng-container>
+
+        <!-- State -->
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>State</span>
+          </th>
+          <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.mismatch.includes('State') === true}">
+            {{element.state}} </td>
+        </ng-container>
+
+        <!-- PostalCode -->
+        <ng-container matColumnDef="pcode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Postal Code</span>
+          </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'highlight': element.mismatch.includes('PostalCode') === true}">
+            {{element.pcode}} </td>
+        </ng-container>
+
+        <!-- score Column -->
+        <ng-container matColumnDef="score">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>Score</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.score | number}} </td>
+        </ng-container>
+
+        <!-- ML Column -->
+        <ng-container matColumnDef="mlpredict">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <span>ML Prediction</span>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.mlpredict}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedconflictColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedconflictColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="flex-container1">
+    <div class="buttons">
+      <div class="linkbutton"
+        *ngIf="(groupper?.includes('ADMIN_PERMISSION')) ||  (groupper?.includes('PMAL_Resolution'))">
+        <button color="primary" mat-raised-button (click)="link()">Link</button>
+      </div>
+      <div class="excludebutton"
+        *ngIf="(groupper?.includes('ADMIN_PERMISSION')) ||  (groupper?.includes('PMAL_Resolution'))">
+        <button color="primary" mat-raised-button (click)="exclude()">Exclude</button>
+      </div>
+      <div class="activelearnbutton">
+        <button color="primary" mat-raised-button (click)="mlstats()">Active Learning Stats</button>
+      </div>
+    </div>
+    <div class="button">
+      <div class="nextbutton">
+        <button color="primary" mat-raised-button disabled="{{next}}" (click)="nextGroup()">Next</button>
+      </div>
+      <div class="prebutton">
+        <button color="primary" mat-raised-button disabled="{{previous}}" (click)="prevGroup()">Prev</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats" *ngIf="stats">
+  <div class="tabs-header">
+    <div class="head">
+      <mat-icon class="back-image" matTooltip="back" (click)="close()">arrow_back_ios</mat-icon>
+      <h1>Active Learning Stats</h1>
+    </div>
+    <div class="search">
+      <form action="" class="input-form">
+        <img src="assets/images/search-icon.svg" alt="">
+        <input type="text" placeholder="General Search" (keyup)="applyFilter($event.target.value)">
+      </form>
+    </div>
+
+  </div>
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="mldataSource" matSort class="table mat-elevation-z8">
+      <!-- id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>Model ID</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Interopx ID Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>Created Date</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'medium'}} </td>
+      </ng-container>
+
+      <!-- resolveconflicts -->
+      <ng-container matColumnDef="resolveconflicts">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>No of Resolved Conflict Pairs</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.resolveconflicts}} </td>
+      </ng-container>
+
+      <!-- accuracy -->
+      <ng-container matColumnDef="accuracy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>Accuracy of Resolved Conflict Pairs</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.accuracy}} </td>
+      </ng-container>
+
+      <!-- patients -->
+      <ng-container matColumnDef="patients">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>Total no of Patient Pairs Trained</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.patients}} </td>
+      </ng-container>
+
+      <!-- overallaccuracy -->
+      <ng-container matColumnDef="overallaccuracy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>Overall Accuracy of the Model</span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.overallaccuracy}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedmlcolumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedmlcolumns;"></tr>
+    </table>
+  </div>
+  <button mat-raised-button class="close" color="warn" (click)="close()">Close</button>
+</div>

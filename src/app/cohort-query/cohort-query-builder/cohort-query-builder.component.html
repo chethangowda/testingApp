@@ -1,0 +1,232 @@
+<div class="builder" cdkDropListGroup>
+  <div class="cohort-item">
+    <h2 class="cohort-item__header">
+      Cohort Ontology
+    </h2>
+    <form action="" class="input-form">
+      <div class="input-form__item">
+        <img src="assets/images/search-icon.svg" alt="">
+        <input type="text" placeholder="Search...">
+      </div>
+    </form>
+    <div class="cohort-item__list">
+
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+          <li cdkDropList cdkDropListSortingDisabled [cdkDropListEnterPredicate]="noReturnPredicate">
+            <div class="itemalign" [ngStyle]="{'cursor': node?.type == 'group' ? 'default' : 'move'}"
+              [cdkDragDisabled]="node.type == 'group'" cdkDrag [cdkDragData]="{input: node, group: node.displayName}">
+              <button mat-icon-button disabled></button>
+              <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+                {{ node.type ==='group' ? 'folder' : 'description' }}
+              </mat-icon>
+              <span>{{node.displayName}}</span>
+            </div>
+          </li>
+
+        </mat-tree-node>
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+          <li cdkDropList cdkDropListSortingDisabled [cdkDropListEnterPredicate]="noReturnPredicate">
+            <div class="mat-tree-node" [ngStyle]="{'cursor': node?.type == 'group' ? 'default' : 'move'}"
+              [cdkDragDisabled]="node.type == 'group'" cdkDrag [cdkDragData]="{input: node, group: node.displayName}">
+              <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+              <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+                {{ node.type ==='group' ? 'folder' : 'description' }}
+              </mat-icon>
+              {{node.displayName}}
+            </div>
+            <ul style="margin-left: 25px;" [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+              <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+          </li>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </div>
+  </div>
+
+  <div class="builder-block">
+    <div class="builder-header">
+      <div class="builder-header__box">
+        <h2 class="builder-header__title">
+          Query Builder
+        </h2>
+        <p class="builder-header__clear" (click)="onClearAll()">
+          Clear All
+        </p>
+      </div>
+      <div class="builder-header__box">
+        <p class="builder-header__button builder-header__button_transparent" (click)="onExecute('save')">
+          Save
+        </p>
+        <p class="builder-header__button" (click)="onExecute('execute')">
+          Execute
+          <img src="assets/images/executewhite.png" alt="" class="query-list__icon">
+        </p>
+      </div>
+    </div>
+
+    <form [formGroup]="cohortForm">
+      <div class="builder-block__wrapper">
+        <ng-container *ngFor="let group of groups; let i = index">
+          <div class="build-item">
+            <div class="build-item__header">
+              <h3 class="build-item__title">
+                Group #{{i + 1}}
+              </h3>
+
+              <span class="build-item__close" (click)="removeGroup(group)">
+                <img src="assets/images/close-icon.svg" alt="Close">
+              </span>
+            </div>
+            <div class="build-item__box__wrap">
+              <div class="build-item__box table-wrapper" [class.build-item__box_placeholder]="!group.conditions.length"
+                cdkDropList (cdkDropListDropped)="addCondition(group, $event.item.data)"
+                [ngSwitch]="!!group.conditions.length">
+                <p class="build-item__box-text" *ngSwitchCase="false">
+                  Drag&Drop Conditions from the <br>
+                  left to start build a Query
+                </p>
+
+                <div class="build-item__conditions" *ngSwitchCase="true">
+                  <div class="condition" *ngFor="let condition of group.conditions" style="display: -webkit-box;">
+
+                    <ng-container [ngSwitch]="condition.inputType">
+
+                      <ng-container *ngSwitchCase="'text'">
+
+                        <p class="condition__name condition__item">
+                          {{condition.groupName}}
+                        </p>
+
+                        <div class="condition__select select-input condition__item">
+                          <mat-form-field>
+                            <mat-label>Mode</mat-label>
+                            <mat-select panelClass="input-form__panel" [(ngModel)]="condition.mode.id">
+                              <mat-option *ngFor="let mode of conditionModes" [value]="mode.id">{{mode.label}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="condition__input input-form condition__item">
+                          <input type="text" [(ngModel)]="condition.value" placeholder="{{condition.title}}">
+                        </div>
+
+                        <div class="condition__select additional-input select-input condition__item">
+                          <mat-form-field>
+                            <mat-select panelClass="input-form__panel" [(ngModel)]="condition.caseSensitive">
+                              <mat-option *ngFor="let comparator of condition.comparator" [value]="comparator.id">
+                                {{comparator.name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'quantity'">
+
+                        <p class="condition__name condition__item">
+                          {{condition.groupName}}
+                        </p>
+
+                        <div class="condition__select select-input condition__item">
+                          <mat-form-field>
+                            <mat-label>Mode</mat-label>
+                            <mat-select panelClass="input-form__panel" [(ngModel)]="condition.mode.id">
+                              <mat-option *ngFor="let mode of conditionModes" [value]="mode.id">{{mode.label}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="condition__input input-form condition__item">
+                          <input type="number" [(ngModel)]="condition.value[0]">
+                        </div>
+
+                        <div class="condition__input input-form condition__item">
+                          <input type="number" [(ngModel)]="condition.value[1]">
+                        </div>
+
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'period'">
+
+                        <p class="condition__name condition__item">
+                          {{condition.groupName}}
+                        </p>
+
+                        <div class="condition__select select-input condition__item">
+                          <mat-form-field>
+                            <mat-label>Mode</mat-label>
+                            <mat-select panelClass="input-form__panel" [(ngModel)]="condition.mode.id">
+                              <mat-option *ngFor="let mode of conditionModes" [value]="mode.id">{{mode.label}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="condition__input input-form condition__item">
+                          <input type="text" [(ngModel)]="condition.value.from" [matDatepicker]="periodFrom"
+                            placeholder="{{condition.title}}" (focus)="periodFrom.open()" readonly>
+                          <mat-datepicker #periodFrom></mat-datepicker>
+                        </div>
+
+                        <div class="condition__input input-form condition__item">
+                          <input type="text" [(ngModel)]="condition.value.to" [matDatepicker]="periodTo"
+                            placeholder="{{condition.title}}" (focus)="periodTo.open()" readonly>
+                          <mat-datepicker #periodTo></mat-datepicker>
+                        </div>
+
+                      </ng-container>
+
+                      <ng-container *ngSwitchDefault>
+
+                        <div class="condition__name condition__item" style="height: 25px;padding: 2px;">
+                          <p>{{condition?.parentName}}</p>
+                        </div>
+
+                        <div class="condition__select select-input condition__item" style="height: 25px;">
+                          <mat-form-field>
+                            <mat-label style="font-size: 12px !important;">Comparator</mat-label>
+                            <mat-select panelClass="input-form__panel" [formControlName]="condition?.displayName">
+                              <mat-option style="font-size: 12px !important;"
+                                *ngFor="let operator of condition.comparator; let i =index" [value]="operator">
+                                {{operator.cohortOperatorName}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="condition__name condition__item" style="height: 25px;padding: 2px;">
+                          <p>{{condition?.displayName}}</p>
+                        </div>
+
+                      </ng-container>
+
+                    </ng-container>
+
+                    <img src="assets/images/condition-close-icon.svg" class="condition__close"
+                      (click)="removeCondition(group, condition)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <span class="build-separator">
+            AND
+          </span>
+        </ng-container>
+
+        <div class="build-item build-item_static" (click)="addGroup()">
+          <img src="assets/images/plus-icon.svg" alt="Plus" class="build-item__image">
+          <p class="build-item__static-text">
+            CREATE NEW GROUP
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

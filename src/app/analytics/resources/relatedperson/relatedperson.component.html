@@ -1,0 +1,107 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+    <div class="resourcetitle">
+      <strong>Related Person</strong>
+    </div>
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Name</td>
+          <td>Status</td>
+          <td>Relationship</td>
+          <td>Telecom</td>
+          <td>Gender</td>
+          <td>BirthDate</td>
+          <td>Address</td>
+        </tr>
+        <tr>
+          <!-- Name -->
+        <td >
+            <span  *ngIf="!relatedData?.name || relatedData?.name?.length <= 0">--</span>
+            <span *ngFor="let item of relatedData?.name; let itemLast=last">
+              <span *ngIf="item?.prefix"> {{ (item?.prefix) }} </span>
+              <span *ngIf="item?.family"> {{item?.family}}</span>
+              <span *ngIf="item?.given"> {{(item?.given)}}</span>
+              <span *ngIf="item?.suffix"> {{item?.suffix}}</span>
+              <span *ngIf="item?.use"><strong>&nbsp; | &nbsp;</strong>{{item?.use}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </td>
+           <!-- Status -->
+           <td >
+            <span *ngIf="!relatedData?.active">--</span>
+            {{ relatedData?.active }}
+          </td>
+
+          <td>
+            <span *ngIf="!relatedData?.relationship || relatedData?.relationship?.length <= 0">--</span>
+            <span *ngFor="let code of relatedData?.relationship">
+            <span *ngIf="code?.coding">
+              <span *ngFor="let item of code?.coding; let itemLast=last">
+                <span *ngIf="item?.code">{{ item?.code }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="item?.system">{{item?.system}}  &nbsp; </span>
+                <span *ngIf="item?.display"> <strong>|</strong> &nbsp; {{item?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </span>
+             <!-- {{item?.value}}
+            <span *ngIf="!itemLast"> <br><hr> </span> -->
+          </span>
+
+          </td>
+
+            <!-- Telecom -->
+        <td>
+            <span *ngIf="!relatedData?.telecom || relatedData?.telecom?.length <= 0">--</span>
+            <span *ngFor="let item of relatedData?.telecom; let itemLast=last">
+              <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="item?.value">{{item?.value}}  &nbsp; </span>
+              <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+
+          </td>
+
+          <td >
+            <span *ngIf="!relatedData?.gender">--</span>
+            {{ relatedData?.gender }}
+          </td>
+
+          <td >
+            <span *ngIf="!relatedData?.birthDate">--</span>
+            <span *ngIf="relatedData?.birthDate">
+            <span *ngIf="!relatedData?.birthDate.toLowerCase().includes('t')"> {{ relatedData?.birthDate | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="relatedData?.birthDate.toLowerCase().includes('t')"> {{ relatedData?.birthDate | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+          </td>
+
+          <td>
+            <span  *ngIf="!relatedData?.address || relatedData?.address?.length <= 0">--</span>
+            <span *ngFor="let item of relatedData?.address; let itemLast=last">
+              <span *ngIf="item?.line"> {{ (item?.line.join(' , ')) }} </span>
+              <span *ngIf="item?.city">, {{item?.city}}</span>
+              <span *ngIf="item?.district">, {{item?.district}}</span>
+              <span *ngIf="item?.state">, {{item?.state}}</span>
+              <span *ngIf="item?.country">, {{item?.country}}</span>
+              <span *ngIf="item?.postalCode">, {{item?.postalCode}}</span>
+              <span *ngIf="item?.use"><strong>&nbsp; | &nbsp;</strong>{{item?.use}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+
+  <!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+
+

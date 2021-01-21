@@ -1,0 +1,136 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+    <div class="resourcetitle">
+      <strong>Encounter</strong>
+    </div>
+    <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <!-- Table header -->
+        <tr class="fontBold tableHeaderBackground">
+          <td>Start Time</td>
+          <td>End Time </td>
+          <td>Type</td>
+          <td>Class</td>
+          <td>Reason</td>
+          <td>Status</td>
+          <td>Location</td>
+          <td>Practitioner</td>
+        </tr>
+        <tr>
+          <!-- Start Time -->
+          <td >
+            <span *ngIf="!encounterData?.period">--</span>
+            <span *ngIf="encounterData?.period?.start">
+            <span *ngIf="!encounterData?.period?.start.toLowerCase().includes('t')"> {{ encounterData?.period?.start | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="encounterData?.period?.start.toLowerCase().includes('t')"> {{ encounterData?.period?.start | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+          </td>
+          <!-- End Time -->
+          <td >
+            <span *ngIf="!encounterData?.period">--</span>
+            <span *ngIf="encounterData?.period?.end">
+            <span *ngIf="!encounterData?.period?.end.toLowerCase().includes('t')"> {{ encounterData?.period?.end | date:'yyyy-MM-dd'}}</span>
+            <span *ngIf="encounterData?.period?.end.toLowerCase().includes('t')"> {{ encounterData?.period?.end | date:'yyyy-MM-dd h:mm:ss a'}}</span>
+          </span>
+          </td>
+          <!-- Code -->
+          <td>
+            <span *ngIf="!encounterData?.type || encounterData?.type?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of encounterData?.type">
+              <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+              <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+
+          </td>
+
+           <!-- Class -->
+           <td>
+            <span *ngIf="!encounterData?.class">--</span>
+            <span *ngIf="encounterData?.class">
+            <span *ngIf="encounterData?.class?.display">{{ encounterData?.class?.display }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="encounterData?.class?.code">{{encounterData?.class?.code}}  &nbsp; </span>
+              <span *ngIf="encounterData?.class?.system"> <strong>|</strong> &nbsp; {{encounterData?.class?.system}}</span>
+            </span>
+          </td>
+
+          <!-- Reason -->
+          <td>
+            <span *ngIf="!encounterData?.reasonCode || encounterData?.reasonCode?.length <= 0">--</span>
+            <div *ngFor="let specialityItem of encounterData?.reasonCode">
+              <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+              <span *ngFor="let code of specialityItem?.coding; let itemLast=last">
+                <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+                <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+                <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+                <span *ngIf="!itemLast"> <br><hr> </span>
+              </span>
+            </div>
+
+          </td>
+          <!-- Status -->
+          <td >
+            <span *ngIf="!encounterData?.status">--</span>
+            {{ encounterData?.status }}
+          </td>
+          <!-- Location -->
+          <td >
+          <span *ngIf="!encounterData?.location || encounterData?.location?.length <= 0">--</span>
+          <div *ngFor="let code of encounterData?.location | slice: 0:1">
+          <span *ngIf="code?.location && code?.location?.reference">
+            <span class="texthiperLink" (click)="onclickResourceLink(encounterData?.location)"
+            [mdePopoverTriggerFor]="appPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+              <span *ngIf="!code?.location?.display  && code?.location?.reference">{{code?.location?.reference}}</span>
+              <span *ngIf="code?.location?.display">{{code?.location?.display}}</span>
+            </span>
+            <mde-popover #appPopover="mdePopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="locdata == encounterData?.location" locationRes [popoverData]="selectedResData" [isNoReference]="true"></div>
+              </mat-card>
+            </mde-popover>
+        </span>
+        <!-- <span *ngIf="!itemLast"> <br><hr> </span> -->
+    </div>
+          </td>
+
+          <!-- practitioner -->
+          <td >
+            <span *ngIf="!encounterData?.participant || encounterData?.participant?.length <= 0">--</span>
+            <div *ngFor="let code of encounterData?.participant | slice: 0:1">
+            <span *ngIf="code?.individual && code?.individual?.reference">
+              <span class="texthiperLink" (click)="onclickResourceLink(encounterData?.participant)"
+              [mdePopoverTriggerFor]="appPopover" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+                <span *ngIf="!code?.individual?.display  && code?.individual?.reference">{{code?.individual?.reference}}</span>
+                <span *ngIf="code?.individual?.display">{{code?.individual?.display}}</span>
+              </span>
+              <mde-popover #appPopover="mdePopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" [mdePopoverOverlapTrigger]="false"
+              [mdePopoverCloseOnClick]="false">
+                <mat-card class="tooltip" style="width: min-content;">
+                  <div style="width: 100%;" *ngIf="locdata == encounterData?.participant" practitionerRes [popoverData]="selectedResData"></div>
+                </mat-card>
+              </mde-popover>
+          </span>
+          <!-- <span *ngIf="!itemLast"> <br><hr> </span> -->
+      </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="isNoRecords" class="viewBackground">
+    <p class="textalign-center colorRed" style="width: 100%;">
+    <strong>No Records</strong></p>
+  </div>
+
+  <!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+
+

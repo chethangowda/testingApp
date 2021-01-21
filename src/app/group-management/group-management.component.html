@@ -1,0 +1,162 @@
+<div class="analytics" style="padding-left: 40px;">
+  <app-group-management-header [pageNumberData]="userdataToPage" (onPagination)="onPaginationCall($event)"
+    (createBtnEvent)="onCreateBtn($event)" (searchTextEvent)="onSearchFilter($event)"></app-group-management-header>
+  <div class="adddatsource" *ngIf="isCollapsed" id="scroll">
+    <br>
+    <mat-card>
+      <mat-card-header class="font_color"> {{title}} Group </mat-card-header><br />
+      <mat-divider></mat-divider>
+      <br>
+      <mat-card-content>
+
+        <form [formGroup]="eventForm">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Group Name</mat-label>
+            <input matInput placeholder="Group Name" formControlName="GroupName" required>
+            <mat-error
+              *ngIf="eventForm.controls['GroupName'].errors?.required && eventForm.controls['GroupName'].touched">
+              GroupName is required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Group Description</mat-label>
+            <input matInput placeholder="Group Description" formControlName="Groupdesc" required>
+            <mat-error
+              *ngIf="eventForm.controls['Groupdesc'].errors?.required && eventForm.controls['Groupdesc'].touched">
+              Group Description is required</mat-error>
+          </mat-form-field>
+          <div class="row">
+            <div class="start col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Permissions</mat-label>
+                <mat-select placeholder="Permissions" formControlName="Permission" multiple required>
+                  <mat-option *ngFor="let permission of Permissions" [value]="permission">
+                    {{ permission.authority }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="eventForm.controls['Permission'].errors?.required && eventForm.controls['Permission'].touched">
+                  Permission is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="stop col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select placeholder="Status" formControlName="Status" required>
+                  <mat-option *ngFor="let option of Statuslist" [value]="option.value">
+                    {{ option.viewValue }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="eventForm.controls['Status'].errors?.required && eventForm.controls['Status'].touched">
+                  Status is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+
+        <mat-divider></mat-divider>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="warn" (click)="closeform()">Close</button>
+        <button mat-raised-button color="primary" [disabled]="eventForm.invalid" (click)="onSubmit()">Save</button>
+      </mat-card-actions>
+    </mat-card><br>
+    <mat-divider></mat-divider>
+  </div>
+  <br>
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" matSort #table [matSortDisableClear]="true"
+      (matSortChange)="handleSortChange($event)" class="table mat-elevation-z8">
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            ID
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- First  Column -->
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Name
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+      </ng-container>
+
+      <!-- Permission Column -->
+      <ng-container matColumnDef="Permission">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Permission
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.Permission}} </td>
+      </ng-container>
+
+      <!-- Details Column -->
+      <ng-container matColumnDef="Details">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Details
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.Details}} </td>
+      </ng-container>
+
+      <!-- Details Column -->
+      <ng-container matColumnDef="Createdby">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Created By
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <p *ngIf="element?.Createdby">{{element.Createdby}}</p>
+          <p *ngIf="!element?.Createdby">--</p>
+        </td>
+      </ng-container>
+      <!-- Details Column -->
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Status
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.Status}}
+          <div>
+            <mat-icon matTooltip="In-Active Group" style="color:green" *ngIf="element.Status == 'Active'"
+              (click)="deactivategroup(element)">toggle_on</mat-icon>
+            <mat-icon matTooltip="Active Group" style="color: red" *ngIf="element.Status == 'Inactive'"
+              (click)="deactivategroup(element)">toggle_off</mat-icon>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Action -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Action
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="editbutton" matTooltip="Edit Group"
+            *ngIf="(groupper?.includes('Create_Group')) || (groupper?.includes('ADMIN_PERMISSION'))"
+            (click)="editgrp(element)">edit</mat-icon>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+
+</div>

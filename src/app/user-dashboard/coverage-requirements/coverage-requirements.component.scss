@@ -1,0 +1,19 @@
+.table {
+  padding: 0.97rem;
+  border-top: 4px solid #dee2e6;
+  min-width: 764px;
+
+  td {
+    padding: 0.97rem;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+  }
+  th {
+    padding: 0.97rem;
+    vertical-align: top;
+    text-align: center;
+  }
+  .actionbutton {
+    padding: 0px;
+  }
+}

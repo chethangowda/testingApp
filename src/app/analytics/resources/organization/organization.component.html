@@ -1,0 +1,108 @@
+<div *ngIf="!isNoRecords" class="viewBackground">
+  <div class="resourcetitle">
+    <!-- <strong>Organization</strong> -->
+    <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Organization</strong>
+    <div  *ngIf="isArray(popoverData)" style="float: right;">
+      <mat-form-field>
+        <mat-label>Select Organization</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- Table header -->
+      <tr class="fontBold tableHeaderBackground">
+        <td>Name</td>
+        <td>Identifiers</td>
+        <td>Type</td>
+        <td>Telecom</td>
+        <td>Address</td>
+      </tr>
+      <tr>
+        <!-- Name -->
+        <td >
+          <span *ngIf="!organizationData?.name">--</span>
+          {{ organizationData?.name }}
+        </td>
+        <!-- Identifier -->
+        <td>
+          <span *ngIf="!organizationData?.identifier || organizationData?.identifier?.length <= 0">--</span>
+          <span *ngFor="let item of organizationData?.identifier; let itemLast=last">
+          <span *ngIf="item?.type?.coding">
+            <span *ngFor="let code of item?.type?.coding | slice:0:1; let isLast=last"
+             [matTooltip]="code?.display"  matTooltipClass="example-tooltip-red">
+              <span *ngIf="code?.code == 'ID'"> Source Id </span>
+              <span *ngIf="code?.code !== 'ID'">{{code?.code}}{{isLast? '' : ' | '}}</span>
+            </span> :
+          </span>
+           {{item?.value}}
+          <span *ngIf="!itemLast"> <br><hr> </span>
+        </span>
+
+        </td>
+
+        <td>
+          <span *ngIf="!organizationData?.type || organizationData?.type?.length <= 0">--</span>
+          <span *ngFor="let code of organizationData?.type">
+          <span *ngIf="code?.coding">
+            <span *ngFor="let item of code?.coding; let itemLast=last">
+              <span *ngIf="item?.code">{{ item?.code }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="item?.system">{{item?.system}}  &nbsp; </span>
+              <span *ngIf="item?.display"> <strong>|</strong> &nbsp; {{item?.display}}</span>
+              <span *ngIf="!itemLast"> <br><hr> </span>
+            </span> 
+          </span>
+           <!-- {{item?.value}}
+          <span *ngIf="!itemLast"> <br><hr> </span> -->
+        </span>
+
+        </td>
+
+        <!-- Telecom -->
+        <td>
+          <span *ngIf="!organizationData?.telecom || organizationData?.telecom?.length <= 0">--</span>
+          <span *ngFor="let item of organizationData?.telecom; let itemLast=last">
+            <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+            <span *ngIf="item?.value">{{item?.value}}  &nbsp; </span>
+            <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+
+        </td>
+
+        <td>
+          <span  *ngIf="!organizationData?.address || organizationData?.address?.length <= 0">--</span>
+          <span *ngFor="let item of organizationData?.address; let itemLast=last">
+            <span *ngIf="item?.line"> {{ (item?.line.join(' , ')) }} </span>
+            <span *ngIf="item?.city">, {{item?.city}}</span>
+            <span *ngIf="item?.district">, {{item?.district}}</span>
+            <span *ngIf="item?.state">, {{item?.state}}</span>
+            <span *ngIf="item?.country">, {{item?.country}}</span>
+            <span *ngIf="item?.postalCode">, {{item?.postalCode}}</span>
+            <span *ngIf="item?.use"><strong>&nbsp; | &nbsp;</strong>{{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isNoRecords" class="viewBackground">
+  <p class="textalign-center colorRed" style="width: 100%;">
+  <strong>No Records</strong></p>
+</div>
+
+<!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+
+

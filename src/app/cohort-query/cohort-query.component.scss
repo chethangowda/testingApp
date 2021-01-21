@@ -1,0 +1,275 @@
+@import "../../styles/mixins";
+
+.texteliipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.analytics {
+  display: block;
+  padding-left: $sideNavWidth;
+}
+
+.cohort {
+  padding-left: 0px;
+  padding-top: 0px;
+
+  app-analytics-header {
+    position: fixed;
+    left: $sideNavWidth;
+    display: block;
+    right: 0;
+    top: 0;
+    z-index: 101;
+    background-color: #fff;
+  }
+}
+
+.queries {
+  width: 100%;
+  display: flex;
+}
+
+.cohort-item {
+  width: 100%;
+  max-width: 318px;
+  overflow: hidden;
+  color: #52525d;
+  padding: 31px 27px 0 24px;
+  height: 100%;
+
+  &_results {
+    padding: 22px 27px 0 14px;
+
+    @media (min-width: $l-screen) {
+      padding-top: 31px;
+    }
+  }
+
+  &__header-box {
+    padding-left: 10px;
+  }
+
+  &__header {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 20px;
+
+    @media (min-width: $l-screen) {
+      margin-bottom: 30px;
+    }
+  }
+}
+
+.query-list {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding-left: 10px;
+  overflow-y: hide;
+
+  @include custom-scrollbar(rgba(170, 179, 200, 0.2), #818faf);
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 100%;
+    max-width: 258px;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    transition: 0.3s;
+
+    &:hover {
+      transition: 0.3s;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+      .query-list__image-box {
+        opacity: 1;
+        pointer-events: auto;
+        transition: 0.3s;
+      }
+    }
+
+    &.active {
+      background: #0083ef;
+      color: #ffffff;
+
+      .query-list__folder-icon {
+        path {
+          fill: #ffffff;
+        }
+      }
+
+      &:hover {
+        transition: 0.3s;
+        box-shadow: none;
+
+        .query-list__image-box {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  &__folder-icon {
+    margin-right: 7px;
+  }
+
+  &__delete-icon {
+    width: 10px;
+    height: 13px;
+  }
+
+  &__text {
+    cursor: default;
+    font-size: 14px;
+    line-height: 18px;
+    margin-right: 15px;
+  }
+
+  &__image-box {
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+
+    img {
+      cursor: pointer;
+    }
+
+    img:first-of-type {
+      margin-right: 14px;
+    }
+  }
+}
+
+.input-form {
+  margin-bottom: 16px;
+
+  &__item {
+    max-width: 258px;
+    margin: 0;
+  }
+}
+
+.cohort-result {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
+  border-left: 1px solid rgba(129, 143, 175, 0.3);
+
+  &__wrapper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .input-form {
+    margin-bottom: 0;
+    padding-right: 0;
+  }
+
+  app-analytics-content {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    ::ng-deep {
+      .table-wrapper {
+        height: calc(100% - 70px);
+      }
+    }
+  }
+}
+
+.empty-state {
+  background: #f3f3f3;
+
+  &__icon {
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 30px;
+    margin-bottom: 19px;
+  }
+
+  &__text {
+    font-size: 16px;
+    line-height: 24px;
+    color: #818faf;
+    text-align: center;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tabs-header.tabs-header_cohort .search {
+    max-width: 65%;
+  }
+
+  // .cohort-result__wrapper {
+  //   overflow: scroll;
+  // }
+
+  app-analytics-content {
+    min-width: 1280px;
+  }
+}
+
+@media (max-width: 1020px) {
+  ::ng-deep {
+    .table-wrapper {
+      overflow: scroll;
+    }
+  }
+
+  .queries {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .cohort {
+    height: auto;
+    overflow: visible;
+  }
+
+  .cohort-item {
+    max-width: 100%;
+
+    .input-form__item {
+      max-width: 100%;
+    }
+  }
+
+  .query-list {
+    height: 150px;
+    padding-top: 5px;
+    padding-right: 10px;
+
+    &__item {
+      max-width: 100%;
+    }
+  }
+}

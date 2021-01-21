@@ -1,0 +1,32 @@
+  <div [ngSwitch]="presentDataType">
+    <div *ngSwitchCase="'onsetDateTime'">
+      <span *ngIf="itemData?.onsetDateTime?.includes('T')">{{itemData?.onsetDateTime | date : 'yyyy-MM-dd h:mm:ss a'}}</span>
+      <span *ngIf="!itemData?.onsetDateTime?.includes('T')">{{itemData?.onsetDateTime}}</span>
+    </div>
+
+    <div *ngSwitchCase="'onsetPeriod'">
+      <span *ngIf="itemData?.onsetPeriod?.start">
+      <span *ngIf="itemData?.onsetPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.onsetPeriod?.start | date : 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.onsetPeriod?.start?.includes('T')"><strong>Start : </strong>{{itemData?.onsetPeriod?.start}}</span> <br>
+      </span>
+      <span *ngIf="itemData?.onsetPeriod?.end">
+      <span *ngIf="itemData?.onsetPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.onsetPeriod?.end | date: 'yyyy-MM-dd h:mm:ss a'}}</span> <br>
+      <span *ngIf="!itemData?.onsetPeriod?.end?.includes('T')"><strong>End :</strong>{{itemData?.onsetPeriod?.end}}</span>
+    </span>
+    </div>
+
+    <div *ngSwitchCase="'onsetRange'">
+      <span><strong>Low : </strong>{{itemData?.onsetRange?.low?.value}} <span *ngIf="itemData?.onsetRange?.low?.code">- itemData?.onsetRange?.low?.code</span></span> <br>
+      <span><strong>High :</strong>{{itemData?.onsetRange?.high?.value}}<span *ngIf="itemData?.onsetRange?.high?.code">- itemData?.onsetRange?.high?.code</span></span>
+    </div>
+
+    <div *ngSwitchCase="'onsetAge'">
+      <span *ngIf="itemData?.onsetAge?.value">{{itemData?.onsetAge?.value}} <span *ngIf="itemData?.onsetAge?.unit"> - {{itemData?.onsetAge?.unit}}</span></span>
+    </div>
+
+    <div *ngSwitchCase="'onsetString'">
+      <span>{{itemData?.onsetString}}</span>
+    </div>
+
+    <div *ngSwitchDefault>--</div>
+  </div>

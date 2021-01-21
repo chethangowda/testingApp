@@ -1,0 +1,149 @@
+<section class="login">
+  <div class="header">
+    <img src="assets/images/interopx-logo.svg" alt="InteropX" class="header__image">
+  </div>
+
+  <section class="content">
+    <div class="content__box" *ngIf="login">
+      <h2 class="content__heading">
+        Log in to InteropX
+      </h2>
+      <form [formGroup]="loginForm" class="content__form">
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Email" formControlName="emailID" required>
+          <mat-error class="error-msg"
+            *ngIf="loginForm.controls['emailID'].errors?.required && loginForm.controls['emailID'].touched">
+            Please enter emial ID</mat-error>
+          <mat-error class="error-msg"
+            *ngIf="loginForm.controls['emailID'].errors?.validateEmail && loginForm.controls['emailID'].touched">
+            Please enter emial ID</mat-error>
+        </mat-form-field>
+        <mat-form-field class="content__form-box">
+          <input type="password" matInput placeholder="Password" formControlName="password" required>
+          <mat-error class="error-msg"
+            *ngIf="loginForm.controls['password'].errors?.required && loginForm.controls['emailID'].touched">
+            Please enter password</mat-error>
+        </mat-form-field>
+        <button class="content__button" (click)="onLogin(loginForm)">
+          Log In
+        </button>
+      </form>
+      <button class="content__button transparent" (click)="forgotpassword()">
+        Forgot password?
+      </button>
+    </div>
+    <div class="content__box" *ngIf="fgtpassword">
+      <h2 class="content__heading">
+        Forgot Password
+      </h2>
+      <form [formGroup]="useridForm" class="content__form">
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Email" formControlName="emailID" required>
+          <mat-error class="error-msg"
+            *ngIf="useridForm.controls['emailID'].errors?.required && useridForm.controls['emailID'].touched">
+            Please enter emial ID</mat-error>
+          <mat-error class="error-msg"
+            *ngIf="useridForm.controls['emailID'].errors?.validateEmail && useridForm.controls['emailID'].touched">
+            Please enter emial ID</mat-error>
+        </mat-form-field>
+        <button class="content__button" [disabled]="!useridForm.valid" (click)="submituserid(useridForm)">
+          Submit
+        </button>
+      </form>
+      <button class="content__button transparent" (click)="forgotuserid()">
+        Forgot UserId?
+      </button>
+      <button class="content__button transparent" style="height: 0px; padding-bottom: 20px;" (click)="back()">
+        Click here to login
+      </button>
+    </div>
+    <div class="content__box" *ngIf="fgtuserid">
+      <h2 class="content__heading">
+        Forgot UserId
+      </h2>
+      <form [formGroup]="fgtuseridForm" class="content__form">
+        <mat-form-field class="content__form-box">
+          <mat-select placeholder="Select country" formControlName="Country"
+            (selectionChange)="onSelectCountryDropdown($event);" required>
+            <mat-option *ngFor="let country of countryList" [value]="country.value">
+              {{country.value}}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="fgtuseridForm.controls['Country'].errors?.required && fgtuseridForm.controls['Country'].touched">
+            Country is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Code" formControlName="Code" required>
+          <mat-error *ngIf="fgtuseridForm.controls['Code'].errors?.required && fgtuseridForm.controls['Code'].touched">
+            Code is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Mobile Number" formControlName="Number" required>
+          <mat-error
+            *ngIf="fgtuseridForm.controls['Number'].errors?.required && fgtuseridForm.controls['Number'].touched">
+            Number is required</mat-error>
+        </mat-form-field>
+        <button class="content__button" [disabled]="!fgtuseridForm.valid" (click)="submitmobile(fgtuseridForm)">
+          Submit
+        </button>
+      </form>
+      <button class="content__button transparent" (click)="back()">
+        Click here to login
+      </button>
+    </div>
+    <div class="content__box" *ngIf="otpscreen">
+      <h2 class="content__heading">
+        Verify OTP
+      </h2>
+      <form [formGroup]="otpform" class="content__form">
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Mobile Number" formControlName="Number" required>
+          <mat-error *ngIf="otpform.controls['Number'].errors?.required && otpform.controls['Number'].touched">
+            Number is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="content__form-box">
+          <input matInput placeholder="Enter OTP" formControlName="otp" required>
+          <mat-error *ngIf="otpform.controls['otp'].errors?.required && otpform.controls['otp'].touched">
+            Number is required</mat-error>
+        </mat-form-field>
+      </form>
+      <button class="content__button transparent" style="margin-top: -18px; margin-left: 140px;"
+        (click)="resend(otpform)">
+        Resend Code
+      </button>
+      <button class="content__button" [disabled]="!otpform.valid" (click)="verifyotp(otpform)">
+        Submit
+      </button>
+      <button class="content__button transparent" (click)="back()">
+        Click here to login
+      </button>
+    </div>
+    <div class="content__box">
+      <p class="content__text">
+        Contact your <a>InteropX Admin</a> to request for login credentials. <br>
+        For any other issues please contact our <a>Support Team</a>.
+      </p>
+      <div class="footer">
+        <p class="footer__text">
+          Copyright © 1918 InteropX, LLC. All rights reserved.
+        </p>
+        <div class="footer__links">
+          <a href="">
+            <img src="assets/images/fb-icon.svg" alt="Facebook" class="footer__links-item">
+          </a>
+          <a href="">
+            <img src="assets/images/linkedin-icon.svg" alt="LinkedIn" class="footer__links-item">
+          </a>
+          <a href="">
+            <img src="assets/images/twitter-icon.svg" alt="Twitter" class="footer__links-item">
+          </a>
+          <a href="">
+            <img src="assets/images/web-icon.svg" alt="WEB" class="footer__links-item">
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</section>

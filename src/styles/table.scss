@@ -1,0 +1,244 @@
+@import "mixins";
+
+.sort-arrow {
+  display: flex;
+  transition: 0.3s;
+
+  i {
+    height: 0;
+    width: 0;
+    border: 3px solid;
+    border-color: #0083ef #0083ef transparent transparent;
+    opacity: 1;
+    transform: rotate(135deg);
+  }
+}
+
+// .table .mat-sort-header-button span
+
+.table {
+  width: 100%;
+  box-shadow: none;
+
+  &.nested {
+    tr.mat-row:not(.expanded):not(.patient-details) {
+      opacity: 0.5;
+    }
+  }
+
+  &.details-table {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-bottom: 5px solid rgba(129, 143, 175, 0.3);
+
+    tr.mat-row {
+      opacity: 1 !important;
+    }
+
+    tr.mat-row:nth-child(even) {
+      background: rgba(242, 242, 242, 0.7);
+    }
+
+    td {
+      border: none;
+    }
+  }
+
+  tbody {
+    tr.mat-row:not(.patient-details) {
+      td {
+        cursor: pointer;
+      }
+    }
+  }
+
+  tr.mat-footer-row,
+  tr.mat-row {
+    height: 42px;
+
+    @media (min-width: $l-screen) {
+      height: 48px;
+    }
+  }
+
+  .mat-row.patient-details > .mat-cell {
+    padding: 0;
+    font-weight: 400;
+  }
+
+  .mat-header-cell {
+    font-family: $sourceSansPro;
+    font-weight: 700;
+    border-bottom: 3px solid rgba(129, 143, 175, 0.3);
+
+    &[aria-sort="ascending"],
+    &[aria-sort="descending"] {
+      .mat-sort-header-arrow {
+        color: #0083ef;
+      }
+    }
+  }
+
+  .mat-sort-header-container {
+    .mat-sort-header-arrow {
+      position: absolute;
+      top: 7px;
+      left: calc(100% - 15px);
+      margin: 0;
+    }
+  }
+
+  &-wrapper {
+    height: calc(100vh - 150px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    @include custom-scrollbar(rgba(170, 179, 200, 0.2), #818faf);
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+  }
+
+  .mat-sort-header-button {
+    span {
+      font-family: $sourceSansPro;
+      font-weight: 700;
+      position: relative !important;
+      top: 5px;
+      font-size: 14px;
+      line-height: 15px;
+      color: black;
+    }
+  }
+
+  td.mat-cell,
+  th.mat-header-cell:not(:first-of-type) {
+    padding-left: 27px;
+    padding-right: 27px;
+  }
+
+  td.mat-cell:first-of-type {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 18px;
+    color: #52525d;
+    width: 150px;
+  }
+
+  td.mat-cell {
+    font-size: 12px;
+    line-height: 15px;
+    align-items: center;
+    color: #52525d;
+
+    @media (min-width: $l-screen) {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  td.birth-cell,
+  th.birth-cell {
+    width: 160px;
+  }
+
+  td.address-cell,
+  th.address-cell {
+    width: 415px;
+  }
+
+  td.right-align-cell {
+    text-align: right;
+  }
+
+  th.age-cell,
+  td.age-cell {
+    width: 100px;
+  }
+
+  th.mat-header-cell {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 15px;
+    color: #52525d;
+    border-left: 1px solid #c0c7d7;
+    position: relative;
+
+    &:first-of-type {
+      border-left: 0;
+    }
+  }
+
+  tr.mat-header-row {
+    height: 36px;
+    vertical-align: baseline;
+  }
+
+  // #F6F6F6
+
+  tr.mat-row.expanded {
+    background: #0083ef26;
+    // background: #efd20030;
+
+    td.mat-cell {
+      font-weight: 600;
+    }
+
+    .id-cell__wrapper {
+      transition: 0.3s;
+      color: #ffbb04;
+    }
+
+    .sort-arrow i {
+      transition: 0.3s;
+      border-color: #ffbb04 #ffbb04 transparent transparent;
+      transform: rotate(-45deg);
+    }
+  }
+
+  td.id-cell {
+    .id-cell__wrapper {
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
+
+.table tr.patient-details {
+  height: 0;
+}
+
+@media (max-width: 1140px) {
+  .table {
+    td.birth-cell,
+    th.birth-cell {
+      width: 120px;
+    }
+
+    td.address-cell,
+    th.address-cell {
+      width: 300px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .table-wrapper {
+    overflow: scroll;
+  }
+
+  .table {
+    min-width: 1280px;
+
+    .mat-sort-header-container {
+      .mat-sort-header-arrow {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  }
+}

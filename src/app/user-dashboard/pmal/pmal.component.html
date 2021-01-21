@@ -1,0 +1,85 @@
+<div>
+  <div class="table-wrapper" style="height: calc(100vh - 85px) !important; margin-top: 10px;">
+    <table mat-table [dataSource]="dataSource" class="table mat-elevation-z8" matSort #table
+      [matSortDisableClear]="true" (matSortChange)="handleSortChange($event)">
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="extractionId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Extraction ID
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element?.extractionId}} </td>
+      </ng-container>
+
+      <!-- First Name Column -->
+      <ng-container matColumnDef="createdDateTime">
+        <th class="textalign-left" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Last Ext. Date
+          </span>
+        </th>
+        <td class="textalign-left" mat-cell *matCellDef="let element"> {{element?.createdDateTime | date:'medium'}}
+        </td>
+      </ng-container>
+
+      <!-- Last Name Column -->
+      <ng-container matColumnDef="totalPatients">
+        <th class="textalign-left" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Total Patients
+          </span>
+        </th>
+        <td class="textalign-center" mat-cell *matCellDef="let element"> {{element?.totalPatients}} </td>
+      </ng-container>
+
+      <!-- Gender Column -->
+      <ng-container matColumnDef="automaticMatchedPatients">
+        <th class="textalign-left" [ngStyle]="{'background-color':'aliceblue'}" mat-header-cell *matHeaderCellDef
+          mat-sort-header>
+          <span>
+            Total Auto Linked Patients
+          </span>
+        </th>
+        <td class="textalign-center" [ngStyle]="{'background-color':'aliceblue'}" mat-cell *matCellDef="let element">
+          {{element?.automaticMatchedPatients}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalUniques">
+        <th class="textalign-left" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Total Unique Patients
+          </span>
+        </th>
+        <td class="textalign-center" mat-cell *matCellDef="let element"> {{element?.totalUniques}} </td>
+      </ng-container>
+
+      <!-- DOB Column -->
+      <ng-container matColumnDef="manuallyMatchedPatients">
+        <th class="textalign-left" mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>
+            Total Manually Linked Patients
+          </span>
+        </th>
+        <td class="textalign-center" mat-cell *matCellDef="let element"> {{element?.manuallyMatchedPatients}} </td>
+      </ng-container>
+
+      <!-- Address Column -->
+      <ng-container matColumnDef="totalConflicts">
+        <th class="textalign-left" [ngStyle]="{'background-color':'bisque'}" mat-header-cell *matHeaderCellDef
+          mat-sort-header>
+          <span>
+            Outstanding Conflicts
+          </span>
+        </th>
+        <td class="textalign-center" [ngStyle]="{'background-color':'bisque'}" mat-cell *matCellDef="let element">
+          {{element?.totalConflicts}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+</div>

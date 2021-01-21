@@ -1,0 +1,8 @@
+<div class="analytics" style="overflow: hidden;">
+  <app-datasources-header (selectPatientTab)="onGetSelectedTab($event)"></app-datasources-header>
+  <div class="analytics-header">
+    <app-dataset-content *ngIf="isSelectedTab === 'datasetview'"></app-dataset-content>
+    <app-datasource-content *ngIf="isSelectedTab === 'datasourceview'"></app-datasource-content>
+    <app-agent-content *ngIf="isSelectedTab === 'agentview'"></app-agent-content>
+  </div>
+</div>

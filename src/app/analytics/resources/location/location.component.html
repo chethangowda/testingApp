@@ -1,0 +1,119 @@
+
+<div *ngIf="isNoRecords" class="viewBackground">
+  <p class="textalign-center colorRed" style="width: 100%;">
+  <strong>No Records</strong></p>
+</div>
+
+<div *ngIf="!isNoRecords" class="viewBackground">
+  <div class="resourcetitle">
+    <!-- <strong>Location</strong> -->
+    <strong [ngStyle]="{'float': isArray(popoverData) ? 'left' : 'center'}">Location</strong>
+    <div  *ngIf="isArray(popoverData)" style="float: right;">
+      <mat-form-field>
+        <mat-label>Select Location</mat-label>
+        <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectChange($event.value)">
+          <mat-option *ngFor="let item of popoverData" [value]="item">
+            <span *ngIf="item?.display">{{item?.display}}</span>
+            <span *ngIf="!item?.display && item?.reference">{{item?.reference}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <table *ngIf="!isLoading" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- Table header -->
+      <tr class="fontBold tableHeaderBackground">
+        <td>Name</td>
+        <td>Identifiers</td>
+        <td>Telecom</td>
+        <td>Type</td>
+        <td>Address</td>
+        <td>Organization</td>
+      </tr>
+      <tr>
+        <!-- Name -->
+        <td>
+          <span *ngIf="!locationData?.name">--</span>
+          {{ locationData?.name }}
+        </td>
+        <!-- Identifier -->
+        <td>
+          <span *ngIf="!locationData?.identifier || locationData?.identifier?.length <= 0">--</span>
+          <span *ngFor="let item of locationData?.identifier; let itemLast=last">
+          <span *ngIf="item?.type?.coding">
+            <span *ngFor="let code of item?.type?.coding | slice:0:1; let isLast=last"
+             [matTooltip]="code?.display"  matTooltipClass="example-tooltip-red">
+              <span *ngIf="code?.code == 'ID'"> Source Id </span>
+              <span *ngIf="code?.code !== 'ID'">{{code?.code}}{{isLast? '' : ' | '}}</span>
+            </span> :
+          </span>
+           {{item?.value}}
+          <span *ngIf="!itemLast"> <br><hr> </span>
+        </span>
+
+        </td>
+        <!-- Telecom -->
+        <td>
+          <span *ngIf="!locationData?.telecom || locationData?.telecom?.length <= 0">--</span>
+          <span *ngFor="let item of locationData?.telecom; let itemLast=last">
+            <span *ngIf="item?.system">{{ item?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+            <span *ngIf="item?.value">{{item?.value}}  &nbsp; </span>
+            <span *ngIf="item?.use"> <strong>|</strong> &nbsp; {{item?.use}}</span>
+            <span *ngIf="!itemLast"> <br><hr> </span>
+          </span>
+
+        </td>
+        <!-- Type -->
+        <td>
+          <span *ngIf="!locationData?.type || locationData?.type?.length <= 0">--</span>
+          <div *ngFor="let specialityItem of locationData?.type">
+            <span *ngIf="!specialityItem?.coding && specialityItem?.text">{{specialityItem?.text}}</span>
+            <span *ngFor="let code of specialityItem?.coding">
+              <span *ngIf="code?.system">{{ code?.system }} &nbsp; <strong>|</strong>  &nbsp; </span>
+              <span *ngIf="code?.code">{{code?.code}}  &nbsp; </span>
+              <span *ngIf="code?.display"> <strong>|</strong> &nbsp; {{code?.display}}</span>
+            </span>
+          </div>
+        </td>
+        <!-- Address -->
+        <td>
+          <span *ngIf="!locationData?.address">--</span>
+            <span *ngIf="locationData?.address?.line"> {{ (locationData?.address.line.join(' , ')) }} </span>
+            <span *ngIf="locationData?.address?.city">, {{locationData?.address?.city}}</span>
+            <span *ngIf="locationData?.address?.state">, {{locationData?.address?.state}}</span>
+            <span *ngIf="locationData?.address?.country">, {{locationData?.address?.country}}</span>
+            <span *ngIf="locationData?.address?.postalCode">, {{locationData?.address?.postalCode}}</span>
+            <span *ngIf="locationData?.address?.use"><strong>&nbsp; | &nbsp;</strong>{{locationData?.address?.use}}</span>
+        </td>
+        <!-- Organization -->
+       
+          <td>
+            <span *ngIf="!locationData?.managingOrganization || locationData?.managingOrganization?.length <= 0">--</span>
+            <span *ngIf="isNoReference">
+              <span *ngIf="!locationData?.managingOrganization?.display">{{locationData?.managingOrganization?.reference}}</span>
+              <span *ngIf="locationData?.managingOrganization?.display">{{locationData?.managingOrganization?.display}}</span>
+              </span>
+            <span *ngIf="!isNoReference" class="texthiperLink" (click)="onclickResourceLink(locationData.managingOrganization)"
+            [mdePopoverTriggerFor]="PractPopover"  mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverTriggerOn="click">
+            <span *ngIf="locationData?.managingOrganization?.display">{{locationData?.managingOrganization?.display}}</span>
+            <span *ngIf="!locationData?.managingOrganization?.display">{{locationData?.managingOrganization?.reference}}</span>
+            </span>
+            <mde-popover #PractPopover="mdePopover" [mdePopoverOverlapTrigger]="false"
+            [mdePopoverCloseOnClick]="false">
+              <mat-card class="tooltip" style="width: min-content;">
+                <div style="width: 100%;" *ngIf="selectedResData == locationData?.managingOrganization" organizationRes [popoverData]="selectedResData"></div>
+              </mat-card>
+            </mde-popover>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <img style="height: 22px; width: 22px;" *ngIf="isLoading" src="assets/images/mouse-loader.gif"> -->
+
+
+
+
+

@@ -1,0 +1,45 @@
+.patient-table {
+  width: calc(100vw - 56px);
+  overflow: hidden;
+}
+
+.childTableBGcolor {
+  background-color: #0083ef26;
+}
+
+.table td {
+  cursor: default !important;
+}
+
+.filter {
+  padding-bottom: 24px;
+}
+
+.tabs-header.nested .tabs__wrapper {
+  padding-bottom: 2px;
+}
+
+@media (max-width: 1024px) {
+  .patient-table {
+    min-width: 1280px;
+  }
+}
+
+.tableData {
+  width: 100%;
+  box-shadow: none;
+
+  &.nested {
+    tr.mat-row:not(.expanded):not(.patient-details) {
+      opacity: 1;
+    }
+  }
+}
+
+.paginator-display {
+  display: contents !important;
+}
+
+.paginator {
+  width: 85%;
+}

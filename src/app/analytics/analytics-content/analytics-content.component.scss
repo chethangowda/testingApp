@@ -1,0 +1,123 @@
+@import "../../../styles/mixins";
+
+.analytics-header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding-bottom: 24px;
+}
+
+button.mat-icon-button.mat-button-base {
+  position: absolute;
+  top: 14%;
+  right: 1px;
+  margin-top: -10px;
+}
+
+.arrangedata {
+  position: absolute;
+  top: -6px;
+  right: 0px;
+}
+
+.arrangeicon {
+  position: absolute;
+  top: 9px;
+  left: 67%;
+  font-size: 15px;
+}
+
+.selector-height {
+  height: 28px !important;
+}
+
+.table th {
+  // border-top: 1px solid;
+  border-right: 1px #c0c7d7 solid;
+  // border-bottom: 1px solid;
+  cursor: col-resize;
+}
+
+.texthiperLink {
+  text-decoration: underline;
+  color: #0083ef;
+}
+
+.tooltip {
+  // width:400px;
+  //  height:238px;
+  //  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  //  background: #ffbc04c4;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+td {
+  text-align: center !important;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+::ng-deep .example-tooltip-red {
+  background: #ed1b31de;
+}
+
+th,
+td {
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
+  // white-space: nowrap;
+}
+
+table {
+  table-layout: fixed;
+  width: 310px;
+}
+table td {
+  width: 100px;
+  word-wrap: break-word;
+}

@@ -1,0 +1,12 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.analytics-header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding-bottom: 24px;
+}
+
+.analytics {
+  display: block;
+  padding-left: $sideNavWidth;
+}

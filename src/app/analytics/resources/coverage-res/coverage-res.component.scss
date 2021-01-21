@@ -1,0 +1,42 @@
+
+:host {
+  display: block;
+  background: rgba(0,0,255,0.05);
+}
+
+table, td, th {
+  border: 1px solid #1d96f76b;
+  text-align: center;
+}
+
+body {
+  background: #efefef;
+}
+
+.table-row table{border: #1d96f76b 1px solid !important}
+
+.table-row table th, td{border: #1d96f76b 1px solid !important; padding-top: 10px; padding-bottom: 10px;}
+
+::ng-deep .example-tooltip-red {
+  background: #ed1b31de;
+}
+
+.tableHeaderBackground {
+  background: #1d96f76b;
+}
+
+.resourcetitle{
+  padding: 10px;
+  text-align: center;
+}
+
+.viewBackground {
+  background: #1d96f71a;
+  padding: 10px;
+}
+
+.texthiperLink {
+  text-decoration: underline;
+  color: #0083ef;
+  cursor: pointer;
+}

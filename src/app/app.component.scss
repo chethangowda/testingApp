@@ -1,0 +1,204 @@
+@import "../styles/mixins";
+
+.backgroundImg {
+  background: url("../assets/images/login-bg.png") -1px;
+}
+
+.aside {
+  position: fixed;
+  z-index: 102;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 56px;
+  height: 100vh;
+  background: #0083ef;
+  font-family: $sourceSansPro;
+  transition: 0.5s;
+  overflow: hidden;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
+
+  * {
+    transition: 0.5s;
+  }
+
+  &:hover {
+    max-width: 270px;
+
+    .aside {
+      &__top-block {
+        padding: 0 28px;
+      }
+
+      &__logo {
+        width: 100%;
+        overflow: hidden;
+      }
+    }
+
+    .content {
+      &__button {
+        padding: 16px 24px;
+      }
+
+      &__box {
+        max-width: 100%;
+
+        &.content__box_bottom {
+          .content {
+            &__button {
+              padding: 16px 31px;
+
+              &.content__button_white {
+                padding: 16px 19px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__top-block {
+    display: flex;
+    align-items: center;
+    height: 75px;
+    padding: 0 9px 0 8px;
+    background-color: #ffffff;
+  }
+
+  &__logo {
+    display: block;
+    width: 40px;
+    overflow: hidden;
+  }
+}
+
+.content {
+  height: calc(100% - 77px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  &__box {
+    width: 100%;
+
+    &.content__box_bottom {
+      padding-bottom: 24px;
+
+      .content {
+        &__button-wrapper {
+          img {
+            margin-right: 30px;
+          }
+        }
+
+        &__button {
+          padding: 16px 20px;
+
+          &.content__button_white {
+            padding: 16px 9px;
+
+            .content__button-text,
+            img {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__button {
+    display: flex;
+    min-width: 238px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 17px;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:hover,
+    &.active {
+      opacity: 1;
+      transition: 0.3s;
+      background: #ffbb04;
+
+      .content__button-wrapper {
+        img {
+          opacity: 1;
+          transition: 0.3s;
+        }
+      }
+
+      .content__button-text {
+        opacity: 1;
+        transition: 0.3s;
+      }
+    }
+  }
+
+  &__button-wrapper {
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 19px;
+      opacity: 0.6;
+      transition: 0.3s;
+    }
+  }
+
+  &__button-text {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #ffffff;
+    opacity: 0.6;
+    transition: 0.3s;
+  }
+
+  &__counter {
+    min-width: 32px;
+    height: 22px;
+
+    font-weight: 600;
+    font-size: 16px;
+    color: #0083ef;
+
+    background-color: #ffffff;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__arrow {
+    padding-right: 7px;
+  }
+
+  &__user-logo {
+    width: 100%;
+    max-width: 40px;
+    height: 40px;
+    border: 2px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin-right: 20px;
+  }
+}
+
+.node__label {
+  // color: red;
+  cursor: pointer;
+  // text-decoration: underline;
+}
+
+.node__children {
+  border-left: 3px solid #61afc6;
+  margin: 5px 0px 5px 25px;
+  padding-left: 10px;
+}

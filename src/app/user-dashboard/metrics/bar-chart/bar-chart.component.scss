@@ -1,0 +1,62 @@
+.column {
+  float: left;
+}
+
+.firstdiv {
+  height: 5px;
+  width: 100%;
+}
+
+.topdiv {
+  height: 5px;
+  background: #57adf4;
+  border-radius: 21px;
+}
+
+.searchInputbox {
+  height: 28px;
+  font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+  background: #b4dbfb82;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  width: 70%;
+  padding-left: 34px;
+  margin-left: 130px;
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+  background-color: #57adf4;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.card-height {
+  height: 100%;
+}
+
+.headerCol {
+  width: 50%;
+}
+
+.piechart {
+  width: 50%;
+}
+
+.nameAlign {
+  padding-right: 21px;
+  text-align: right;
+  overflow-wrap: break-word;
+}
+
+.highlight {
+  box-shadow: 0 2px 1px -1px#ffbb04, 0 1px 1px 0 #ffbb04, 0 1px 3px 0 #ffbb04;
+}
+
+.headerBorder {
+  border-bottom: 0.5px solid #808080a6;
+  margin-bottom: 5px;
+}
