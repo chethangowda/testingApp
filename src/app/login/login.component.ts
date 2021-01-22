@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
   otpform: FormGroup;
   resendotp: boolean = true;
   login: boolean = true;
-  fgtpassword: boolean = false;
-  fgtuserid: boolean = false;
-  otpscreen: boolean = false;
+  fgtpassword: boolean = false
+  fgtuserid: boolean = false
+  otpscreen: boolean = false
   permissionlist: any = [];
   countryList: any = [];
   isSetPassword: boolean = false;
@@ -36,6 +36,8 @@ export class LoginComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private loaderService: LoaderService
+
+
   ) { }
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class LoginComponent implements OnInit {
         "",
         [Validators.required, Validators.pattern("^(([0-9]{10}))*$")],
       ],
-    });
+    })
 
     this.otpform = this.fb.group({
       Number: ["", [Validators.required]],
